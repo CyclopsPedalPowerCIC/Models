@@ -29,6 +29,8 @@ MFRC522::MIFARE_Key key;
 
 const int switchpins[]= {D0, D1, D2};
 
+#define NSWITCHES (sizeof(switchpins)/sizeof(switchpins[0]))
+
 // Define the array of leds
 CRGB leds[NUM_LEDS];
 
@@ -45,8 +47,8 @@ void init_wifi() {
   Serial.printf("MAC address: %02x:%02x:%02x:%02x:%02x:%02x\r\n", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
   WiFi.mode(WIFI_STA);
   for (;;) {
-    //if (connect_wifi("Cyclops_Wifi", "skullface")) return;
-    if (connect_wifi("LeedsHackspace", "blinkyLED")) return;
+    if (connect_wifi("Cyclops_Wifi", "skullface")) return;
+    //if (connect_wifi("LeedsHackspace", "blinkyLED")) return;
   }
 }
 
@@ -119,7 +121,9 @@ void handleBlock(){
 
 
 void handleRoot() {
-  server.send(200, "text/plain", message_string());
+     server.sendHeader("Location", "http://codecraft:8000/?"+server.hostHeader());
+     server.send(301);
+  //server.send(200, "text/plain", message_string());
 }
 
 void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length) {
@@ -158,9 +162,9 @@ void setup() {
   FastLED.show();
   fill_solid(&leds[0], NUM_LEDS, CRGB::Blue);
   FastLED.show();
-  for (int i=0;i<3; i++) {
-    pinMode(switchpins[i], INPUT);
-    digitalWrite(switchpins[i],0);
+  for (int i=0;i<NSWITCHES; i++) {
+    pinMode(switchpins[i], INPUT_PULLUP);
+    //digitalWrite(switchpins[i],0);
   }
 
   pinMode(PIN_LEDS, OUTPUT); 
@@ -171,6 +175,7 @@ void setup() {
   Serial.printf("Number of readers: %d\r\n", NREADERS);
   Serial.printf("Max retry count: %d\r\n", NTRIES);
   Serial.println("And we're go");
+  fill_solid(&leds[0], NUM_LEDS, CRGB::Black);
 }
 
 void init_readers () {
@@ -318,7 +323,7 @@ uint32_t read_switches() {
   static uint8_t debounce[32] = { 0 };
   uint32_t pressed = 0;
   
-  for (int i=0; i<3; i++) {
+  for (int i=0; i<NSWITCHES; i++) {
     bool r = !digitalRead(switchpins[i]);
 
     if (((switches>>i) ^ r)&1) {
