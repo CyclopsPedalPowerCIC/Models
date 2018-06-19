@@ -1,0 +1,19 @@
+Scenario Time:,1,(mins),equal to:,24,(hours),starting at,2,hours,,,//properties of the scenario
+Lights Power,0,0,200,200,600,300,200,200,100,100,//power of the lights 
+Device:, id:, mode:, control:, power:,socket (if no id),category,,,,,//properties of following devices...
+Kettle,18-bf,9,4-4,2000,,kitchen,4-2,,,,"//mode 2=off, 3=on, 1=toggle, 5=touch, 5+=timed in minutes, e.g. 15=15-5mins=10mins (house time)"
+Router,local,3,,11,,IT,4-1,,,,
+Smoke Alarm,local,3,,2,,Security,5-6,,,,
+CO Alarm,local,3,,2,,Security,4-3,,,,
+TV,58-1d,5,4-2,250,,AV,4-5,,,,"//local, has no phsical connecito in the house"
+Washing Machine,3f-c2,125,4-1,400,,Utility Room,4-6,,,,"//None, has no ID, does have a socket, e.g. lights"
+Hair Dryer,86-e8,1,2-6,400,,Gas,5-1,,,,TRSUPQ
+cooker,d6-d,1,4-3,2000,,Gas,5-2,,,,"//as of 07/05/18 None does not work, under development"
+freezer,be-b,1,4-5,150,,kitchen,5-3,,,,//none needs some code adding to the house and/or transmitter
+microwave,fd-2c,1,4-6,900,,kitchen,5-4,,,,
+Electric Heater,4d-ba,1,2-1,2500,,Other,5-5,,,,
+Coffee Maker,41-1a,1,2-2,600,,Other,,,,,
+Printer,12-2,1,2-3,40,,Other,//control board 0 is doubling up for now with lights and devices for testing only!,,,,
+X-box,1-9,1,2-4,80,,Other,,,,,
+wifi router,6d-cd,1,2-5,10,,Other,,,,,
+shower,None,1,2-0,1000,23,Bathroom,,,,,
