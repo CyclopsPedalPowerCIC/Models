@@ -1,0 +1,47 @@
+#define EN1pin 2
+#define EN2pin 3
+#define S0pin 4
+#define S1pin 5
+#define S2pin 6
+#define S3pin 7
+#define sigpin 8
+
+
+void setup() {
+  // put your setup code here, to run once:
+
+pinMode(sigpin,OUTPUT);
+Serial.begin(115200);
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  connectPin(0);
+  digitalWrite(sigpin,0);
+  delay(500);
+  digitalWrite(sigpin,1);  
+  delay(500);
+  
+//for (int i=0;i<32;i++){
+//    connectPin(i);
+//    delay(100);
+//    int value=digitalRead(sigpin);
+//    Serial.print(value);
+//  }
+//    Serial.print("\n");
+  
+}
+
+
+int connectPin(int number){
+  
+  digitalWrite(S0pin,int(floor(float(number)/1.0))%2);
+  digitalWrite(S1pin,int(floor(float(number)/2.0))%2);
+  digitalWrite(S2pin,int(floor(float(number)/4.0))%2);
+  digitalWrite(S3pin,int(floor(float(number)/8.0))%2);
+
+  digitalWrite(EN1pin,int(floor(float(number)/16.0))%2);
+  digitalWrite(EN2pin,1-int(floor(float(number)/16.0))%2);
+  
+  }

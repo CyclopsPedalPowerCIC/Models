@@ -1,0 +1,7 @@
+Scenario Time:,15,(mins),equal to:,24,(hours),,,,,,//properties of the scenario
+Lights Power,0,0,2,2,1,8,1,1,3,2,//power of the lights 
+Device:, id:, mode:, control:, power:,,,,,,,//properties of following devices...
+Kettle, 31-b7,12, TT-4,2000,,,,,,,"//mode 0=off, 1=on, 2=toggle, 5=touch, 5+=timed in minutes, e.g. 15=15-5mins=10mins (house time)"
+Router,local,1,,11,,,,,,,
+Smoke Alarm,,,,,,,,,,,
+CO Alarm,,,,,,,,,,,
