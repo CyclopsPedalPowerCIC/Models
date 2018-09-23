@@ -39,23 +39,24 @@
 //#define SS_PIN_2 D3
 #define RST_PIN UINT8_MAX //D2
 #define NREADERS 5
-
+#if 0
 //pins
-#define PIN_SHIFT_CLK D3
-#define PIN_SHIFT_DATA D4
-#define PIN_SHIFT_LATCH_CLK D5
-#define PIN_DATA D2
+#define DATA595 D2
+#define CLK595 D3
+#define LATCH595 D1
+#define DEMUX_INPUT D0 // pin connected to the transparent input of the '259s
+#endif
+#define RST_PIN D2
 
 struct reader {
   MFRC522 rfid;
-  const char *name;
   byte serial[4];
 } readers[NREADERS];
 
-const uint8_t pins[] = { D1, D3, D0, D2, D4 };
-const char *names[] = { "READER 1", "READER 2", "READER 3", "READER 4", "READER 5" };
-
+uint8_t pins[] = { D8, D4, D3, D1, D0 };
 MFRC522::MIFARE_Key key; 
+
+unsigned long lastelapsed;
 
 // Init array that will store new NUID 
 //byte nuidPICC[4];
@@ -64,17 +65,21 @@ void init_readers () {
   int i;
   SPI.begin(); // Init SPI bus
   for (i=0; i<NREADERS; i++) {
-    set_latch_address(i);
-    //readers[i].rfid = MFRC522(pins[i], UINT8_MAX);
-    readers[i].rfid = MFRC522(LATCHD, UINT8_MAX);
+    //set_latch_address(i);
+    Serial.print(i);
+    //readers[i].rfid = MFRC522(DEMUX_INPUT, UINT8_MAX);
+    readers[i].rfid = MFRC522(pins[i], UINT8_MAX);
     readers[i].rfid.PCD_Init(); // Init MFRC522 
-    readers[i].name = names[i];
+    Serial.println(readers[i].rfid.PCD_PerformSelfTest() ? "OK" : "fail");
+    readers[i].rfid.PCD_Init(); // Init MFRC522 
+    Serial.print(":");
     memset(readers[i].serial, 0, sizeof readers[i].serial);
   }
 }
 
 void poll_readers () {
   for (int i=0; i<NREADERS; i++) {
+    //set_latch_address(i);
     checkcard(readers[i]);
   }
 }
@@ -121,6 +126,8 @@ void handleRoot() {
     snprintf(buf, sizeof buf, "%d: %02x%02x%02x%02x\n", i, readers[i].serial[0], readers[i].serial[1], readers[i].serial[2], readers[i].serial[3]);
      res += buf;
    }
+  snprintf(buf, sizeof buf, "%d elapsed\n", lastelapsed);
+  res += buf;
   server.send(200, "text/plain", res);
   //digitalWrite(led, 0);
 }
@@ -128,32 +135,70 @@ void handleRoot() {
 void setup() { 
   Serial.begin(115200);
   Serial.println("A");
+#if 0
+  pinMode(DATA595, OUTPUT);
+  pinMode(CLK595, OUTPUT);
+  pinMode(LATCH595, OUTPUT);
+  pinMode(LATCH595, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
 
+  pinMode(DEMUX_INPUT, OUTPUT);
+
+  // set all the latch outputs high
+  digitalWrite(DEMUX_INPUT, HIGH);
+  for (byte i=0; i<32; i++) {
+    set_latch_address (i);
+    delayMicroseconds(100);
+  }
+#endif
+#if 1
+  // pull shared reset pin low
+  pinMode(RST_PIN, OUTPUT);
+  digitalWrite(RST_PIN, LOW);
+  delay(50);
+  digitalWrite(RST_PIN, HIGH);  
+  delay(10);
+#endif
+  SPI.begin(); // Init SPI bus
   init_server();
   init_readers ();
   for (byte i = 0; i < 6; i++) {
     key.keyByte[i] = 0xFF;
   }
-
-  pinMode(LATCH0, OUTPUT);
-  pinMode(LATCH1, OUTPUT);
-  pinMode(LATCH2, OUTPUT);
+}
+#if 0
+void write595(const uint8_t *arr, uint8_t len) {
+  while (len--)
+    shiftOut(DATA595, CLK595, MSBFIRST, arr[len]);
+  digitalWrite(LATCH595, HIGH); 
+  digitalWrite(LATCH595, LOW); 
+  digitalWrite(DEMUX_INPUT, HIGH);
 }
 
-//static int last_address;
-void set_latch_address(uint8_t addr) {
-  // ensure latch data is high
-  digitalWrite(LATCHD, 1);
-  // set address
-  digitalWrite(LATCH0, !!(addr&1));
-  digitalWrite(LATCH1, !!(addr&2));
-  digitalWrite(LATCH2, !!(addr&4));
-
-  //set mul
-  shiftOut(DATA, CLK, bitOrder, value);
+static inline void set_latch(uint8_t *arr, uint8_t bitno, bool val) {
+  uint8_t mask = 1<<(bitno&7);
+  arr[bitno>>3] &= ~mask;
+  arr[bitno>>3] |= val?mask:0;
 }
 
+// pinout on 595 outputs:
+// 0-2 A0,A1,A2
+// 3,4 LE0 LE1
+#define LE0 3
+#define LE1 4
 
+uint8_t arr[6] = { 0 };
+
+static void set_latch_address(uint8_t n) {
+  uint8_t chip = n & 8;
+  uint8_t a012 = n & 7;
+  arr[0] = n&7;  // FIXME
+  set_latch(arr, LE0, chip?HIGH:LOW);
+  set_latch(arr, LE1, chip?LOW:HIGH);
+  write595(arr, sizeof arr);
+  delay(1);
+}
+#endif
 bool cardpresent(MFRC522 r) {
         byte bufferATQA[2];
         byte bufferSize = sizeof(bufferATQA);
@@ -182,9 +227,9 @@ void checkcard(struct reader &r) {
     return;
 
   //Serial.print(r.name);
-  //Serial.print(F("PICC type: "));
+  Serial.print(F("PICC type: "));
   MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
-  //Serial.println(rfid.PICC_GetTypeName(piccType));
+  Serial.println(rfid.PICC_GetTypeName(piccType));
 
   // Check is the PICC of Classic MIFARE type
   if (piccType != MFRC522::PICC_TYPE_MIFARE_MINI &&  
@@ -202,15 +247,16 @@ void checkcard(struct reader &r) {
   rfid.PCD_StopCrypto1();
   
 }
- 
+
 void loop() {
   unsigned long t1, t2;
-  //t1 = millis();
+  t1 = millis();
   poll_readers();
   server.handleClient();
-  //t2 = millis();
-  //Serial.print("elapsed ");
-  //Serial.println(t2-t1);
+  t2 = millis();
+  Serial.print("elapsed ");
+  lastelapsed = t2-t1;
+  Serial.println(t2-t1);
 }
 
 /**
