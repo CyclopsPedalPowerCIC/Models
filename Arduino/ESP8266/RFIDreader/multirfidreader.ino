@@ -33,58 +33,30 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
+#include <WebSocketsServer.h>
 #include <ESP8266mDNS.h>
 
 //#define SS_PIN D1
 //#define SS_PIN_2 D3
 #define RST_PIN UINT8_MAX //D2
 #define NREADERS 5
-#if 0
-//pins
-#define DATA595 D2
-#define CLK595 D3
-#define LATCH595 D1
-#define DEMUX_INPUT D0 // pin connected to the transparent input of the '259s
-#endif
-#define RST_PIN D2
+#define RST_PIN D4
 
 struct reader {
   MFRC522 rfid;
-  byte serial[4];
+  uint32_t serial;
+  int tries;
 } readers[NREADERS];
 
-uint8_t pins[] = { D8, D4, D3, D1, D0 };
+#define NTRIES 5 // how many failed reads in a row before we believe the card's gone away
+
+uint8_t pins[] = { D8, D3, D2, D1, D0 };
 MFRC522::MIFARE_Key key; 
 
 unsigned long lastelapsed;
 
-// Init array that will store new NUID 
-//byte nuidPICC[4];
-
-void init_readers () {
-  int i;
-  SPI.begin(); // Init SPI bus
-  for (i=0; i<NREADERS; i++) {
-    //set_latch_address(i);
-    Serial.print(i);
-    //readers[i].rfid = MFRC522(DEMUX_INPUT, UINT8_MAX);
-    readers[i].rfid = MFRC522(pins[i], UINT8_MAX);
-    readers[i].rfid.PCD_Init(); // Init MFRC522 
-    Serial.println(readers[i].rfid.PCD_PerformSelfTest() ? "OK" : "fail");
-    readers[i].rfid.PCD_Init(); // Init MFRC522 
-    Serial.print(":");
-    memset(readers[i].serial, 0, sizeof readers[i].serial);
-  }
-}
-
-void poll_readers () {
-  for (int i=0; i<NREADERS; i++) {
-    //set_latch_address(i);
-    checkcard(readers[i]);
-  }
-}
-
 ESP8266WebServer server(80);
+WebSocketsServer webSocket = WebSocketsServer(81);
 
 void init_server() {
   const char* ssid = "LeedsHackspace";
@@ -105,7 +77,7 @@ void init_server() {
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
 
-  if (MDNS.begin("esprfid")) {
+  if (MDNS.begin("esprfid2")) {
     Serial.println("MDNS responder started");
   }
 
@@ -115,42 +87,48 @@ void init_server() {
 
   server.begin();
   Serial.println("HTTP server started");
+  webSocket.begin();
+  webSocket.onEvent(webSocketEvent);
+  Serial.println("WS server started");
 }
 
 void handleRoot() {
-  //digitalWrite(led, 1);
-  String res;
+#if 0
+String res;
   char buf[30];
-  //Serial.println("/");
   for (int i=0; i<NREADERS; i++) {
-    snprintf(buf, sizeof buf, "%d: %02x%02x%02x%02x\n", i, readers[i].serial[0], readers[i].serial[1], readers[i].serial[2], readers[i].serial[3]);
-     res += buf;
+    snprintf(buf, sizeof buf, "%d: %08x\n", i, readers[i].serial);
+    res += buf;
    }
   snprintf(buf, sizeof buf, "%d elapsed\n", lastelapsed);
   res += buf;
   server.send(200, "text/plain", res);
-  //digitalWrite(led, 0);
+#else
+  server.send(200, "text/plain", message_string());
+#endif
+}
+
+void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length) {
+    switch(type) {
+        case WStype_DISCONNECTED:
+            Serial.printf("[%u] Disconnected!\n", num);
+            break;
+        case WStype_CONNECTED:
+            {
+                IPAddress ip = webSocket.remoteIP(num);
+                Serial.printf("[%u] Connected from %d.%d.%d.%d url: %s\n", num, ip[0], ip[1], ip[2], ip[3], payload);
+                webSocket.sendTXT(num, message_string());
+            }
+            break;
+         case WStype_TEXT:
+             webSocket.broadcastTXT(message_string());
+            break;
+    }
 }
 
 void setup() { 
   Serial.begin(115200);
   Serial.println("A");
-#if 0
-  pinMode(DATA595, OUTPUT);
-  pinMode(CLK595, OUTPUT);
-  pinMode(LATCH595, OUTPUT);
-  pinMode(LATCH595, OUTPUT);
-  pinMode(LED_BUILTIN, OUTPUT);
-
-  pinMode(DEMUX_INPUT, OUTPUT);
-
-  // set all the latch outputs high
-  digitalWrite(DEMUX_INPUT, HIGH);
-  for (byte i=0; i<32; i++) {
-    set_latch_address (i);
-    delayMicroseconds(100);
-  }
-#endif
 #if 1
   // pull shared reset pin low
   pinMode(RST_PIN, OUTPUT);
@@ -159,46 +137,29 @@ void setup() {
   digitalWrite(RST_PIN, HIGH);  
   delay(10);
 #endif
-  SPI.begin(); // Init SPI bus
   init_server();
   init_readers ();
   for (byte i = 0; i < 6; i++) {
     key.keyByte[i] = 0xFF;
   }
 }
-#if 0
-void write595(const uint8_t *arr, uint8_t len) {
-  while (len--)
-    shiftOut(DATA595, CLK595, MSBFIRST, arr[len]);
-  digitalWrite(LATCH595, HIGH); 
-  digitalWrite(LATCH595, LOW); 
-  digitalWrite(DEMUX_INPUT, HIGH);
+
+void init_readers () {
+  int i;
+  SPI.begin(); // Init SPI bus
+  for (i=0; i<NREADERS; i++) {
+    //set_latch_address(i);
+    Serial.print(i);
+    readers[i].rfid = MFRC522(pins[i], UINT8_MAX);
+    readers[i].rfid.PCD_Init(); // Init MFRC522 
+    Serial.println(readers[i].rfid.PCD_PerformSelfTest() ? "OK" : "fail");
+    readers[i].rfid.PCD_Init(); // Init MFRC522 again after self-test
+    readers[i].serial = 0;
+    readers[i].tries = 0;
+    Serial.print(":");
+  }
 }
 
-static inline void set_latch(uint8_t *arr, uint8_t bitno, bool val) {
-  uint8_t mask = 1<<(bitno&7);
-  arr[bitno>>3] &= ~mask;
-  arr[bitno>>3] |= val?mask:0;
-}
-
-// pinout on 595 outputs:
-// 0-2 A0,A1,A2
-// 3,4 LE0 LE1
-#define LE0 3
-#define LE1 4
-
-uint8_t arr[6] = { 0 };
-
-static void set_latch_address(uint8_t n) {
-  uint8_t chip = n & 8;
-  uint8_t a012 = n & 7;
-  arr[0] = n&7;  // FIXME
-  set_latch(arr, LE0, chip?HIGH:LOW);
-  set_latch(arr, LE1, chip?LOW:HIGH);
-  write595(arr, sizeof arr);
-  delay(1);
-}
-#endif
 bool cardpresent(MFRC522 r) {
         byte bufferATQA[2];
         byte bufferSize = sizeof(bufferATQA);
@@ -213,39 +174,58 @@ bool cardpresent(MFRC522 r) {
         return (result == MFRC522::STATUS_OK || result == MFRC522::STATUS_COLLISION);
 }
 
-void checkcard(struct reader &r) {
+uint32_t checkcard(struct reader &r) {
   MFRC522 rfid = r.rfid;
-  // Look for new cards
-  memset(r.serial, 0, sizeof r.serial);
 
 //  if ( ! rfid.PICC_IsNewCardPresent())
 //    return;
-  if (!cardpresent(rfid));// return;
+  if (!cardpresent(rfid));// return 0;
 
   // Verify if the NUID has been readed
   if ( ! rfid.PICC_ReadCardSerial())
-    return;
+    return 0;
 
   //Serial.print(r.name);
-  Serial.print(F("PICC type: "));
-  MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
-  Serial.println(rfid.PICC_GetTypeName(piccType));
-
-  // Check is the PICC of Classic MIFARE type
-  if (piccType != MFRC522::PICC_TYPE_MIFARE_MINI &&  
-    piccType != MFRC522::PICC_TYPE_MIFARE_1K &&
-    piccType != MFRC522::PICC_TYPE_MIFARE_4K) {
-    //Serial.println(F("Your tag is not of type MIFARE Classic."));
-    //return;
-  }
-  memcpy(r.serial, rfid.uid.uidByte, sizeof r.serial);
-
+  //Serial.print(F("PICC type: "));
+  //MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
+  //Serial.println(rfid.PICC_GetTypeName(piccType));
+  
   // Halt PICC
   rfid.PICC_HaltA();
 
   // Stop encryption on PCD
   rfid.PCD_StopCrypto1();
-  
+  return (rfid.uid.uidByte[0]<<24) + (rfid.uid.uidByte[1]<<16) + (rfid.uid.uidByte[2]<<8) + rfid.uid.uidByte[3];
+}
+
+void poll_readers () {
+  bool changed = false;
+  for (int i=0; i<NREADERS; i++) {
+    uint32_t serial = checkcard(readers[i]);
+    if (serial || ++readers[i].tries > NTRIES) {
+      if (!serial && readers[i].serial) { Serial.print(i); Serial.print(" retry timeout\r\n"); }
+      if (readers[i].serial != serial) changed = true;
+      readers[i].serial = serial;
+      readers[i].tries = 0;
+    }
+  }
+  if (changed) {
+      Serial.print("broadcasting\r\n");
+    webSocket.broadcastTXT(message_string());
+  }
+}
+
+char *message_string() {
+  static char buf[16*NREADERS+16];
+  char *end = buf+sizeof buf, *ptr=buf;
+  *ptr++='[';
+  for (int i=0; i<NREADERS; i++) {
+    ptr+=snprintf(ptr, end-ptr, "\"%08x\",", readers[i].serial);
+  }
+  ptr--;
+  *ptr++=']';
+  *ptr++='\0';
+  return buf;
 }
 
 void loop() {
@@ -253,18 +233,9 @@ void loop() {
   t1 = millis();
   poll_readers();
   server.handleClient();
+  webSocket.loop();
   t2 = millis();
   Serial.print("elapsed ");
   lastelapsed = t2-t1;
   Serial.println(t2-t1);
-}
-
-/**
- * Helper routine to dump a byte array as hex values to Serial. 
- */
-void printHex(byte *buffer, byte bufferSize) {
-  for (byte i = 0; i < bufferSize; i++) {
-    Serial.print(buffer[i] < 0x10 ? " 0" : " ");
-    Serial.print(buffer[i], HEX);
-  }
 }

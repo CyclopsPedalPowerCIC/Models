@@ -1,0 +1,12 @@
+<div id=d1 style="color: blue">
+</div>
+<div id=d2 style="color: red">
+</div>
+<script src=rfidtest.js>
+</script>
+<script>
+function gebi(id) { return document.getElementById(id); }
+
+new esprfid("ws://esprfid.local:81/", (a)=>gebi("d1").innerHTML=a);
+new esprfid("ws://esprfid2.local:81/", (a)=>gebi("d2").innerHTML=a);
+</script>
