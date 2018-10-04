@@ -1,33 +1,3 @@
-/*
- * --------------------------------------------------------------------------------------------------------------------
- * Example sketch/program showing how to read new NUID from a PICC to serial.
- * --------------------------------------------------------------------------------------------------------------------
- * This is a MFRC522 library example; for further details and other examples see: https://github.com/miguelbalboa/rfid
- * 
- * Example sketch/program showing how to the read data from a PICC (that is: a RFID Tag or Card) using a MFRC522 based RFID
- * Reader on the Arduino SPI interface.
- * 
- * When the Arduino and the MFRC522 module are connected (see the pin layout below), load this sketch into Arduino IDE
- * then verify/compile and upload it. To see the output: use Tools, Serial Monitor of the IDE (hit Ctrl+Shft+M). When
- * you present a PICC (that is: a RFID Tag or Card) at reading distance of the MFRC522 Reader/PCD, the serial output
- * will show the type, and the NUID if a new card has been detected. Note: you may see "Timeout in communication" messages
- * when removing the PICC from reading distance too early.
- * 
- * @license Released into the public domain.
- * 
- * Typical pin layout used:
- * -----------------------------------------------------------------------------------------
- *             MFRC522      Arduino       Arduino   Arduino    Arduino          Arduino
- *             Reader/PCD   Uno/101       Mega      Nano v3    Leonardo/Micro   Pro Micro     ESP8266
- * Signal      Pin          Pin           Pin       Pin        Pin              Pin
- * -----------------------------------------------------------------------------------------
- * RST/Reset   RST          9             5         D9         RESET/ICSP-5     RST           D2
- * SPI SS      SDA(SS)      10            53        D10        10               10            D1 purple
- * SPI MOSI    MOSI         11 / ICSP-4   51        D11        ICSP-4           16            D7
- * SPI MISO    MISO         12 / ICSP-1   50        D12        ICSP-1           14            D6
- * SPI SCK     SCK          13 / ICSP-3   52        D13        ICSP-3           15            D5
- */
-
 #include <SPI.h>
 #include <MFRC522.h>
 #include <ESP8266WiFi.h>
@@ -36,21 +6,20 @@
 #include <WebSocketsServer.h>
 #include <ESP8266mDNS.h>
 
-//#define SS_PIN D1
-//#define SS_PIN_2 D3
-#define RST_PIN UINT8_MAX //D2
 #define NREADERS 5
+#define NTRIES 5   // how many failed reads in a row before we believe the card's gone away
+#define ID 4
+
 #define RST_PIN D4
 
 struct reader {
   MFRC522 rfid;
   uint32_t serial;
   int tries;
+  bool tested_ok;
 } readers[NREADERS];
 
-#define NTRIES 5 // how many failed reads in a row before we believe the card's gone away
-
-uint8_t pins[] = { D8, D3, D2, D1, D0 };
+uint8_t pins[] = { D0, D1, D2, D3, D8 };
 MFRC522::MIFARE_Key key; 
 
 unsigned long lastelapsed;
@@ -58,31 +27,44 @@ unsigned long lastelapsed;
 ESP8266WebServer server(80);
 WebSocketsServer webSocket = WebSocketsServer(81);
 
-void init_server() {
-  const char* ssid = "LeedsHackspace";
-  const char* password = "blinkyLED";
-
+void init_wifi() {
+  uint8_t mac[6];
+  WiFi.macAddress(mac);
+  Serial.printf("MAC address: %02x:%02x:%02x:%02x:%02x:%02x\r\n", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
   WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
-  Serial.println("");
+  for (;;) {
+    if (connect_wifi("cyclopswifi", "skullface")) return;
+    if (connect_wifi("LeedsHackspace", "blinkyLED")) return;
+  }
+}
 
-  // Wait for connection
+bool connect_wifi(const char* ssid, const char* password) {
+  Serial.printf("Wifi: trying %s/%s", ssid,password);
+  WiFi.begin(ssid, password);
+  int tries = 30;
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
+    if (!--tries) {
+      Serial.print("failed\r\n");
+      return false;
+    }
   }
-  Serial.println("");
-  Serial.print("Connected to ");
-  Serial.println(ssid);
-  Serial.print("IP address: ");
+  Serial.printf("got IP ");
   Serial.println(WiFi.localIP());
+  return true;
+}
 
-  if (MDNS.begin("esprfid2")) {
+void init_server() {
+  init_wifi();
+  if (MDNS.begin(hostname_string())) {
     Serial.println("MDNS responder started");
   }
 
   server.on("/", handleRoot);
-  
+  server.on("/reboot", do_reboot);
+  server.on("/reinit", do_reinit);
+
   //server.onNotFound(handleNotFound);
 
   server.begin();
@@ -92,20 +74,19 @@ void init_server() {
   Serial.println("WS server started");
 }
 
-void handleRoot() {
-#if 0
-String res;
-  char buf[30];
-  for (int i=0; i<NREADERS; i++) {
-    snprintf(buf, sizeof buf, "%d: %08x\n", i, readers[i].serial);
-    res += buf;
-   }
-  snprintf(buf, sizeof buf, "%d elapsed\n", lastelapsed);
-  res += buf;
-  server.send(200, "text/plain", res);
-#else
+
+void do_reboot() {
+  server.send(200, "text/plain", "brb");
+  ESP.reset();
+}
+
+void do_reinit() {
+  init_readers();
   server.send(200, "text/plain", message_string());
-#endif
+}
+
+void handleRoot() {
+  server.send(200, "text/plain", message_string());
 }
 
 void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length) {
@@ -126,37 +107,50 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
     }
 }
 
+const char *hostname_string() {
+  static char buf[16];
+  snprintf(buf, sizeof buf, "esprfid%d", ID);
+  return buf;
+}
+
 void setup() { 
   Serial.begin(115200);
-  Serial.println("A");
-#if 1
+  Serial.print("\r\n\r\n\r\nmultirfidreader (" __TIME__ " " __DATE__ ")\r\n");
+  init_server();
+  init_readers();
+
+  Serial.printf("Number of readers: %d\r\n", NREADERS);
+  Serial.printf("Max retry count: %d\r\n", NTRIES);
+  Serial.printf("ID: %d (hostname '%s.local')\r\n", ID, hostname_string());
+  Serial.println("And we're go");
+}
+
+void init_readers () {
+  Serial.println("Readers:");
   // pull shared reset pin low
   pinMode(RST_PIN, OUTPUT);
   digitalWrite(RST_PIN, LOW);
   delay(50);
   digitalWrite(RST_PIN, HIGH);  
   delay(10);
-#endif
-  init_server();
-  init_readers ();
+
   for (byte i = 0; i < 6; i++) {
     key.keyByte[i] = 0xFF;
   }
-}
 
-void init_readers () {
-  int i;
   SPI.begin(); // Init SPI bus
-  for (i=0; i<NREADERS; i++) {
-    //set_latch_address(i);
-    Serial.print(i);
+  for (int i=0; i<NREADERS; i++) {
+    Serial.printf("%d: ",i);
     readers[i].rfid = MFRC522(pins[i], UINT8_MAX);
     readers[i].rfid.PCD_Init(); // Init MFRC522 
-    Serial.println(readers[i].rfid.PCD_PerformSelfTest() ? "OK" : "fail");
-    readers[i].rfid.PCD_Init(); // Init MFRC522 again after self-test
-    readers[i].serial = 0;
+    bool tested_ok = readers[i].rfid.PCD_PerformSelfTest();
+    Serial.println(tested_ok ? "OK" : "fail");
+    if (tested_ok) 
+      readers[i].rfid.PCD_Init(); // Init MFRC522 again after self-test
+
+    readers[i].tested_ok = tested_ok;
+    readers[i].serial = tested_ok ? 0 : 0xeeeeeeee;
     readers[i].tries = 0;
-    Serial.print(":");
   }
 }
 
@@ -185,11 +179,6 @@ uint32_t checkcard(struct reader &r) {
   if ( ! rfid.PICC_ReadCardSerial())
     return 0;
 
-  //Serial.print(r.name);
-  //Serial.print(F("PICC type: "));
-  //MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
-  //Serial.println(rfid.PICC_GetTypeName(piccType));
-  
   // Halt PICC
   rfid.PICC_HaltA();
 
@@ -201,6 +190,7 @@ uint32_t checkcard(struct reader &r) {
 void poll_readers () {
   bool changed = false;
   for (int i=0; i<NREADERS; i++) {
+    if (!readers[i].tested_ok) continue;
     uint32_t serial = checkcard(readers[i]);
     if (serial || ++readers[i].tries > NTRIES) {
       if (!serial && readers[i].serial) { Serial.print(i); Serial.print(" retry timeout\r\n"); }
@@ -216,7 +206,7 @@ void poll_readers () {
 }
 
 char *message_string() {
-  static char buf[16*NREADERS+16];
+  static char buf[256];
   char *end = buf+sizeof buf, *ptr=buf;
   *ptr++='[';
   for (int i=0; i<NREADERS; i++) {
@@ -235,7 +225,6 @@ void loop() {
   server.handleClient();
   webSocket.loop();
   t2 = millis();
-  Serial.print("elapsed ");
   lastelapsed = t2-t1;
-  Serial.println(t2-t1);
+  Serial.printf("elapsed %d  \r", lastelapsed);
 }
