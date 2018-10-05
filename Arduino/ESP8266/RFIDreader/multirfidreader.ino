@@ -33,7 +33,7 @@ void init_wifi() {
   Serial.printf("MAC address: %02x:%02x:%02x:%02x:%02x:%02x\r\n", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
   WiFi.mode(WIFI_STA);
   for (;;) {
-    if (connect_wifi("cyclopswifi", "skullface")) return;
+    if (connect_wifi("Cyclops_Wifi", "skullface")) return;
     if (connect_wifi("LeedsHackspace", "blinkyLED")) return;
   }
 }
