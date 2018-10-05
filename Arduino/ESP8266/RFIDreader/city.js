@@ -16,6 +16,7 @@ esprfid.prototype = {
 	    this.ws.send(outdata);
     },
     reconnect: function() {
+	console.log("reconnect");
 	this.healthy = 0;
 	window.setTimeout(this.wsstart.bind(this),300);
     },
@@ -35,13 +36,21 @@ esprfid.prototype = {
     },
     send: function(d) {
 	this.outdata = d; // data to send
-	this.ws.send(outdata);
+	try {
+	    this.ws.send(outdata);
+	} catch (e) {}
     },
     
     ping: function() {
-	if (this.healthy < 2) { // no signal since last ping
+	if (!this.ws) {
+	    console.log("returning "+this.host);
+	    return;
+	}
+	console.log("ping: "+this.host+" "+this.healthy);
+	if (this.healthy == 1) { // no signal since last ping
 	    this.healthy = 0;
 	    this.ws.close();
+	    this.ws = null;
 	}
 	this.healthy = 1;
 	try {
@@ -49,6 +58,7 @@ esprfid.prototype = {
 	} catch (e) {}
     },
     wsstart: function() {
+	console.log("wsstart "+this.host);
 	this.ws = new WebSocket(`ws://${this.host}:81/`);
 	this.ws.onopen = this.connected;
 	this.ws.onclose = this.ws.onerror = this.reconnect.bind(this);
@@ -60,12 +70,15 @@ var ws_objs= [];
 
 function citymodel() {
     var hosts = [
-	"192.168.1.146",
-	"rfid2",
-//	"rfid3",
-//	"rfid4",
-//	"rfid5",
-//	"rfid6",
+//	"esprfid1.local",
+//	"esprfid2.local",
+//	"192.168.0.140",
+	"192.168.0.141",
+	"192.168.0.142",
+	"192.168.0.143",
+	"192.168.0.144",
+	"192.168.0.146",
+	"192.168.0.147",
 //	"citymaster",
     ];
     for (var h of hosts) {
@@ -77,6 +90,7 @@ function update_models() {
     var rfids = [].concat.call(
 	Array.map(ws_objs, (w)=>w.lastjson) // FIXME: but not master
     );
+    gebi("d1").innerHTML=rfids.join(", ");
     console.log(rfids);
 }
     
