@@ -47,6 +47,9 @@ esprfid.prototype = {
 	    console.log("returning "+this.host);
 	    return;
 	}
+	if (this.ws.readyState !== 1)
+	    return;
+
 	//console.log("ping: "+this.host+" "+this.healthy);
 	if (this.healthy == 1) { // no signal since last ping
 	    this.healthy = 0;
@@ -54,13 +57,20 @@ esprfid.prototype = {
 	    this.ws = null;
 	}
 	try {
-	    this.ws.send(''); // if this fails, we'll close next time
-	    this.healthy = 1;
+	    if (this.ws.readyState==1) {
+		this.ws.send(''); // if this fails, we'll close next time
+		this.healthy = 1;
+	    }
 	} catch (e) {}
     },
     wsstart: function() {
-	if (this.ws) console.log(`${this.host} readystate ${this.ws.readyState}`);
-	try { this.ws.close(); } catch (e) {}
+	if (this.ws) {
+	    var r=this.ws.readyState;
+	    console.log(`${this.host} readystate ${r}`);
+	    if (r===0) {
+		return;
+	    }
+	}
 	//console.log("wsstart "+this.host);
 	this.ws = new WebSocket(`ws://${this.host}:81/`);
 	this.ws.onopen = this.connected;
