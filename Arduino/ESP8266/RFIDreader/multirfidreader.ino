@@ -8,7 +8,7 @@
 
 #define NREADERS 5
 #define NTRIES 5   // how many failed reads in a row before we believe the card's gone away
-#define ID 4
+#define ID 5
 
 #define RST_PIN D4
 
@@ -34,23 +34,23 @@ void init_wifi() {
   WiFi.mode(WIFI_STA);
   for (;;) {
     if (connect_wifi("Cyclops_Wifi", "skullface")) return;
-    if (connect_wifi("LeedsHackspace", "blinkyLED")) return;
+    //if (connect_wifi("LeedsHackspace", "blinkyLED")) return;
   }
 }
 
 bool connect_wifi(const char* ssid, const char* password) {
   Serial.printf("Wifi: trying %s/%s", ssid,password);
   WiFi.begin(ssid, password);
-  int tries = 30;
+  int tries = 80;
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
     if (!--tries) {
-      Serial.print("failed\r\n");
+      Serial.print("\r\nfailed\r\n");
       return false;
     }
   }
-  Serial.printf("got IP ");
+  Serial.printf("\r\ngot IP ");
   Serial.println(WiFi.localIP());
   return true;
 }
@@ -224,6 +224,9 @@ void loop() {
   poll_readers();
   server.handleClient();
   webSocket.loop();
+  if (WiFi.status() != WL_CONNECTED) {
+    init_wifi();
+  }
   t2 = millis();
   lastelapsed = t2-t1;
   Serial.printf("elapsed %d  \r", lastelapsed);
