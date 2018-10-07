@@ -144,7 +144,7 @@ function energy() {
 function get_energy_mix() { // CO2 intensity of electricity
     if (entries.energy.length != 2) {
 	console.log ("wrong number of energies");
-	return entries.energy[0].e || 55; // FIXME
+	return entries.energy[0] ? entries.energy[0].e || 55; // FIXME
     }
     return ((entries.energy[0].e +entries.energy[1].e)/2);
 }
