@@ -59,7 +59,7 @@ esprfid.prototype = {
 	} catch (e) {}
     },
     wsstart: function() {
-	if (this.ws) console.log(`${this.host} readystate ${ws.readyState}`);
+	if (this.ws) console.log(`${this.host} readystate ${this.ws.readyState}`);
 	try { this.ws.close(); } catch (e) {}
 	//console.log("wsstart "+this.host);
 	this.ws = new WebSocket(`ws://${this.host}:81/`);
