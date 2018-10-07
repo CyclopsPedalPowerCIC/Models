@@ -26,7 +26,7 @@ function set_orbs(id) {
     } while (el=el.nextSibling);
 }
 
-var blocks = { housing: 8, policy: 1, leisure: 6, transport: 5, industry: 4, energy: 2, fuel: 1 };
+var blocks = { housing: 8, /*policy: 1,*/ leisure: 6, transport: 4 /* should be 5 */, industry: 4, energy: 2, fuel: 1 };
 var entries = {};
 
 for (let [id,count] of Object.entries(blocks)) {
@@ -96,14 +96,14 @@ var names = {
    miles travelled per person: car 5400   bus 254  train 427
    
 */
-    transport: [
-	{ n:1, name:"Train station" },
-	{ n:1, name:"Bus station" },
-	{ n:1, name:"Car park" },
-	{ n:1, name:"Car park (EV)" },
-	{ n:1, name:"Park and ride" },
-	{ n:1, name:"Park and ride (EV)" },
-	{ n:1, name:"Cycle park" },
+    transport: [ // relative amounts of car, bus, train (FIXME: for orb only, no CO2 impact)
+	{ c:0, b:0, t:1, name:"Train station" },
+	{ c:0, b:1, t:0, name:"Bus station" },
+	{ c:1, b:0, t:0, name:"Car park" },
+	{ c:1, b:0, t:0, name:"Car park (EV)" },
+	{ c:.5, b:.5, t:0, name:"Park and ride" },
+	{ c:.5, b:.5, t:0, name:"Park and ride (EV)" },
+	{ c:0, b:0, t:0, name:"Cycle park" },
     ],
     fuel: [ // gCO2/km/person fuel and kwh/pkm electric for car, bus and train
 	{ cf:90, bf:42.47, tf:64.81, ce:0, be:0, te:0, name:"Baseline" }, // 90 42.47 64.81
@@ -112,18 +112,18 @@ var names = {
 	{ cf:0, bf:10, tf:0, ce:0.16, be:0, te:0.096, name:"Electric" }, // (0.16kwh/km) 10 (0.096kwh/km)
     ],
     leisure: [ // CO2 modifiers
-	{ m:1, name:"Mega supermarket" }, // 0
+	{ m:1.4, name:"Mega supermarket" }, // 0
 	{ m:1.1, name:"Retail park" }, // +10
-	{ m:1.1, name:"Leisure park" }, // +10
-	{ m:1, name:"Sports ground" }, // 0
+	{ m:1.3, name:"Leisure park" }, // +10
+	{ m:1.5, name:"Sports ground" }, // 0
 	{ m:1, name:"O2 Arena" }, // 0
-	{ m:.8, name:"Nature reserve" }, // -20
+	{ m:.3, name:"Nature reserve" }, // -20
 	{ m:1, name:"Cinema" }, // 0
 	{ m:1, name:"Kirkgate Market" }, // 0
 	{ m:1.1, name:"Shopping precinct" }, // +10
-	{ m:.8, name:"Park" }, // -20
+	{ m:.6, name:"Park" }, // -20
 	{ m:1.1, name:"Gym and Pool" }, // +10
-	{ m:.8, name:"Skateboard park" }, // -20
+	{ m:.5, name:"Skateboard park" }, // -20
 	{ m:1, name:"Kart track" }, // 0
     ],
 };
@@ -146,6 +146,7 @@ function get_energy_mix() { // CO2 intensity of electricity
 	console.log ("wrong number of energies");
 	return entries.energy[0] ? entries.energy[0].e : 55; // FIXME
     }
+    console.log(`get_energy: 0=${entries.energy[0].e} 1=${entries.energy[1].e}`);
     return ((entries.energy[0].e +entries.energy[1].e)/2);
 }
 
@@ -168,6 +169,7 @@ function housing() {
 	total += co2;
     }
     set_orbs("housing");
+    if (!isFinite(total)) alert("HOUSING");
     return total;
 }
 
@@ -195,7 +197,7 @@ orb colours: 9-[0, 68 135, 203, 270, 338, 405, 473, 540] (green is low)
 function modifiers_block(id, baseheat, baseelec, orbs) {
     var elec = get_energy_mix();
     var total = 0;
-    for (var e of entries.leisure) {
+    for (var e of entries[id]) {
 	var co2 = (baseheat  // heat
 		   + elec * baseelec) // appliances
 	    * e.m / 1e9;
@@ -210,17 +212,18 @@ function modifiers_block(id, baseheat, baseelec, orbs) {
 	total += co2;
     }
     set_orbs(id);
+    if (!isFinite(total)) alert("ERROR "+id);
     return total;
 }
 
 function leisure() {
 	return modifiers_block("leisure", 56e9, 182089000,
-			       [540,473,405,338,270,203,138,68,0]);
+			       [500,300,200,150,100,75,50,25,0]);
 }
 
 function industry() {
 	return modifiers_block("industry", 64.7e9, 191725000,
-			       [540,473,405,338,270,203,138,68,0]);
+			       [500,300,200,150,100,75,50,25,0]);
 }
     
 /*
@@ -282,10 +285,10 @@ function transport() {
 		ce ${e.ce} be ${e.be} te ${e.te}`);
     var gas = 
 	(5400 * e.cf + 254 * e.bf + 427 * e.tf) * 1.6;
-    var elec = 
+    var elect = 
 	(5400 * e.ce + 254 * e.be + 427 * e.te) * 1.6 * elec;
-    var co2 = (gas + elec) * 800000 / 1e9;
-    console.log(`fuel co2 ${co2}: gas ${gas} elec ${elec}`);
+    var co2 = (gas + elect) * 800000 / 1e9;
+    console.log(`fuel co2 ${co2}: gas ${gas} elec ${elect}`);
 	
     for (var orb=0; orb<9; orb++) {
 	if (co2 > [100,90,80,70,60,50,40,30,20][orb])
@@ -295,6 +298,22 @@ function transport() {
     e.orb = orb;
     set_orbs("fuel");
     
+    // FIXME: transport blocks change proportions
+    for (var t of entries.transport) {
+	// this is all terrible
+	var q = t.c*5400*e.cf + t.b*254*e.bf + t.t*427*e.tf +
+	    (t.c*5400*e.ce + t.b*254*e.be + t.t*427*e.te)*elec;
+	//console.log(`${t.name}: ${t.c} ${t.b} ${t.t} em=${q}`);
+	//console.log(`${e.cf} ${e.bf} ${e.tf} elec  ${elec} ${e.ce} ${e.be} ${e.te}`);
+	for (var orb=0; orb<9; orb++) {
+	    if (q >= [10000,8000,6000,4000,2000,1000,500,200,0][orb])
+		break;
+	}
+	console.log(`orb ${orb}`);
+	t.orb = orb;
+    }
+    set_orbs("transport");
+
     return co2;
 }
 
@@ -334,6 +353,14 @@ function set_cards (c) {
 	gebi("problems").innerHTML=prefix+problems.join("<br>"+prefix);
 	//return;
     }
+    console.log(`
+		housing ${housing()}
+		leisure ${leisure()}
+		industry ${industry()}
+		transport ${transport()}
+		energy ${energy()}
+		`);
+			  
     var total = housing()
 	+ leisure()
 	+ industry()
@@ -359,8 +386,8 @@ function commaify (num) {
     return threes.join();
 }
 
-var emissions = { el: gebi("emissions"), cloud: gebi("emcloud"), val: 2000 };
-var target = { el: gebi("target"), cloud: gebi("tarcloud"), val: 2000 };
+var emissions = { el: gebi("emissions"), cloud: gebi("emcloud"), val: 1100 };
+var target = { el: gebi("target"), cloud: gebi("tarcloud"), val: 1100 };
 
 function set_emissions(obj,v) {
     var valueProperty = {val: obj.val};
@@ -369,7 +396,7 @@ function set_emissions(obj,v) {
         step: function() {
             obj.el.textContent=commaify(obj.val.toFixed(0));
 	    var minsize = .5;
-	    var size = ((Math.tanh(obj.val/6000))*(1-minsize)+minsize);
+	    var size = ((Math.tanh(obj.val/3000))*(1-minsize)+minsize);
 	    obj.cloud.style.backgroundSize = size*100+"%";
 	    
             obj.val = this.val;
@@ -394,7 +421,7 @@ $('#thermometer').thermometer( {
 });
 
 function set_thermometer(co2) {
-    var m = co2 / 1000; // FIXME
+    var m = 1.2+ co2 / 1500;
     $('#thermometer').thermometer('setValue', m);
 }
 
@@ -412,11 +439,12 @@ var ids = {
     '50a3a2a4': {group:'housing', id:2},// 50ssd
     '407e1ca4': {group:'housing', id:4},//modernsemi
     '20f391a6': {group:'housing', id:6},// Tower block
+    '04ab5582': {group:'housing', id:6},// Tower block
     'e05a6ca4': {group:'housing', id:8},// Eco house
     'b0547da4': {group:'housing', id:10},// Eco flats
     'f0cf44a4': {group:'housing', id:12},// Ziggurat
     '237d7a89': {group:'housing', id:13},// Detached house
-
+    
     '608c17a4': {group:'energy', id:0},// wind farm
     'f0466ea4': {group:'energy', id:6},// natural gas
     '04a25482': {group:'energy', id:2},// coal
@@ -443,7 +471,7 @@ var ids = {
     '6a537889': {group:'transport', id:0},// train station
     '70fa77a4': {group:'transport', id:1},// bus station
     '40fb3fa6': {group:'transport', id:2},// car park
-    '046d5482': {group:'transport', id:4},// park and ride
+    '04d65482': {group:'transport', id:4},// park and ride
     '04ce5482': {group:'transport', id:6},// cycle park
 
     '04ad5382': {group:'fuel', id:0},// baseline
@@ -461,9 +489,19 @@ var ids = {
 $(document).ready( function() {
     //set_cards(['608c17a4','f0466ea4','90976da5','50a3a2a4', 'fuel1']);
 
-    //setInterval(()=>set_emissions(emissions,Math.random()*10000), 2000);
+    //setInterval(()=>set_emissions(target,1100, 2000);
     //setInterval(()=>set_thermometer(Math.random()*6000), 5000);
     citymodel();
-    set_emissions(target,300);
+    set_emissions(target,1100);
     set_cards([]);
 });
+
+/*
+temperature
+
+4 different pathways
+<1100 => 1.3-1.9
+<2750 => 2.0-3.0
+<4210 => 3.0-3.7
+<6970 => 3.8-6.0
+*/

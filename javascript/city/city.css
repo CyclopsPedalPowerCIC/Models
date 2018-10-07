@@ -97,7 +97,7 @@ h3 {
 #blk2 {
   position: absolute;
   height: 20%; left: 3%;
-  top: 50%; width: 22%;
+  top: 46%; width: 22%;
 }
 
 #blk3 {
@@ -117,31 +117,31 @@ h3 {
 #blk5 {
   position: absolute;
   height: 20%; left: 27%;
-  top: 50%; width: 22%;
+  top: 46%; width: 22%;
 }
 
 #blk6 {
   position: absolute;
   height: 20%; left: 27%;
-  top: 70%; width: 22%;
+  top: 68%; width: 22%;
 }
 
 #blk7 {
   position: absolute;
   height: 20%; left: 51%;
-  top: 50%; width: 22%;
+  top: 46%; width: 22%;
 }
 
 #blk8 {
   position: absolute;
   height: 20%; left: 75%;
-  top: 50%; width: 22%;
+  top: 46%; width: 22%;
 }
 
 #blk9 {
   position: absolute;
   height: 8%; left: 51%;
-  top: 85%; width: 22%;
+  top: 82%; width: 22%;
 }
 
 .cloud {
