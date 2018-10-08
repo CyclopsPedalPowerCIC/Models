@@ -102,6 +102,7 @@ function citymodel() {
 }
 
 function update_models() {
+	
 //    var rfids = [].concat.call(
 //	Array.map(ws_objs, (w)=>w.lastjson) // FIXME: but not master
     //    );
