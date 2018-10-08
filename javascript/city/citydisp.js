@@ -361,13 +361,32 @@ function set_cards (c) {
 		energy ${energy()}
 		`);
 			  
-    var total = housing()
-	+ leisure()
-	+ industry()
-	+ transport()
-	+ energy();
+    var total = housing()+ leisure()+ industry()+ transport()+ energy();
     set_emissions(emissions,total);
     set_thermometer(total);
+}
+
+function setColour(readerNum,R,G,B){
+	
+	var theURL="http://" + "192.168.0.150" +"/setBlock?";
+	theURL+="number="+String(parseInt(readerNum));
+	theURL+="red="+String(parseInt(R));
+	theURL+="green="+String(parseInt(G));
+	theURL+="blue="+String(parseInt(B));
+	$.get(theURL,{},function(response,stat){},"text");
+	console.log("Hiya!");
+	
+	
+}
+
+function setColourScale(readerNum,value){
+	
+	//value goes from 0-8
+	if (value<0){return;}
+	else if (value<4){setColour(readerNum,255,255/4*value,0);}
+	else if (value<9){setColour(readerNum,255*(8-value)/5,255,0);}
+	else (value<4){return;}
+	
 }
 
 function commaify (num) {
