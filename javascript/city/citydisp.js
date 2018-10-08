@@ -487,7 +487,7 @@ f0466ea4 natural gas
 90976da5 Sports ground
 */
 var ids = {
-    '702238a5': {group:'housing', id:0},// terrace
+ '702238a5': {group:'housing', id:0},// terrace
     '50a3a2a4': {group:'housing', id:2},// 50ssd
     '407e1ca4': {group:'housing', id:4},//modernsemi
     '20f391a6': {group:'housing', id:6},// Tower block
@@ -497,35 +497,59 @@ var ids = {
     'f0cf44a4': {group:'housing', id:12},// Ziggurat
     '237d7a89': {group:'housing', id:13},// Detached house
     
-    '608c17a4': {group:'energy', id:0},// wind farm
-    'f0466ea4': {group:'energy', id:6},// natural gas
+    
+	'608c17a4': {group:'energy', id:0},// wind farm
+    '048b5382': {group:'energy', id:0},// wind farm
+    '04525582': {group:'energy', id:1},// nuclear
+	'f0466ea4': {group:'energy', id:6},// natural gas
+    '04995682': {group:'energy', id:6},// natural gas
     '04a25482': {group:'energy', id:2},// coal
+    '047f5682': {group:'energy', id:2},// coal
     '04aa5482': {group:'energy', id:3},// biomass
     '04c25482': {group:'energy', id:5},// solar
+    '049c5482': {group:'energy', id:5},// solar
+    '04855682': {group:'energy', id:7},// fracked gas
     '04ba5482': {group:'energy', id:8},// natural gas with ccs
 
     '572c0a0c': {group:'industry', id:0},// steel foundry
     '60c4a0a4': {group:'industry', id:1},// chemical works
+    '04985582': {group:'industry', id:2},// turbine factory**
     '005e7ba4': {group:'industry', id:2},// turbine factory
+    '04705582': {group:'industry', id:3},// factory farming**
     '809649a4': {group:'industry', id:3},// factory farming
+    '048D5682': {group:'industry', id:4},// business park **
     '00706ea4': {group:'industry', id:4},// business park
+    '048e5782': {group:'industry', id:5},// datacentre  **
     'b09d6ba4': {group:'industry', id:5},// datacentre
     '109093a6': {group:'industry', id:6},// cannery
+    '04775682': {group:'industry', id:7},// clothing **
     '50451aa4': {group:'industry', id:7},// clothing
+    '04915682': {group:'industry', id:11},// warehouse **
 
     '50dc7ea4': {group:'leisure', id:0},// mega supermarket
+    '04a35682': {group:'leisure', id:0},// mega supermarket
     '109680a4': {group:'leisure', id:1},// retail park
     '90976da5': {group:'leisure', id:3},// Sports ground
+    '048d5482': {group:'leisure', id:3},// Sports ground
     '8005e6a4': {group:'leisure', id:4},// O2 arena
     'b0128da6': {group:'leisure', id:5},// nature reserve
+    '044b5482': {group:'leisure', id:5},// nature reserve
+    '048a5582': {group:'leisure', id:8},// shopping precinct
+    '04855282': {group:'leisure', id:8},// shopping precinct
+    '046c5582': {group:'leisure', id:9}, // park
     '50af90a6': {group:'leisure', id:11},// skateboard park
 
     '6a537889': {group:'transport', id:0},// train station
+    '045a5582': {group:'transport', id:0},// train station
     '70fa77a4': {group:'transport', id:1},// bus station
+    '04715482': {group:'transport', id:1},// bus station
     '40fb3fa6': {group:'transport', id:2},// car park
+    '046b5682': {group:'transport', id:2},// car park
     '04d65482': {group:'transport', id:4},// park and ride
+    '04625582': {group:'transport', id:4},// park and ride
     '04ce5482': {group:'transport', id:6},// cycle park
-
+	
+	
     '04ad5382': {group:'fuel', id:0},// baseline
     '04b55382': {group:'fuel', id:1},// biofuels
     '04bd5382': {group:'fuel', id:2},// hydrogen?
