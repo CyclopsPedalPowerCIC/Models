@@ -7,22 +7,61 @@ function make_orbs(id, n) {
     }
 }
 
-function set_orb(el, n, name) {
-    el.textContent = name;
-    //el.style.display=(n===null)?'none':'list-item';
-    el.style.backgroundPosition=`0px -${(n===null)?9999:(0|([0,54,107,161,215,270,325,381,436][n]*30/45))}px`;
+// mapping from readers to LEDs
+var ledmap = [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27 ];
+// LEDs to write
+var real_orbs = [];
+
+function set_orb(el, obj) {
+    el.textContent = obj.name;
+    el.style.backgroundPosition=`0px -${(obj.orb===null)?9999:(0|([0,54,107,161,215,270,325,381,436][obj.orb]*30/45))}px`;
+    if (obj.source) {
+	for (var i=0; i<obj.source.length; i++) {
+	    console.log(`set_real_orb: ${obj.source[i]} ${obj.orb}`);
+	    real_orbs[ledmap[obj.source[i]]]=obj.orb;
+	}
+    }
+}
+
+function setColour(readerNum,R,G,B){
+    var theURL="http://" + "192.168.0.150" +"/setBlock?";
+    theURL+="number="+String(parseInt(readerNum));
+    theURL+="red="+String(parseInt(R));
+    theURL+="green="+String(parseInt(G));
+    theURL+="blue="+String(parseInt(B));
+    $.get(theURL,{},function(response,stat){},"text");
+    console.log(`sent ${theURL}`);
+}
+
+function setColourScale(readerNum,value){
+    //value goes from 0-8
+    if (value===null) {
+	setColour(readerNum,0,0,0,0);
+    } else if (value<4) {
+	setColour(readerNum,255,255/4*value,0);
+    } else if (value<9) {
+	setColour(readerNum,255*(8-value)/5,255,0);
+    }
+}
+
+function set_real_orbs() {
+    for (var i=0; i<28; i++) {
+	setColourScale(i, real_orbs[i]);
+	console.log(`real_orb ${i} ${real_orbs[i]}`);
+    }
 }
 
 function set_orbs(id) {
     var el=gebi(id).querySelector("li");
     var arr = entries[id];
+    //console.log(`id=${id} arr=${arr} len=${arr.length}`);
     for (var i=0; i<arr.length; i++, el&&(el=el.nextSibling)) {
 	if (el)
-	    set_orb(el, arr[i].orb, arr[i].name);
+	    set_orb(el, arr[i]);
     }
     if (el)
     do {
-	set_orb(el, null, 'empty');
+	set_orb(el, {orb:null, name:'empty', source:[]});
     } while (el=el.nextSibling);
 }
 
@@ -319,10 +358,23 @@ function transport() {
 
 function set_cards (c) {
     var problems = [];
-    for (i of Object.keys(entries)) {
+    for (let i of Object.keys(entries)) {
 	entries[i] = [];
     }
-    for (i of c) {
+    // blank all the sources
+    for (var group of Object.keys(entries)) {
+	for (var i=0; i<names[group].length; i++) {
+	    names[group][i].source = [];
+	}
+    }
+    //blank all the LEDs
+    for (var i=0;i<28; i++) {
+	real_orbs[i] = null;
+    }
+
+    console.log(`c.length=${c.length}`);
+    for (var n=0; n<c.length; n++) {
+	var i = c[n];
 	if (!i || i==='00000000' || i==='eeeeeeee')
 	    continue;
 	var obj = ids[i];
@@ -331,6 +383,9 @@ function set_cards (c) {
 	console.log (obj);
 	
 	entries[obj.group].push(names[obj.group][obj.id]);
+	console.log(`pushing source ${n} for ${obj.name}`);
+	console.log(names[obj.group][obj.id]);
+	names[obj.group][obj.id].source.push(n);
     }
     
     for (var group of Object.keys(entries)) {
@@ -361,32 +416,10 @@ function set_cards (c) {
 		energy ${energy()}
 		`);
 			  
-    var total = housing()+ leisure()+ industry()+ transport()+ energy();
+    var total = housing()+leisure()+industry()+transport()+energy();
     set_emissions(emissions,total);
     set_thermometer(total);
-}
-
-function setColour(readerNum,R,G,B){
-	
-	var theURL="http://" + "192.168.0.150" +"/setBlock?";
-	theURL+="number="+String(parseInt(readerNum));
-	theURL+="red="+String(parseInt(R));
-	theURL+="green="+String(parseInt(G));
-	theURL+="blue="+String(parseInt(B));
-	$.get(theURL,{},function(response,stat){},"text");
-	console.log("Hiya!");
-	
-	
-}
-
-function setColourScale(readerNum,value){
-	
-	//value goes from 0-8
-	if (value<0){return;}
-	else if (value<4){setColour(readerNum,255,255/4*value,0);}
-	else if (value<9){setColour(readerNum,255*(8-value)/5,255,0);}
-	else (value<4){return;}
-	
+    set_real_orbs();
 }
 
 function commaify (num) {
@@ -513,6 +546,7 @@ $(document).ready( function() {
     citymodel();
     set_emissions(target,1100);
     set_cards([]);
+    //set_cards(['04ad5382', '04ce5482']);
 });
 
 /*
