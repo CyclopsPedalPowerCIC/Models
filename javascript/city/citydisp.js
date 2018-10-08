@@ -7,35 +7,22 @@ function make_orbs(id, n) {
     }
 }
 
-// mapping from readers to LEDs
-var ledmap = [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27 ];
-
-function set_orb(el, obj) {
-    console.log(`set_orb: ${el} ${obj}`);
-    el.textContent = obj.name;
-    el.style.backgroundPosition=`0px -${(obj.orb===null)?9999:(0|([0,54,107,161,215,270,325,381,436][obj.orb]*30/45))}px`;
-    if (obj.source) {
-	for (var i=0; i<obj.source.length; i++) {
-	    setColourScale(ledmap[i],obj.orb);
-	}
-    }
-}
-
-function setColourScale(id,n) {
-    console.log(`set colour ${id} ${n}`);
+function set_orb(el, n, name) {
+    el.textContent = name;
+    //el.style.display=(n===null)?'none':'list-item';
+    el.style.backgroundPosition=`0px -${(n===null)?9999:(0|([0,54,107,161,215,270,325,381,436][n]*30/45))}px`;
 }
 
 function set_orbs(id) {
     var el=gebi(id).querySelector("li");
     var arr = entries[id];
-    //console.log(`id=${id} arr=${arr} len=${arr.length}`);
     for (var i=0; i<arr.length; i++, el&&(el=el.nextSibling)) {
 	if (el)
-	    set_orb(el, arr[i]);
+	    set_orb(el, arr[i].orb, arr[i].name);
     }
     if (el)
     do {
-	set_orb(el, {orb:null, name:'empty', source:[]});
+	set_orb(el, null, 'empty');
     } while (el=el.nextSibling);
 }
 
@@ -45,7 +32,7 @@ var entries = {};
 for (let [id,count] of Object.entries(blocks)) {
     make_orbs(id, count);
     entries[id] = [];
-    //set_orbs(id);
+    set_orbs(id);
 }
 
 var names = {
@@ -332,18 +319,10 @@ function transport() {
 
 function set_cards (c) {
     var problems = [];
-    for (let i of Object.keys(entries)) {
+    for (i of Object.keys(entries)) {
 	entries[i] = [];
     }
-    // blank all the sources
-    for (var group of Object.keys(entries)) {
-	for (var i=0; i<names[group].length; i++) {
-	    names[group][i].source = [];
-	}
-    }
-    console.log(`c.length=${c.length}`);
-    for (var n=0; n<c.length; n++) {
-	var i = c[n];
+    for (i of c) {
 	if (!i || i==='00000000' || i==='eeeeeeee')
 	    continue;
 	var obj = ids[i];
@@ -352,9 +331,6 @@ function set_cards (c) {
 	console.log (obj);
 	
 	entries[obj.group].push(names[obj.group][obj.id]);
-	console.log(`pushing source ${n} for ${obj.name}`);
-	console.log(names[obj.group][obj.id]);
-	names[obj.group][obj.id].source.push(n);
     }
     
     for (var group of Object.keys(entries)) {
@@ -513,8 +489,7 @@ $(document).ready( function() {
     //setInterval(()=>set_thermometer(Math.random()*6000), 5000);
     citymodel();
     set_emissions(target,1100);
-    //set_cards([]);
-    set_cards(['04ad5382']);
+    set_cards([]);
 });
 
 /*
