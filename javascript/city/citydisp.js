@@ -361,11 +361,7 @@ function set_cards (c) {
 		energy ${energy()}
 		`);
 			  
-    var total = housing()
-	+ leisure()
-	+ industry()
-	+ transport()
-	+ energy();
+    var total = housing()+leisure()+industry()+transport()+energy();
     set_emissions(emissions,total);
     set_thermometer(total);
 }
