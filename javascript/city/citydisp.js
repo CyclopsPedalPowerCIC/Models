@@ -36,9 +36,9 @@ function setColour(readerNum,R,G,B){
 function setColourScale(readerNum,value){
     //value goes from 0-8
     var orb_colours = [
-	[0xf00000], [0xf73d00], [0xf85f00],
-	[0xffa00c], [0xffd719], [0xf8ff19],
-	[0xc2ff1b], [0x79e114], [0x18df0f],
+	0xf00000, 0xf73d00, 0xf85f00,
+	0xffa00c, 0xffd719, 0xf8ff19,
+	0xc2ff1b, 0x79e114, 0x18df0f,
     ];
     var rgb = (value===null) ? 0x000000 : orb_colours[value];
     setColour(readerNum, (rgb>>16)&0xff, (rgb>>8)&0xff, (rgb)&0xff);
