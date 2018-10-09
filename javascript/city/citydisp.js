@@ -84,7 +84,7 @@ var names = {
 	{ hn:30000, n:33333, a:3900, name:"Modern semi-detached (SP)" },
 	{ hn:9000,  n:50000, a:2800, name:"Tower block" }, // 9000 50000 2800
 	{ hn:9000,  n:50000, a:2800, name:"Tower block (SP)" },
-	{ hn:10000, n:33333, a:3900, name:"Eco house" }, // 10000 33333 3900
+	{ hn:10000, n:33333, a:3900, name:"Housing Cooperative" }, // 10000 33333 3900
 	{ hn:10000, n:33333, a:3900, name:"Eco house (SP)" },
 	{ hn:5000,  n:50000, a:2800, name:"Eco flats" }, // 5000 50000 2800
 	{ hn:5000,  n:50000, a:2800, name:"Eco flats (SP)" },
@@ -488,21 +488,31 @@ f0466ea4 natural gas
 */
 var ids = {
  '702238a5': {group:'housing', id:0},// terrace
+ '04925482': {group:'housing', id:0},// terrace
+ '04835382': {group:'housing', id:0},// terrace
     '50a3a2a4': {group:'housing', id:2},// 50ssd
+    '04865782': {group:'housing', id:2},// 50ssd
+    '04785582': {group:'housing', id:4},// Mssd
     '407e1ca4': {group:'housing', id:4},//modernsemi
     '20f391a6': {group:'housing', id:6},// Tower block
+    '047c5282': {group:'housing', id:6},// Tower block
     '04ab5582': {group:'housing', id:6},// Tower block
+    '04435382': {group:'housing', id:6},// Tower block
     'e05a6ca4': {group:'housing', id:8},// Eco house
+    '04f91e82': {group:'housing', id:8},// housing coop
     'b0547da4': {group:'housing', id:10},// Eco flats
+    '047c5782': {group:'housing', id:10},// Eco flats
+    '047e5582': {group:'housing', id:10},// Eco flats
     'f0cf44a4': {group:'housing', id:12},// Ziggurat
+    '04795882': {group:'housing', id:12},// Ziggurat
     '237d7a89': {group:'housing', id:13},// Detached house
+    'f0466ea4': {group:'housing', id:13},// Detached house
+    '608c17a4': {group:'housing', id:13},// Detached house
     
     
-	'608c17a4': {group:'energy', id:0},// wind farm
-    '048b5382': {group:'energy', id:0},// wind farm
+	'048b5382': {group:'energy', id:0},// wind farm
     '04525582': {group:'energy', id:1},// nuclear
-	'f0466ea4': {group:'energy', id:6},// natural gas
-    '04995682': {group:'energy', id:6},// natural gas
+	'04995682': {group:'energy', id:6},// natural gas
     '04a25482': {group:'energy', id:2},// coal
     '047f5682': {group:'energy', id:2},// coal
     '04aa5482': {group:'energy', id:3},// biomass
