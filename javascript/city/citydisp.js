@@ -10,7 +10,7 @@ function make_orbs(id, n) {
 // mapping from readers to LEDs
 var ledmap = [13,9,12,11,10,17,14,18,15,16,3,0,1,2,6,7,4,5,8,25,27,24,26,23,21,19,22,20];
 // LEDs to write
-var real_orbs = [];
+var real_orbs = [], sent_real_orbs = [];
 
 function set_orb(el, obj) {
     el.textContent = obj.name;
@@ -46,8 +46,11 @@ function setColourScale(readerNum,value){
 
 function set_real_orbs() {
     for (var i=0; i<28; i++) {
+	if (real_orbs[i] === sent_real_orbs[i])
+	    continue;
 	setColourScale(i, real_orbs[i]);
 	console.log(`real_orb ${i} ${real_orbs[i]}`);
+	sent_real_orbs[i] = real_orbs[i];
     }
 }
 
