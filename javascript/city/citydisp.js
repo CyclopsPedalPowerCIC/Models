@@ -8,7 +8,7 @@ function make_orbs(id, n) {
 }
 
 // mapping from readers to LEDs
-var ledmap = [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27 ];
+var ledmap = [13,9,12,11,10,17,14,18,15,16,3,0,1,2,6,7,4,5,8,25,27,24,26,23,21,19,22,20];
 // LEDs to write
 var real_orbs = [];
 
@@ -24,11 +24,11 @@ function set_orb(el, obj) {
 }
 
 function setColour(readerNum,R,G,B){
-    var theURL="http://" + "192.168.0.150" +"/setBlock?";
+    var theURL="http://" + "192.168.0.145" +"/setBlock?";
     theURL+="number="+String(parseInt(readerNum));
-    theURL+="red="+String(parseInt(R));
-    theURL+="green="+String(parseInt(G));
-    theURL+="blue="+String(parseInt(B));
+    theURL+="&red="+String(parseInt(R));
+    theURL+="&green="+String(parseInt(G));
+    theURL+="&blue="+String(parseInt(B));
     $.get(theURL,{},function(response,stat){},"text");
     console.log(`sent ${theURL}`);
 }
@@ -124,6 +124,7 @@ var names = {
 	{ m:0.9, name:"Furniture maker" }, // .9
 	{ m:0.8, name:"Warehouse" }, // .8
 	{ m:1.1, name:"Warehousing (chilled)" }, // 1.1
+	{ m:0.6, name:"Community Farm" }, // total guess
     ],
 
 /* transport
@@ -164,6 +165,9 @@ var names = {
 	{ m:1.1, name:"Gym and Pool" }, // +10
 	{ m:.5, name:"Skateboard park" }, // -20
 	{ m:1, name:"Kart track" }, // 0
+	{ m:0.8, name:"Community centre" }, // 0 number 13
+	{ m:0.6, name:"Paintball arena" }, // 0 number 14
+	{ m:0.8, name:"Youth club" }, // 0 number 15
     ],
 };
 
@@ -492,7 +496,7 @@ f0466ea4 natural gas
 90976da5 Sports ground
 */
 var ids = {
- '702238a5': {group:'housing', id:0},// terrace
+     '702238a5': {group:'housing', id:0},// terrace
  '04925482': {group:'housing', id:0},// terrace
  '04835382': {group:'housing', id:0},// terrace
     '50a3a2a4': {group:'housing', id:2},// 50ssd
@@ -511,8 +515,8 @@ var ids = {
     'f0cf44a4': {group:'housing', id:12},// Ziggurat
     '04795882': {group:'housing', id:12},// Ziggurat
     '237d7a89': {group:'housing', id:13},// Detached house
-    'f0466ea4': {group:'housing', id:13},// Detached house
-    '608c17a4': {group:'housing', id:13},// Detached house
+    '04465482': {group:'housing', id:8},// Housing co-operative
+    '': {group:'housing', id:13},// Detached house
     
     
 	'048b5382': {group:'energy', id:0},// wind farm
@@ -532,7 +536,7 @@ var ids = {
     '005e7ba4': {group:'industry', id:2},// turbine factory
     '04705582': {group:'industry', id:3},// factory farming**
     '809649a4': {group:'industry', id:3},// factory farming
-    '048D5682': {group:'industry', id:4},// business park **
+    '048d5682': {group:'industry', id:4},// business park **
     '00706ea4': {group:'industry', id:4},// business park
     '048e5782': {group:'industry', id:5},// datacentre  **
     'b09d6ba4': {group:'industry', id:5},// datacentre
@@ -540,6 +544,7 @@ var ids = {
     '04775682': {group:'industry', id:7},// clothing **
     '50451aa4': {group:'industry', id:7},// clothing
     '04915682': {group:'industry', id:11},// warehouse **
+    '809649a4': {group:'industry', id:13},// comminuty farm **
 
     '50dc7ea4': {group:'leisure', id:0},// mega supermarket
     '04a35682': {group:'leisure', id:0},// mega supermarket
@@ -550,7 +555,13 @@ var ids = {
     'b0128da6': {group:'leisure', id:5},// nature reserve
     '044b5482': {group:'leisure', id:5},// nature reserve
     '048a5582': {group:'leisure', id:8},// shopping precinct
-    '04855282': {group:'leisure', id:8},// shopping precinct
+    '04855482': {group:'leisure', id:8},// shopping precinct
+	'608c17a4': {group:'leisure', id:14},// paintball arena
+    'f0466ea4': {group:'leisure', id:13},// community centre
+    '043b5382': {group:'leisure', id:6},// cinema
+	'043e5482': {group:'leisure', id:15},// youth club
+	
+	
     '046c5582': {group:'leisure', id:9}, // park
     '50af90a6': {group:'leisure', id:11},// skateboard park
 
@@ -558,17 +569,17 @@ var ids = {
     '045a5582': {group:'transport', id:0},// train station
     '70fa77a4': {group:'transport', id:1},// bus station
     '04715482': {group:'transport', id:1},// bus station
-    '40fb3fa6': {group:'transport', id:2},// car park
+    '40fb3fa6': {group:'transport', id:6},// cycle park
     '046b5682': {group:'transport', id:2},// car park
     '04d65482': {group:'transport', id:4},// park and ride
     '04625582': {group:'transport', id:4},// park and ride
     '04ce5482': {group:'transport', id:6},// cycle park
 	
 	
-    '04ad5382': {group:'fuel', id:0},// baseline
-    '04b55382': {group:'fuel', id:1},// biofuels
-    '04bd5382': {group:'fuel', id:2},// hydrogen?
-    '04c55382': {group:'fuel', id:3},// electric?
+    '005e7ba4': {group:'fuel', id:0},// baseline
+    '70fa77a4': {group:'fuel', id:1},// biofuels
+    'f0cf44a4': {group:'fuel', id:2},// hydrogen?
+    'e05a6ca4': {group:'fuel', id:3},// electric?
 
     '04b25482': {group:'policy', id:0},// ssp1
     '04cb5582': {group:'policy', id:1},// ssp2
