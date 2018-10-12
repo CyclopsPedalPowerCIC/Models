@@ -24,11 +24,11 @@ function set_orb(el, obj) {
 }
 
 function setColour(readerNum,R,G,B){
-    var theURL="http://" + "192.168.0.150" +"/setBlock?";
+    var theURL="http://" + "192.168.0.145" +"/setBlock?";
     theURL+="number="+String(parseInt(readerNum));
-    theURL+="red="+String(parseInt(R));
-    theURL+="green="+String(parseInt(G));
-    theURL+="blue="+String(parseInt(B));
+    theURL+="&red="+String(parseInt(R));
+    theURL+="&green="+String(parseInt(G));
+    theURL+="&blue="+String(parseInt(B));
     $.get(theURL,{},function(response,stat){},"text");
     console.log(`sent ${theURL}`);
 }

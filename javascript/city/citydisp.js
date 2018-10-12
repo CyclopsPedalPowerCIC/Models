@@ -337,7 +337,7 @@ function transport() {
     console.log(`fuel co2 ${co2}: gas ${gas} elec ${elect}`);
 	
     for (var orb=0; orb<9; orb++) {
-	if (co2 > [100,90,80,70,60,50,40,30,20][orb])
+	if (co2/7 > [100,90,80,70,60,50,40,30,0][orb])
 	    break;
     }
     console.log(`orb ${orb}`);
@@ -352,7 +352,7 @@ function transport() {
 	//console.log(`${t.name}: ${t.c} ${t.b} ${t.t} em=${q}`);
 	//console.log(`${e.cf} ${e.bf} ${e.tf} elec  ${elec} ${e.ce} ${e.be} ${e.te}`);
 	for (var orb=0; orb<9; orb++) {
-	    if (q >= [10000,8000,6000,4000,2000,1000,500,200,0][orb])
+	    if (q/8 >= [10000,8000,6000,4000,2000,1000,500,200,0][orb])
 		break;
 	}
 	console.log(`orb ${orb}`);
@@ -400,7 +400,7 @@ function set_cards (c) {
 	console.log(entries[group]);
 	var problem=false;
 	if (entries[group].length > blocks[group]) {
-	    problems.push (`Too many ${group}`);
+	    problems.push (`Too many ${group} blocks`);
 	    problem=true;
 	} else if (entries[group].length < blocks[group]) {
 	    //problems.push (`Not enough ${group}`);
@@ -423,11 +423,7 @@ function set_cards (c) {
 		energy ${energy()}
 		`);
 			  
-    var total = housing()+
-	leisure()+
-	industry()+
-	transport()+
-	energy();
+    var total = housing()+leisure()+industry()+transport()+energy();
 	
     set_emissions(emissions,total);
     set_thermometer(total);
