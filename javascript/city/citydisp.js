@@ -44,7 +44,28 @@ function setColourScale(readerNum,value){
     setColour(readerNum, (rgb>>16)&0xff, (rgb>>8)&0xff, (rgb)&0xff);
 }
 
+
+function get_orb_colour(value){
+    //value goes from 0-8
+    var orb_colours = [
+	0xf00000, 0xf73d00, 0xf85f00,
+	0xffa00c, 0xffd719, 0xf8ff19,
+	0xc2ff1b, 0x79e114, 0x18df0f,
+    ];
+    var rgb = (value===null) ? 0x000000 : orb_colours[value];
+    return rgb;
+}
+
 function set_real_orbs() {
+    var a = new Uint8Array(28*3);
+    for (var i=0, ptr=0; i<28;i++) {
+	var rgb = get_orb_colour(real_orbs[i]);
+	a[ptr++] = (rgb>>16)&0xff;
+	a[ptr++] = (rgb>>8)&0xff;
+	a[ptr++] = (rgb)&0xff;
+    }
+    citymaster.send(a);
+/*
     for (var i=0; i<28; i++) {
 	if (real_orbs[i] === sent_real_orbs[i])
 	    continue;
@@ -52,6 +73,7 @@ function set_real_orbs() {
 	console.log(`real_orb ${i} ${real_orbs[i]}`);
 	sent_real_orbs[i] = real_orbs[i];
     }
+*/
 }
 
 function set_orbs(id) {

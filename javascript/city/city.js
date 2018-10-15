@@ -38,7 +38,7 @@ esprfid.prototype = {
     send: function(d) {
 	this.outdata = d; // data to send
 	try {
-	    this.ws.send(outdata);
+	    this.ws.send(this.outdata);
 	} catch (e) {}
     },
     
@@ -79,35 +79,40 @@ esprfid.prototype = {
     }
 };
 
-var ws_objs= [];
+var ws_objs= [], rfid_objs = [], citymaster;
 
 function citymodel() {
-    var hosts = [
-//	"esprfid1.local",
-//	"esprfid2.local",
-//	"192.168.0.140",
-
-	"192.168.0.141",
-	"192.168.0.142",
-	"192.168.0.143",
-	"192.168.0.144",
-	"192.168.0.146",
-	"192.168.0.147",
+    var hosts = {
+	"192.168.0.141":true,
+	"192.168.0.142":true,
+	"192.168.0.143":true,
+	"192.168.0.144":true,
+	"192.168.0.146":true,
+	"192.168.0.147":true,
 	
-//	"citymaster",
-    ];
-    for (var h of hosts) {
-	ws_objs.push(new esprfid(h, update_models));
+	"192.168.0.145":false,
+    };
+    for (let [h,is_rfid] of Object.entries(hosts)) {
+	var esp = new esprfid(h, is_rfid?update_models:update_switches);
+	ws_objs.push(esp);
+	if (is_rfid)
+	    rfid_objs.push(esp);
+	else
+	    citymaster = esp;
     }
 }
 
+function update_switches() {
+    console.log(`sw ${citymaster.lastjson}`);
+}
+    
 function update_models() {
 	
 //    var rfids = [].concat.call(
 //	Array.map(ws_objs, (w)=>w.lastjson) // FIXME: but not master
     //    );
     var rfids = [];
-    for (let o of ws_objs) {
+    for (let o of rfid_objs) {
 	rfids=rfids.concat(o.lastjson);
     }
     //var rfids = ws_objs[0].lastjson;//FIXME
