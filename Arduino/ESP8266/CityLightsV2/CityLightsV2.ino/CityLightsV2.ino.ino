@@ -30,11 +30,11 @@ ShiftRegister74HC595 sr (24, D0, D2, D1);
 
 // Define the array of leds
 CRGB leds[NUM_LEDS];
-//int switchMap[28]={24,23,30,31,0,1,7,9,8,27,28,26,25,29,21,19,22,18,20,12,11,13,10,4,5,6,3,2};  //lights->switches, wrong way round
+//int switchMapR[28]={24,23,30,31,0,1,7,9,8,27,28,26,25,29,21,19,22,18,20,12,11,13,10,4,5,6,3,2};  //lights->switches, wrong way round
 int switchMap[32]={4,5,27,26,23,24,25,6,8,7,22,20,19,21,28,28,28,28,17,15,18,14,16,1,0,12,11,9,10,13,2,3};  //switches->lights
 int rfidMap[28]={13,9,12,11,10,17,14,18,15,16,3,0,1,2,6,7,4,5,8,25,27,24,26,23,21,19,22,20}; //rfid readers->lights
 
-int switchState[28]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+int switchState[29]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}; //29th value is a dummy which corresponds to non existant switches
 
 void setup() { 
   Serial.begin(9600);
@@ -112,12 +112,12 @@ void checkSwitches(){
     sr.set(0,(i/8)%2); //S3
     sr.set(4,(i/16)%2); //En1
     sr.set(5,(i/16+1)%2); //En2
-    delay(1);
+    //delay(1);
     if (!digitalRead(D3)){
       Serial.print(i);
       
     setCorner(switchMap[i],CRGB::Yellow);
-    switchState[i]=1;  //records if the switch has been pressed
+    switchState[switchMap[i]]=1;  //records if the switch has been pressed
       }
     else {
       //Serial.print(" ");
@@ -161,6 +161,7 @@ void handleBlock(){
     setBlock(bNumber,bColour);
     
     FastLED.show();
+    server.sendHeader("Access-Control-Allow-Origin", "*");
     server.send(200, "text/plain", "Set");
     }
   else {  server.send(200, "text/plain", "Failed");}
@@ -180,7 +181,7 @@ void handleRoot() {
 void handleCorner(){
 
   int bNumber=-1;
-  CRGB bColour;
+  CRGB bColour=CRGB::Black;
   //Serial.print("handleBlock called");
   for (uint8_t i=0; i<server.args(); i++){
     if (server.argName(i)=="number"){
@@ -206,6 +207,7 @@ void handleCorner(){
     setCorner(bNumber,bColour);
     
     FastLED.show();
+    server.sendHeader("Access-Control-Allow-Origin", "*");//should be included automatically, acording to documentation, but isn't for some reason
     server.send(200, "text/plain", "Set");
     }
   else {  server.send(200, "text/plain", "Failed");}
@@ -214,7 +216,8 @@ void handleCorner(){
 }
 
 void setBlock(int number, CRGB colour){
-
+  if (number>27){return;}
+  if (number<0){return;}
 int start=19*number;
 for (int i=0;i<15;i++){
   
@@ -225,6 +228,8 @@ for (int i=0;i<15;i++){
 
 
 void setCorner(int number, CRGB colour){
+    if (number>27){return;}
+  if (number<0){return;}
 int start=19*number;
 
 for (int i=0;i<2;i++){
@@ -238,9 +243,11 @@ for (int i=0;i<2;i++){
 void handleSwitch(){
 
   String returnString="";
-  for (int i=0;i<28;i++){
-    returnString+=switchState[i];    
+  for (int i=0;i<32;i++){
+    returnString+=switchState[i];
+    switchState[i]=0; //reset switches    
     }
+    server.sendHeader("Access-Control-Allow-Origin", "*");
   server.send(200, "text/plain", returnString);
   }
 
