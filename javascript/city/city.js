@@ -123,6 +123,7 @@ function update_models() {
 }
     
 setInterval(check_health, 1000);
+var still_loading = true;
 function check_health() {
     var err = [];
     for (var w of ws_objs) {
@@ -130,7 +131,15 @@ function check_health() {
 	    err.push(w.host);
 	}
     }
+    if (!err.length) {
+	still.loading = false;
+	gebi("loading").style.display="none";
+    }
+    if (still_loading) {
+	//gebi("progress").style.width = (1-err.length/ws_objs.length)*100+"%";
+    }
+    
     var alerter = gebi("alerter");
-    alerter.style.display = err.length ? 'block' : 'none';
+    alerter.style.display = (err.length && (still_loading===debug)) ? 'block' : 'none';
     alerter.innerHTML=err.length ? `${err.length} unhealthy: ${err.join(", ")}`: '';
 }

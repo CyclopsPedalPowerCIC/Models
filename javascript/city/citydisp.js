@@ -347,7 +347,7 @@ function industry() {
 
 function transport() {
     var elec = get_energy_mix();
-    if (entries.fuel.length !== 1) return;
+    if (entries.fuel.length !== 1) return 0;
     var e=entries.fuel[0];
     console.log(`fuel cf ${e.cf} bf ${e.bf} tf ${e.tf}
 		ce ${e.ce} be ${e.be} te ${e.te}`);
@@ -608,6 +608,15 @@ var ids = {
     '04bb5582': {group:'policy', id:3},// ssp4
     '04b35582': {group:'policy', id:4},// ssp5
 };
+var debug = false;
+function keyevent(e) {
+    switch (e.key) {
+    case 'd':
+	debug=!debug;
+	gebi("d1").style.display = debug?"block":"none";
+	break;
+    }
+}
 
 $(document).ready( function() {
     //set_cards(['608c17a4','f0466ea4','90976da5','50a3a2a4', 'fuel1']);
@@ -618,6 +627,7 @@ $(document).ready( function() {
     set_emissions(target,1100);
     set_cards([]);
     //set_cards(['04ad5382', '04ce5482']);
+    window.onkeypress = keyevent;
 });
 
 /*
