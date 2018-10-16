@@ -132,11 +132,11 @@ function check_health() {
 	}
     }
     if (!err.length) {
-	still.loading = false;
+	still_loading = false;
 	gebi("loading").style.display="none";
     }
     if (still_loading) {
-	//gebi("progress").style.width = (1-err.length/ws_objs.length)*100+"%";
+	gebi("progress").style.width = (1-err.length/ws_objs.length)*100+"%";
     }
     
     var alerter = gebi("alerter");
