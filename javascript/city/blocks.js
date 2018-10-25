@@ -1,3 +1,22 @@
+/* Terminology:
+   A _template_ is a variety of building.
+   A _category_ is what category a template falls into.  Each template has precisely one category.
+   A _block_ is a specific instance of a template.  There can be more than one block of a given type.
+   An _id_ is a 32-bit hex constant that uniquely identifies a block.
+   A _slot_ is a place where a block can be placed.  There are 28 slots.
+*/
+
+/* how many slots of each category */
+var blocks = { housing: 8,
+	       /*policy: 1,*/
+	       leisure: 6,
+	       transport: 4 /* should be 5 */,
+	       industry: 4,
+	       energy: 2,
+	       fuel: 1,
+	     };
+
+/* names and attributes for each template, arranged by category */
 var names = {
     housing: [ // heating need, number of dwellings, appliance energy need
 	{ hn:37200, n:33333, a:3000, name: "Terrace" }, // 37200 33333 3000
@@ -38,7 +57,6 @@ var names = {
 	{ m:2.0, name:"Chemical works" }, // 2.0
 	{ m:1.8, name:"Turbine factory" }, // 1.8
 	{ m:2.2, name:"Factory farming" }, // 2.2
-
 	{ m:0.8, name:"Business park" }, // 0.8
 	{ m:1.1, name:"Datacentre" }, // 1.1
 	{ m:1.1, name:"Cannery" }, // 1.1
@@ -50,7 +68,6 @@ var names = {
 	{ m:1.1, name:"Warehousing (chilled)" }, // 1.1
 	{ m:0.6, name:"Community Farm" }, // total guess
     ],
-
     transport: [ // relative amounts of car, bus, train (FIXME: for orb only, no CO2 impact)
 	{ c:0, b:0, t:1, name:"Train station" },
 	{ c:0, b:1, t:0, name:"Bus station" },
@@ -86,6 +103,8 @@ var names = {
     ],
 };
 
+
+/* list of blocks */
 var ids = {
     '702238a5': {group:'housing', id:0},// terrace
     '04925482': {group:'housing', id:0},// terrace
@@ -149,7 +168,6 @@ var ids = {
     'f0466ea4': {group:'leisure', id:13},// community centre
     '043b5382': {group:'leisure', id:6},// cinema
     '043e5482': {group:'leisure', id:15},// youth club
-    
     '046c5582': {group:'leisure', id:9}, // park
     '50af90a6': {group:'leisure', id:11},// skateboard park
 
