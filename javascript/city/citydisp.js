@@ -23,28 +23,6 @@ function set_orb(el, obj) {
     }
 }
 
-function setColour(readerNum,R,G,B){
-    var theURL="http://" + "192.168.0.145" +"/setBlock?";
-    theURL+="number="+String(parseInt(readerNum));
-    theURL+="&red="+String(parseInt(R));
-    theURL+="&green="+String(parseInt(G));
-    theURL+="&blue="+String(parseInt(B));
-    $.get(theURL,{},function(response,stat){},"text");
-    console.log(`sent ${theURL}`);
-}
-
-function setColourScale(readerNum,value){
-    //value goes from 0-8
-    var orb_colours = [
-	0xf00000, 0xf73d00, 0xf85f00,
-	0xffa00c, 0xffd719, 0xf8ff19,
-	0xc2ff1b, 0x79e114, 0x18df0f,
-    ];
-    var rgb = (value===null) ? 0x000000 : orb_colours[value];
-    setColour(readerNum, (rgb>>16)&0xff, (rgb>>8)&0xff, (rgb)&0xff);
-}
-
-
 function get_orb_colour(value){
     //value goes from 0-8
     var orb_colours = [
@@ -64,16 +42,7 @@ function set_real_orbs() {
 	a[ptr++] = (rgb>>8)&0xff;
 	a[ptr++] = (rgb)&0xff;
     }
-    citymaster.send(a);
-/*
-    for (var i=0; i<28; i++) {
-	if (real_orbs[i] === sent_real_orbs[i])
-	    continue;
-	setColourScale(i, real_orbs[i]);
-	console.log(`real_orb ${i} ${real_orbs[i]}`);
-	sent_real_orbs[i] = real_orbs[i];
-    }
-*/
+    citylights.send(a);
 }
 
 function set_orbs(id) {
@@ -90,7 +59,6 @@ function set_orbs(id) {
     } while (el=el.nextSibling);
 }
 
-var blocks = { housing: 8, /*policy: 1,*/ leisure: 6, transport: 4 /* should be 5 */, industry: 4, energy: 2, fuel: 1 };
 var entries = {};
 
 for (let [id,count] of Object.entries(blocks)) {
@@ -403,15 +371,6 @@ function set_thermometer(co2) {
     $('#thermometer').thermometer('setValue', m);
 }
 
-/*
-702238a5 terrace id0
-50a3a2a4 50ssd   id2
-407e1ca4 modernsemi id4
-608c17a4 wind farm
-f0466ea4 natural gas
-572c0a0c steel foundry
-90976da5 Sports ground
-*/
 var debug = false;
 function keyevent(e) {
     switch (e.key) {

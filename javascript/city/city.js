@@ -79,7 +79,7 @@ esprfid.prototype = {
     }
 };
 
-var ws_objs= [], rfid_objs = [], citymaster;
+var ws_objs= [], rfid_objs = [], citylights;
 
 function citymodel() {
     var hosts = {
@@ -98,19 +98,15 @@ function citymodel() {
 	if (is_rfid)
 	    rfid_objs.push(esp);
 	else
-	    citymaster = esp;
+	    citylights = esp;
     }
 }
 
 function update_switches() {
-    console.log(`sw ${citymaster.lastjson}`);
+    console.log(`sw ${citylights.lastjson}`);
 }
     
 function update_models() {
-	
-//    var rfids = [].concat.call(
-//	Array.map(ws_objs, (w)=>w.lastjson) // FIXME: but not master
-    //    );
     var rfids = [];
     for (let o of rfid_objs) {
 	rfids=rfids.concat(o.lastjson);
