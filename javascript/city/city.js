@@ -14,10 +14,9 @@ esprfid.prototype = {
     connected: function() {
 	this.healthy = 1;
 	if (this.outdata)
-	    this.ws.send(outdata);
+	    this.ws.send(this.outdata);
     },
     reconnect: function() {
-	//console.log("reconnect");
 	this.healthy = 0;
 	window.setTimeout(this.wsstart.bind(this),300);
     },
@@ -44,7 +43,7 @@ esprfid.prototype = {
     
     ping: function() {
 	if (!this.ws) {
-	    console.log("returning "+this.host);
+	    //console.log("returning "+this.host);
 	    return;
 	}
 	if (this.ws.readyState !== 1)
@@ -64,16 +63,11 @@ esprfid.prototype = {
 	} catch (e) {}
     },
     wsstart: function() {
-	if (this.ws) {
-	    var r=this.ws.readyState;
-	    console.log(`${this.host} readystate ${r}`);
-	    if (r===0) {
-		return;
-	    }
-	}
-	//console.log("wsstart "+this.host);
+	if (this.ws && !this.ws.readyState)
+	    return;
+
 	this.ws = new WebSocket(`ws://${this.host}:81/`);
-	this.ws.onopen = this.connected;
+	this.ws.onopen = this.connected.bind(this);
 	this.ws.onclose = this.ws.onerror = this.reconnect.bind(this);
 	this.ws.onmessage = this.onmsg.bind(this);
     }
@@ -105,7 +99,7 @@ function citymodel() {
 function update_switches() {
     console.log(`sw ${citylights.lastjson}`);
 }
-    
+
 function update_models() {
     var rfids = [];
     for (let o of rfid_objs) {
@@ -134,7 +128,7 @@ function check_health() {
     if (still_loading) {
 	gebi("progress").style.width = (1-err.length/ws_objs.length)*100+"%";
     }
-    
+
     var alerter = gebi("alerter");
     alerter.style.display = (err.length && (still_loading===debug)) ? 'block' : 'none';
     alerter.innerHTML=err.length ? `${err.length} unhealthy: ${err.join(", ")}`: '';
