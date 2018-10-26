@@ -17,7 +17,7 @@ function set_orb(el, obj) {
     el.style.backgroundPosition=`0px -${(obj.orb===null)?9999:(0|([0,54,107,161,215,270,325,381,436][obj.orb]*30/45))}px`;
     if (obj.source) {
 	for (var i=0; i<obj.source.length; i++) {
-	    console.log(`set_real_orb: ${obj.source[i]} ${obj.orb}`);
+	    //console.log(`set_real_orb: ${obj.source[i]} ${obj.orb}`);
 	    real_orbs[ledmap[obj.source[i]]]=obj.orb;
 	}
     }
@@ -34,13 +34,30 @@ function get_orb_colour(value){
     return rgb;
 }
 
+const anim = { NONE: 0, FLASH_SLOW: 1, FLASH_FAST: 2,
+	       CRAWL_SLOW_LEFT:3, CRAWL_SLOW_RIGHT:4,
+	       CRAWL_FAST_LEFT:5, CRAWL_FAST_RIGHT:6,
+	       DISCO:7
+	     };
+
 function set_real_orbs() {
-    var a = new Uint8Array(28*3);
+    var a = new Uint8Array(28*13);
     for (var i=0, ptr=0; i<28;i++) {
-	var rgb = get_orb_colour(real_orbs[i]);
-	a[ptr++] = (rgb>>16)&0xff;
-	a[ptr++] = (rgb>>8)&0xff;
-	a[ptr++] = (rgb)&0xff;
+	function setrgb(rgb) {
+	    a[ptr++] = (rgb>>16)&0xff;
+	    a[ptr++] = (rgb>>8)&0xff;
+	    a[ptr++] = (rgb)&0xff;
+	}
+	// main colour
+	setrgb (get_orb_colour(real_orbs[i]))
+	// flash colour (unused if no animation)
+	setrgb (0xffffff); // white
+	// corner colour
+	setrgb(real_orbs[i] ? 0x808080 : 0x000000); // grey if block present, black otherwise
+	// corner pressed colour
+	setrgb(real_orbs[i] ? 0xffffff : 0x400000); // white if block present, dim red otherwise
+	// animation type
+	a[ptr++] = anim.NONE;
     }
     citylights.send(a);
 }
