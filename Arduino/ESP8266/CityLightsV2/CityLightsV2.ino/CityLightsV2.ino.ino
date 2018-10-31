@@ -36,19 +36,39 @@ int floodleds1[][2]=  //starting pixel and number of pixels to be "flooded"
     {19*19+0,8},
     {19*18+12,5},
     {19*20+11,8},
-    {19*20+4,3}};
+    {19*20+4,3},
+    {19*22+11,4}};
     
 int floodleds2[][2]=
-    {{19*11+11,8},  //flooding level 2
-    {19*12+11,8},
-    {19*13+11,8},
-    {19*25+4,3},
-    {19*17+4,3},
-    {19*19+0,8},
-    {19*18+12,5},
-    {19*20+11,8},
-    {19*20+4,3}};
+    {{19*11+9,10},  //flooding level 2
+    {19*11+0,3},
+    {19*12+9,10},
+    {19*12+0,3},
+    {19*13+9,10},
+    {19*13+0,3},
+    {19*25+2,7},
+    {19*17+2,7},
+    {19*19+0,10},
+    {19*19+16,3},
+    {19*18+9,10},
+    {19*20+0,19},
+    {19*22+9,8}};
 
+int floodleds3[][2]=
+    {{19*10+9,8},              //flooding level 3
+    {19*11+0,19},
+    {19*12+0,19},
+    {19*13+0,19},
+    {19*25+1,11},
+    {19*17+0,19},
+    {19*16+11,5},
+    {19*9+11,3},
+    {19*14+6,7},
+    {19*19+0,12},
+    {19*19+14,5},
+    {19*18+0,19},
+    {19*20+0,19},
+    {19*22+9,8}};
     
 
 
@@ -280,7 +300,7 @@ void update_leds() {
 
   }
   if (1){  //((frame%200)>50){ //(1){//
-  flood(2);}
+  flood(3);}
   //add in flooding code here...
   FastLED.show();
 }
@@ -302,6 +322,16 @@ void flood(int level){
        leds[j+floodleds2[i][0]].b=abs((frame%5110)/10-255);  //fades the blue in smoothly
        leds[j+floodleds2[i][0]].r=min(int(leds[j+floodleds2[i][0]].r),(255-abs((frame%5110)/10-255))/2); //fades r/g out smoothly
        leds[j+floodleds2[i][0]].g=min(int(leds[j+floodleds2[i][0]].g),(255-abs((frame%5110)/10-255))/2);
+      }
+    }
+  }
+  else if (level==3){
+    for (int i=0;i<(sizeof floodleds3 / sizeof floodleds3[0]);i++){
+       //fill_solid(&leds[floodleds3[i][0]], floodleds3[i][1], gamma_apply(CRGB::Blue));
+       for (int j=0;j<floodleds3[i][1];j++){
+       leds[j+floodleds3[i][0]].b=abs((frame%5110)/10-255);  //fades the blue in smoothly
+       leds[j+floodleds3[i][0]].r=min(int(leds[j+floodleds3[i][0]].r),(255-abs((frame%5110)/10-255))/2); //fades r/g out smoothly
+       leds[j+floodleds3[i][0]].g=min(int(leds[j+floodleds3[i][0]].g),(255-abs((frame%5110)/10-255))/2);
       }
     }
   }
