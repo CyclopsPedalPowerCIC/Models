@@ -26,6 +26,33 @@ int revswitchMap[28]={24,23,30,31,0,1,7,9,8,27,28,26,25,29,21,19,22,18,20,12,11,
 int switchMap[32]={4,5,27,26,23,24,25,6,8,7,22,20,19,21,28,28,28,28,17,15,18,14,16,1,0,12,11,9,10,13,2,3};  //switches->lights
 int rfidMap[28]={13,9,12,11,10,17,14,18,15,16,3,0,1,2,6,7,4,5,8,25,27,24,26,23,21,19,22,20}; //rfid readers->lights
 
+int floodLevel=2;
+int floodleds1[][2]=  //starting pixel and number of pixels to be "flooded"
+    {{19*11+11,8},  //flooding level 1
+    {19*12+11,8},
+    {19*13+11,8},
+    {19*25+4,3},
+    {19*17+4,3},
+    {19*19+0,8},
+    {19*18+12,5},
+    {19*20+11,8},
+    {19*20+4,3}};
+    
+int floodleds2[][2]=
+    {{19*11+11,8},  //flooding level 2
+    {19*12+11,8},
+    {19*13+11,8},
+    {19*25+4,3},
+    {19*17+4,3},
+    {19*19+0,8},
+    {19*18+12,5},
+    {19*20+11,8},
+    {19*20+4,3}};
+
+    
+
+
+
 uint32_t switches = 0;
 
 typedef enum { ANIM_NONE=0, ANIM_FLASH_SLOW, ANIM_FLASH_FAST,
@@ -252,8 +279,34 @@ void update_leds() {
 	      slot[i].tip_colour);
 
   }
+  if (1){  //((frame%200)>50){ //(1){//
+  flood(2);}
+  //add in flooding code here...
   FastLED.show();
 }
+
+
+void flood(int level){
+
+  if (level==0){return;} //there is no flooding
+
+  if (level==1){
+    for (int i=0;i<(sizeof floodleds1 / sizeof floodleds1[0]);i++){
+       fill_solid(&leds[floodleds1[i][0]], floodleds1[i][1], gamma_apply(CRGB::Blue));
+    }
+  }
+  else if (level==2){
+    for (int i=0;i<(sizeof floodleds2 / sizeof floodleds2[0]);i++){
+       //fill_solid(&leds[floodleds2[i][0]], floodleds2[i][1], gamma_apply(CRGB::Blue));
+       for (int j=0;j<floodleds2[i][1];j++){
+       leds[j+floodleds2[i][0]].b=abs((frame%5110)/10-255);  //fades the blue in smoothly
+       leds[j+floodleds2[i][0]].r=min(int(leds[j+floodleds2[i][0]].r),(255-abs((frame%5110)/10-255))/2); //fades r/g out smoothly
+       leds[j+floodleds2[i][0]].g=min(int(leds[j+floodleds2[i][0]].g),(255-abs((frame%5110)/10-255))/2);
+      }
+    }
+  }
+}
+
 
 void set_leds(uint8_t *buf) {
   Serial.print("set_leds\r\n");
@@ -271,6 +324,7 @@ void set_leds(uint8_t *buf) {
       slot[i].frame = frame; // restart animation on mode change
     }
   }
+  if (floodLevel>0) animating = true;  //because the flood is animated
   update_leds();
 }
 
