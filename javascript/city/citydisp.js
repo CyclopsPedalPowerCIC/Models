@@ -30,6 +30,12 @@ function get_orb_colour(value){
 	0xffa00c, 0xffd719, 0xf8ff19,
 	0xc2ff1b, 0x79e114, 0x18df0f,
     ];
+	orb_colours = [
+	0xff0000, 0xff3d00, 0xff5f00,
+	0xffa000, 0xffd700, 0xffff00,
+	0xc2ff00, 0x79ff00, 0x00ff00,
+    ];
+	
     var rgb = (value===null) ? 0x000000 : orb_colours[value];
     return rgb;
 }
