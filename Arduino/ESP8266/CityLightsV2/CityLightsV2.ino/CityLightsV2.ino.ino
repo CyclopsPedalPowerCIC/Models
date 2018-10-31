@@ -279,7 +279,7 @@ void update_leds() {
 	      slot[i].tip_colour);
 
   }
-  if ((frame%200)>50){ //(1){//
+  if (1){  //((frame%200)>50){ //(1){//
   flood(2);}
   //add in flooding code here...
   FastLED.show();
@@ -297,7 +297,12 @@ void flood(int level){
   }
   else if (level==2){
     for (int i=0;i<(sizeof floodleds2 / sizeof floodleds2[0]);i++){
-       fill_solid(&leds[floodleds2[i][0]], floodleds2[i][1], gamma_apply(CRGB::Blue));
+       //fill_solid(&leds[floodleds2[i][0]], floodleds2[i][1], gamma_apply(CRGB::Blue));
+       for (int j=0;j<floodleds2[i][1];j++){
+       leds[j+floodleds2[i][0]].b=abs((frame%5110)/10-255);  //fades the blue in smoothly
+       leds[j+floodleds2[i][0]].r=min(int(leds[j+floodleds2[i][0]].r),(255-abs((frame%5110)/10-255))/2); //fades r/g out smoothly
+       leds[j+floodleds2[i][0]].g=min(int(leds[j+floodleds2[i][0]].g),(255-abs((frame%5110)/10-255))/2);
+      }
     }
   }
 }

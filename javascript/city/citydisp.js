@@ -25,12 +25,12 @@ function set_orb(el, obj) {
 
 function get_orb_colour(value){
     //value goes from 0-8
-    var orb_colours = [
+    var orb_colours = [  //original version from orb olors
 	0xf00000, 0xf73d00, 0xf85f00,
 	0xffa00c, 0xffd719, 0xf8ff19,
 	0xc2ff1b, 0x79e114, 0x18df0f,
     ];
-	orb_colours = [
+	orb_colours = [  //modified version to make the real life colours better (no blue, more full saturated r/g
 	0xff0000, 0xff3d00, 0xff5f00,
 	0xffa000, 0xffd700, 0xffff00,
 	0xc2ff00, 0x79ff00, 0x00ff00,
