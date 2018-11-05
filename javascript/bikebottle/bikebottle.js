@@ -29,7 +29,7 @@ function estimate() {
 	etastr = "Forever.  Get pedalling!";
     }
     eta.innerHTML = etastr;
-    gebi("debug").innerHTML = `${percent} done ${needed} delta=${delta} time=${time}`;
+    console.log(`${percent} done ${needed} delta=${delta} time=${time}`);
 }
 setInterval(add,50);
 
