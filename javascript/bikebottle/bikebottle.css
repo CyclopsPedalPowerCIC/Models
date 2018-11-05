@@ -1,0 +1,60 @@
+@font-face {
+    font-family: 'Gill Sans MT Light';
+    src: url('Gill Sans MT Light.ttf');
+}
+@font-face {
+    font-family: 'Gill Sans MT';
+    src: url('Gill Sans MT.ttf');
+}
+@font-face {
+    font-family: 'Gill Sans Condensed Bold';
+    src: url('Gill Sans Condensed Bold.ttf');
+}
+body {
+    font-family: Gill Sans MT;
+    font-size: 30px;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    text-align: center;
+}
+.container {
+    width: 300px;
+    display: inline-block;
+}
+.bottle {
+    margin: 00px 50px;
+    width: 198px;
+    height: 662px;
+    background: url(coke_4.png);
+}
+.caption {
+    text-align: center;
+    height: 80px;
+}
+.footer {
+    text-align: center;
+    height: 80px;
+}
+.right {
+    display: inline-block;
+    margin-left: 80px;
+    margin-top:150px;
+    vertical-align: top;
+    text-align: center;
+}
+#eta, #power {
+    font-family: Gill Sans Condensed Bold;
+    font-size: 70px;
+}
+.bottle > .label {
+    font-family: Gill Sans Condensed Bold;
+    font-size: 60px;
+    height: 662px;
+    top: 40%;
+    width: 95%;
+    margin: auto auto;
+    text-align: center;
+    position: relative;
+}
+
