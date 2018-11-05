@@ -1,6 +1,6 @@
 function gebi(id) { return document.getElementById(id); }
 var eta=gebi("eta");
-var bgbottle=gebi("bgbottle").cloneNode();
+//var bgbottle=gebi("bgbottle").cloneNode();
 var made=0;
 var lastmade=0;
 var energy1=180; // energy per recycled bottle
@@ -17,15 +17,17 @@ var bestpower = 0; // hi score
 var recycval; // percentage recycled
 var bottlespersec = 450; // UK bottle usage per second
 var fakebike = true; // for testing
+var bottleimage = new Image();
+bottleimage.src = 'cokebg.png';
 
 function go() {
-    if (started) return;
+    if (started || waiting) return;
     made=0;
     lastmade=0;
     waiting = true;
     gebi("final").style.display='none';
     timer = setInterval(req,req_interval);
-    gebi("bottles").innerHTML='';
+    emptycanvas();
     update(0); // set power to zero
 }
 
@@ -60,7 +62,7 @@ At this rate it would take ${etastr} to make a single plastic bottle.
 
 <p>While you were pedalling the UK used ${bottlespersec*gametime} plastic bottles!
 
-With ${recycval}% recycling that's ${total*bottlespersec*gametime} watt-hours of energy used and ${co2*bottlespersec*gametime/1000}kg of CO<sub>2</sub> released.
+With ${recycval}% recycling that's ${total*bottlespersec*gametime} watt-hours of energy used and ${(co2*bottlespersec*gametime/1000).toFixed(0)}kg of CO<sub>2</sub> released.
     `;
 }
 
@@ -104,13 +106,17 @@ function add(resp) {
 }
 
 function update(power) {
-    made += power * req_interval / 3600 / 1000;
-    if (!started && made) {
+    // enforce a minimum power to start the game
+    if (!started && power > 1.0) {
 	started = Date.now();
 	waiting = false;
 	setTimeout(stop, gametime*1000);
 	requestAnimationFrame(multitude);
+    } else if (!started) {
+	power = 0;
     }
+    
+    made += power * req_interval / 3600 / 1000;
     
     var str;
     for (var i=0; i<4; i++) {
@@ -152,11 +158,30 @@ function drawtime() {
     gebi("timer").innerHTML = str;
 }
 
+function emptycanvas() {
+    var c=gebi("bottles");
+    c.width = c.clientWidth;
+    c.height = c.clientHeight;
+    bottlewidth=9;
+    bottleheight=30;
+    bottlesperline = (c.width/bottlewidth)|0;
+    bgx = 0;
+    bgy = 0;
+    console.log(`width=${c.width} height=${c.height} bottlesperline=${bottlesperline}`);
+}
+
 function multitude() {
-    return;
+    var c = gebi("bottles").getContext("2d");
     if (!started) return;
-    for (var i=0; i<7; i++) 
-	gebi("bottles").appendChild(bgbottle.cloneNode());
+    for (var i=0; i<7; i++) {
+	c.drawImage(bottleimage, bgx*bottlewidth, bgy*bottleheight, bottlewidth, bottleheight);
+	bgx++;
+	if (bgx>bottlesperline) {
+	    bgx=0; bgy++;
+	}
+    }
+    console.log(`bgx=${bgx} bgy=${bgy}`);
+    //gebi("bottles").appendChild(bgbottle.cloneNode());
     requestAnimationFrame(multitude);
 }
 

@@ -20,6 +20,7 @@ body {
     overflow: hidden;
     position: fixed;
     text-align: center;
+    background: #eeeeff;
 }
 #bgbottle{
     width: 12px;
@@ -29,13 +30,13 @@ body {
 #bottles {
     width: 100%;
     height: 100%;
+    top:0;
+    left:0;
     margin:0;
     padding: 0;
-    text-align: left;
-    vertical-align: bottom;
     z-index: -999;
     position: fixed;
-    background: #eeeeff;
+    opacity: .2;
 }
 #recycpane {
     position: fixed;
