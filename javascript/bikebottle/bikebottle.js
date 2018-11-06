@@ -18,6 +18,7 @@ var recycval; // percentage recycled
 var bottlespersec = 450; // UK bottle usage per second
 var fakebike = true; // for testing
 var bottleimage = new Image();
+var multtime, multlast;
 bottleimage.src = 'cokebg.png';
 
 function go() {
@@ -29,6 +30,8 @@ function go() {
     timer = setInterval(req,req_interval);
     emptycanvas();
     update(0); // set power to zero
+    estimate();
+    drawtime();
 }
 
 function stop() {
@@ -39,30 +42,58 @@ function stop() {
     setTimeout(drawstats,1000);
 }
 
+function commaify (num) {
+    var num_string, i,  len, threes = [], remainders;
+
+    num_string = num.toString();
+    len = num_string.length;
+    remainders = len % 3;
+
+    if (remainders != 0)
+        threes.push(num_string.substr(0, remainders));
+
+    for (i = remainders; i < len; i += 3)
+        threes.push(num_string.substr(i, 3));
+
+    return threes.join();
+}
+
+function geteta(time,short) {
+    //var percent=(made/total*100).toFixed(2)+"%";
+    var days=(time/86400)|0, hours=((time/3600)%24)|0, minutes=((time/60)%60)|0, seconds = (time%60)|0;
+    return  short?
+	`${days ? days+"d ":" "}${hours}h ${minutes}m ${seconds}s` : `
+${days ? days+" day"+(days==1?'':'s'):''}
+${hours ? hours+" hour"+(hours==1?'':'s'):''}
+${minutes} minute${minutes==1?'':'s'}
+    `// ${seconds}${seconds==1?'':'s'}`
+    ;
+}
+
 function drawstats() {
     gebi("final").style.display='block';
-    var needed = total;
-    var time=(needed/made)*gametime;
-    var percent=(made/total*100).toFixed(2)+"%";
-    var hours=(time/3600)|0, minutes=((time/60)%60)|0, seconds = (time%60)|0;
-    etastr = `${hours} hour${hours==1?'':'s'} ${minutes} minute${minutes==1?'':'s'}`;// ${seconds}${seconds==1?'':'s'}`;
+    var eta1 = geteta((energy1/made)*gametime);
+    var eta2 = geteta((energy2/made)*gametime);
+    var etaavg = geteta(total); // average based upon recycling factor
     var hi=false;
     var power = made*3600/gametime;
     if (bestpower < power) {
 	bestpower = power;
 	hi = true;
     }
-    gebi("heading").innerHTML=hi?"New High Score!":"Game Over";
+    gebi("heading").innerHTML=hi?"Impressive Pedalling!":"Time's Up!";
     gebi("stats").innerHTML=`
     	<p>Your average power output: ${power.toFixed(1)}W.  Today's best: ${bestpower.toFixed(1)}W${hi?' (<b>that\'s you!</b>)':''}.
 
-<p>You pedalled for ${gametime} seconds and made ${made.toFixed(5)}Wh of energy.
+<p>You pedalled for ${gametime} seconds and made ${made.toFixed(3)} watt-hours of energy.
 
-At this rate it would take ${etastr} to make a single plastic bottle.
+At this rate it would take ${eta2} to make a virgin plastic bottle and ${eta1} to make a recycled plastic bottle.
 
-<p>While you were pedalling the UK used ${bottlespersec*gametime} plastic bottles!
+<p>While you were pedalling the UK used ${commaify(bottlespersec*gametime)} plastic bottles!
 
-With ${recycval}% recycling that's ${total*bottlespersec*gametime} watt-hours of energy used and ${(co2*bottlespersec*gametime/1000).toFixed(0)}kg of CO<sub>2</sub> released.
+With ${recycval}% recycling that's ${commaify((total*bottlespersec*gametime).toFixed(0))} watt-hours of energy consumed and ${(co2*bottlespersec*gametime/1000).toFixed(0)}kg of CO<sub>2</sub> released.
+
+    Powering the UK's bottle production would take ${commaify((total*bottlespersec/made)|0)} people like you pedalling continuously (that's ${(total*bottlespersec/made/70e6*100).toFixed(2)}% of the UK population).
     `;
 }
 
@@ -111,6 +142,7 @@ function update(power) {
 	started = Date.now();
 	waiting = false;
 	setTimeout(stop, gametime*1000);
+	multtime = Date.now();
 	requestAnimationFrame(multitude);
     } else if (!started) {
 	power = 0;
@@ -134,15 +166,12 @@ function estimate() {
     if (delta) {
 	lastmade = made;
 	var needed = total-made;
-	var time=(needed/delta)*timedelta;
-	var percent=(made/total*100).toFixed(2)+"%";
-	var hours=(time/3600)|0, minutes=((time/60)%60)|0, seconds = (time%60)|0;
-	etastr = `${hours}h ${minutes}m ${seconds}s`;
+	etastr = geteta(needed/delta, true);
     } else {
 	etastr = "Forever.  Get pedalling!";
     }
     eta.innerHTML = etastr;
-    console.log(`${percent} done ${needed} delta=${delta} time=${time}`);
+    //console.log(`${percent} done ${needed} delta=${delta} time=${time}`);
 }
 
 function drawtime() {
@@ -167,20 +196,23 @@ function emptycanvas() {
     bottlesperline = (c.width/bottlewidth)|0;
     bgx = 0;
     bgy = 0;
-    console.log(`width=${c.width} height=${c.height} bottlesperline=${bottlesperline}`);
+    //console.log(`width=${c.width} height=${c.height} bottlesperline=${bottlesperline}`);
 }
 
 function multitude() {
     var c = gebi("bottles").getContext("2d");
     if (!started) return;
-    for (var i=0; i<7; i++) {
+    multlast = multtime;
+    multtime = Date.now()
+    var delta = multtime - multlast;
+    var bottles = delta/1000 * bottlespersec;
+    for (var i=0; i<bottles; i++) {
 	c.drawImage(bottleimage, bgx*bottlewidth, bgy*bottleheight, bottlewidth, bottleheight);
 	bgx++;
 	if (bgx>bottlesperline) {
 	    bgx=0; bgy++;
 	}
     }
-    console.log(`bgx=${bgx} bgy=${bgy}`);
     //gebi("bottles").appendChild(bgbottle.cloneNode());
     requestAnimationFrame(multitude);
 }
@@ -196,7 +228,6 @@ function setrecycle() {
 // update the time remaining estimate once a second
 setInterval(estimate,timedelta*1000);
 setInterval(drawtime,100);
-requestAnimationFrame(multitude);
 
 gebi("button").onclick = go;
 gebi("recycle").oninput = setrecycle;

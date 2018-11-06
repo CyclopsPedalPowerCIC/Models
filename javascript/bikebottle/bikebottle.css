@@ -47,11 +47,21 @@ body {
     border-radius: 20px;
     background: white;
 }
+#fake {
+    position: fixed;
+    top: 2%;
+    right: 20%;
+    padding: 20px;
+    border: 5px solid black;
+    border-radius: 20px;
+    background: white;
+}
 
 #final {
     position: fixed;
     top: 20%; left: 10%;
-    width: 80%; height: 60%;
+    width: 80%; margin: 0 auto 0 auto;
+    vertical-align: middle;
     background: white;
     border-radius: 20px;
     border: 5px solid black;
@@ -62,10 +72,12 @@ body {
     text-align: left;
 }
 #button {
+    display: inline-block;
     font-size: 36px;
     background: green;
     border-radius: 20px;
     padding: 8px;
+    margin: 30px;
     border-top: 8px solid lime;
     border-left: 8px solid lime;
     border-bottom: 8px solid black;
