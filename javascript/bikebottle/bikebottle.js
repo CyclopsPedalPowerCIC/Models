@@ -77,6 +77,7 @@ function drawstats() {
     var etaavg = geteta(total); // average based upon recycling factor
     var hi=false;
     var power = made*3600/gametime;
+    var popneeded = total*bottlespersec/(made/gametime);
     if (bestpower < power) {
 	bestpower = power;
 	hi = true;
@@ -93,7 +94,9 @@ At this rate it would take ${eta2} to make a virgin plastic bottle and ${eta1} t
 
 With ${recycval}% recycling that's ${commaify((total*bottlespersec*gametime).toFixed(0))} watt-hours of energy consumed and ${(co2*bottlespersec*gametime/1000).toFixed(0)}kg of CO<sub>2</sub> released.
 
-    Powering the UK's bottle production would take ${commaify((total*bottlespersec/made)|0)} people like you pedalling continuously (that's ${(total*bottlespersec/made/70e6*100).toFixed(2)}% of the UK population).
+    Powering the UK's bottle production would take ${commaify(popneeded|0)} people like you pedalling continuously (that's
+    ${popneeded>70e6 ? "more than the UK population!)"
+															      : (popneeded/70e6*100).toFixed(2)+"% of the UK population)"}.
     `;
 }
 
@@ -166,7 +169,7 @@ function estimate() {
     if (delta) {
 	lastmade = made;
 	var needed = total-made;
-	etastr = geteta(needed/delta, true);
+	etastr = geteta(needed/delta, false);//true);
     } else {
 	etastr = "Forever.  Get pedalling!";
     }
