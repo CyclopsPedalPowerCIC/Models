@@ -88,7 +88,7 @@ var names = {
 	{ m:1.1, name:"Retail park" }, // +10
 	{ m:1.3, name:"Leisure park" }, // +10
 	{ m:1.5, name:"Sports ground" }, // 0
-	{ m:1, name:"O2 Arena", anim: 7 }, // 0
+	{ m:1, name:"O2 Arena" /*, anim: 7*/ }, // 0
 	{ m:.3, name:"Nature reserve" }, // -20
 	{ m:1, name:"Cinema" }, // 0
 	{ m:1, name:"Kirkgate Market" }, // 0
@@ -96,7 +96,7 @@ var names = {
 	{ m:.6, name:"Park" }, // -20
 	{ m:1.1, name:"Gym and Pool" }, // +10
 	{ m:.5, name:"Skateboard park" }, // -20
-	{ m:1, name:"Kart track" }, // 0
+	{ m:1, name:"Go-Kart track" }, // 0
 	{ m:0.8, name:"Community centre" }, // 0 number 13
 	{ m:0.6, name:"Paintball arena" }, // 0 number 14
 	{ m:0.8, name:"Youth club" }, // 0 number 15
@@ -149,23 +149,27 @@ var ids = {
     '048e5782': {group:'industry', id:5},// datacentre  **
     'b09d6ba4': {group:'industry', id:5},// datacentre
     '109093a6': {group:'industry', id:6},// cannery
+    '04e3913a': {group:'industry', id:6},// cannery
     '04775682': {group:'industry', id:7},// clothing **
     '50451aa4': {group:'industry', id:7},// clothing
     '04915682': {group:'industry', id:11},// warehouse **
     '809649a4': {group:'industry', id:13},// comminuty farm **
-
+    '04df913a': {group:'industry', id:7},// another clothing
+    '0496d36a': {group:'industry', id:9},// cosmetics
     '50dc7ea4': {group:'leisure', id:0},// mega supermarket
     '04a35682': {group:'leisure', id:0},// mega supermarket
     '109680a4': {group:'leisure', id:1},// retail park
     '90976da5': {group:'leisure', id:3},// Sports ground
     '048d5482': {group:'leisure', id:3},// Sports ground
     '8005e6a4': {group:'leisure', id:4},// O2 arena
+    '046b5682': {group:'leisure', id:4},// O2 arena **
     'b0128da6': {group:'leisure', id:5},// nature reserve
     '044b5482': {group:'leisure', id:5},// nature reserve
     '048a5582': {group:'leisure', id:8},// shopping precinct
     '04855482': {group:'leisure', id:8},// shopping precinct
     '608c17a4': {group:'leisure', id:14},// paintball arena
     'f0466ea4': {group:'leisure', id:13},// community centre
+    '04a6d16a': {group:'leisure', id:12},// kart track
     '043b5382': {group:'leisure', id:6},// cinema
     '043e5482': {group:'leisure', id:15},// youth club
     '046c5582': {group:'leisure', id:9}, // park
@@ -176,7 +180,6 @@ var ids = {
     '70fa77a4': {group:'transport', id:1},// bus station
     '04715482': {group:'transport', id:1},// bus station
     '40fb3fa6': {group:'transport', id:6},// cycle park
-    '046b5682': {group:'transport', id:2},// car park
     '04d65482': {group:'transport', id:4},// park and ride
     '04625582': {group:'transport', id:4},// park and ride
     '04ce5482': {group:'transport', id:6},// cycle park
