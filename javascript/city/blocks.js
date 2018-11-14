@@ -100,6 +100,7 @@ var names = {
 	{ m:0.8, name:"Community centre" }, // 0 number 13
 	{ m:0.6, name:"Paintball arena" }, // 0 number 14
 	{ m:0.8, name:"Youth club" }, // 0 number 15
+	{ m:.3, name:"Community garden" }, // -20
     ],
 };
 
@@ -109,6 +110,7 @@ var ids = {
     '702238a5': {group:'housing', id:0},// terrace
     '04925482': {group:'housing', id:0},// terrace
     '04835382': {group:'housing', id:0},// terrace
+    '0474d26a': {group:'housing', id:0},// terrace
     '50a3a2a4': {group:'housing', id:2},// 50ssd
     '04865782': {group:'housing', id:2},// 50ssd
     '04785582': {group:'housing', id:4},// Mssd
@@ -174,6 +176,7 @@ var ids = {
     '043e5482': {group:'leisure', id:15},// youth club
     '046c5582': {group:'leisure', id:9}, // park
     '50af90a6': {group:'leisure', id:11},// skateboard park
+    '04db913a': {group:'leisure', id:16},// community garden
 
     '6a537889': {group:'transport', id:0},// train station
     '045a5582': {group:'transport', id:0},// train station
