@@ -88,7 +88,7 @@ var names = {
 	{ m:1.1, name:"Retail park" }, // +10
 	{ m:1.3, name:"Leisure park" }, // +10
 	{ m:1.5, name:"Sports ground" }, // 0
-	{ m:1, name:"O2 Arena" }, // 0
+	{ m:1, name:"O2 Arena", anim: 7 }, // 0
 	{ m:.3, name:"Nature reserve" }, // -20
 	{ m:1, name:"Cinema" }, // 0
 	{ m:1, name:"Kirkgate Market" }, // 0

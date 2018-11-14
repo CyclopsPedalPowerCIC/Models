@@ -18,12 +18,13 @@ function set_orb(el, obj) {
     if (obj.source) {
 	for (var i=0; i<obj.source.length; i++) {
 	    //console.log(`set_real_orb: ${obj.source[i]} ${obj.orb}`);
-	    real_orbs[ledmap[obj.source[i]]]=obj.orb;
+	    real_orbs[ledmap[obj.source[i]]]=obj;
 	}
     }
 }
 
-function get_orb_colour(value){
+function get_orb_colour(obj){
+    var value = (obj && obj.orb);
     //value goes from 0-8
     var orb_colours = [  //original version from orb olors
 	0xf00000, 0xf73d00, 0xf85f00,
@@ -55,7 +56,7 @@ function set_real_orbs() {
 	    a[ptr++] = (rgb)&0xff;
 	}
 	// main colour
-	setrgb (get_orb_colour(real_orbs[i]))
+	setrgb (get_orb_colour(real_orbs[i]));
 	// flash colour (unused if no animation)
 	setrgb (0xffffff); // white
 	// corner colour
@@ -63,7 +64,7 @@ function set_real_orbs() {
 	// corner pressed colour
 	setrgb(real_orbs[i] ? 0xffffff : 0x400000); // white if block present, dim red otherwise
 	// animation type
-	a[ptr++] = anim.NONE;
+	a[ptr++] = (real_orbs[i] && real_orbs[i].anim) || anim.NONE;
     }
     citylights.send(a);
 }
