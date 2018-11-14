@@ -150,6 +150,7 @@ var ids = {
     '00706ea4': {group:'industry', id:4},// business park
     '048e5782': {group:'industry', id:5},// datacentre  **
     'b09d6ba4': {group:'industry', id:5},// datacentre
+    '047cd26a': {group:'industry', id:5},// datacentre
     '109093a6': {group:'industry', id:6},// cannery
     '04e3913a': {group:'industry', id:6},// cannery
     '04775682': {group:'industry', id:7},// clothing **
@@ -157,7 +158,9 @@ var ids = {
     '04915682': {group:'industry', id:11},// warehouse **
     '809649a4': {group:'industry', id:13},// comminuty farm **
     '04df913a': {group:'industry', id:7},// another clothing
+    '0484d26a': {group:'industry', id:8},// agriculture
     '0496d36a': {group:'industry', id:9},// cosmetics
+    '04e7913a': {group:'industry', id:10},// furniture
     '50dc7ea4': {group:'leisure', id:0},// mega supermarket
     '04a35682': {group:'leisure', id:0},// mega supermarket
     '109680a4': {group:'leisure', id:1},// retail park
@@ -177,6 +180,7 @@ var ids = {
     '046c5582': {group:'leisure', id:9}, // park
     '50af90a6': {group:'leisure', id:11},// skateboard park
     '04db913a': {group:'leisure', id:16},// community garden
+    '048ed36a': {group:'leisure', id:7},// kirkgate market
 
     '6a537889': {group:'transport', id:0},// train station
     '045a5582': {group:'transport', id:0},// train station
