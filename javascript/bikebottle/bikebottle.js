@@ -236,5 +236,5 @@ gebi("button").onclick = go;
 gebi("recycle").oninput = setrecycle;
 setrecycle();
 go();
-gebi("fake").style.display=fake?'block':'none';
+gebi("fake").style.display=fakebike?'block':'none';
 window.onkeypress = go;
