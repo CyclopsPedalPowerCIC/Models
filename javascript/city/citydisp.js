@@ -64,6 +64,7 @@ function set_real_orbs() {
 	setrgb(real_orbs[i] ? 0xffffff : 0x400000); // white if block present, dim red otherwise
 	// animation type
 	a[ptr++] = anim.NONE;
+	//a[ptr++] = anim.DISCO;
     }
     citylights.send(a);
 }

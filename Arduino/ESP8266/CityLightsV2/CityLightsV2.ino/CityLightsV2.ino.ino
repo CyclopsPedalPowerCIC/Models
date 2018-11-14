@@ -26,7 +26,7 @@ int revswitchMap[28]={24,23,30,31,0,1,7,9,8,27,28,26,25,29,21,19,22,18,20,12,11,
 int switchMap[32]={4,5,27,26,23,24,25,6,8,7,22,20,19,21,28,28,28,28,17,15,18,14,16,1,0,12,11,9,10,13,2,3};  //switches->lights
 int rfidMap[28]={13,9,12,11,10,17,14,18,15,16,3,0,1,2,6,7,4,5,8,25,27,24,26,23,21,19,22,20}; //rfid readers->lights
 
-int floodLevel=2;
+int floodLevel=0;
 int floodleds1[][2]=  //starting pixel and number of pixels to be "flooded"
     {{19*11+11,8},  //flooding level 1
     {19*12+11,8},
@@ -300,7 +300,7 @@ void update_leds() {
 
   }
   if (1){  //((frame%200)>50){ //(1){//
-  flood(3);}
+  flood(floodLevel);}
   //add in flooding code here...
   FastLED.show();
 }
