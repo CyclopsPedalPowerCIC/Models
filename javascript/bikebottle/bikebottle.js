@@ -106,8 +106,8 @@ function req() {
 	return;
     }
     //var url = "https://sphere.chronosempire.org.uk/~HEx/tmp/bike";
-    var url = "bike";
-    //var url = "http://192.168.0.138/Data";
+    //var url = "bike";
+    var url = "http://192.168.0.138/Data";
     var request = new XMLHttpRequest();
     request.open("GET", url, true);
     request.overrideMimeType('text/plain');
