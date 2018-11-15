@@ -66,7 +66,7 @@ var names = {
 	{ m:0.9, name:"Furniture maker" }, // .9
 	{ m:0.8, name:"Warehouse" }, // .8
 	{ m:1.1, name:"Warehousing (chilled)" }, // 1.1
-	{ m:0.6, name:"Community Farm" }, // total guess
+	{ m:0.6, name:"Community Farm" }, // total guess for amounts
     ],
     transport: [ // relative amounts of car, bus, train (FIXME: for orb only, no CO2 impact)
 	{ c:0, b:0, t:1, name:"Train station" },
@@ -128,6 +128,7 @@ var ids = {
     '04795882': {group:'housing', id:12},// Ziggurat
     '237d7a89': {group:'housing', id:13},// Detached house
     '04465482': {group:'housing', id:8},// Housing co-operative
+    '046cd26a': {group:'housing', id:8},// Housing co-operative
     
     '048b5382': {group:'energy', id:0},// wind farm
     '04525582': {group:'energy', id:1},// nuclear
@@ -157,6 +158,7 @@ var ids = {
     '50451aa4': {group:'industry', id:7},// clothing
     '04915682': {group:'industry', id:11},// warehouse **
     '809649a4': {group:'industry', id:13},// comminuty farm **
+    '049ed16a': {group:'industry', id:12},// chilled warehouse
     '04df913a': {group:'industry', id:7},// another clothing
     '0484d26a': {group:'industry', id:8},// agriculture
     '0496d36a': {group:'industry', id:9},// cosmetics
@@ -181,6 +183,7 @@ var ids = {
     '50af90a6': {group:'leisure', id:11},// skateboard park
     '04db913a': {group:'leisure', id:16},// community garden
     '048ed36a': {group:'leisure', id:7},// kirkgate market
+    '04eb913a': {group:'leisure', id:10}, // gym + pool
 
     '6a537889': {group:'transport', id:0},// train station
     '045a5582': {group:'transport', id:0},// train station
