@@ -101,6 +101,7 @@ var names = {
 	{ m:0.6, name:"Paintball arena" }, // 0 number 14
 	{ m:0.8, name:"Youth club" }, // 0 number 15
 	{ m:.3, name:"Community garden" }, // -20
+	{ m: 1.6, name: "University" }, // Id 17
     ],
 };
 
@@ -184,14 +185,18 @@ var ids = {
     '04db913a': {group:'leisure', id:16},// community garden
     '048ed36a': {group:'leisure', id:7},// kirkgate market
     '04eb913a': {group:'leisure', id:10}, // gym + pool
+	'04cf913a': {group:'leisure', id:11},// skateboard park
+	'04d3913a': {group:'leisure', id:17}, // University
 
     '6a537889': {group:'transport', id:0},// train station
     '045a5582': {group:'transport', id:0},// train station
     '70fa77a4': {group:'transport', id:1},// bus station
     '04715482': {group:'transport', id:1},// bus station
+    '04ef5482': {group:'transport', id:2},// cAR PARK
     '40fb3fa6': {group:'transport', id:6},// cycle park
     '04d65482': {group:'transport', id:4},// park and ride
     '04625582': {group:'transport', id:4},// park and ride
+    '04765382': {group:'transport', id:4},// park and ride
     '04ce5482': {group:'transport', id:6},// cycle park
     
     '005e7ba4': {group:'fuel', id:0},// baseline
