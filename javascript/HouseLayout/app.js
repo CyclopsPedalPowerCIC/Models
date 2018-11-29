@@ -964,7 +964,8 @@ function sumPower(){
 }
 
 function setResistance(number){
-	
+	console.log("set resistance");
+	console.log(number);
 	var theURL="http://" + _urlDump +"/Set?";
 	theURL+="Duty="+String(parseInt(number));
 	$.get(theURL,{},function(response,stat){},"text");

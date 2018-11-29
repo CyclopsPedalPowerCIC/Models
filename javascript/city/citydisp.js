@@ -160,16 +160,18 @@ function set_cards (c) {
     set_real_orbs();
 }
 
+
 function setResistance(duty){
 	//incoming value generally between 1000 and 3500 ish
 	//output duty between 0 and 2000
 	
-	
+	console.log("set resistance");
+	console.log(duty);
 	//using a function that will hopefully make the bikes feel like theyre doing something..
 	
 	duty=((duty-500)*2/3); //1000->300 and 3500->2000
 	
-	var theURL="http://" + "192.168.0.138" +"/Set?";
+	var theURL="http://" + "192.168.0.139" +"/Set?";
 	theURL+="Duty="+String(parseInt(duty));
 	$.get(theURL,{},function(response,stat){},"text");
 	

@@ -164,6 +164,7 @@ function transport() {
     // FIXME: transport blocks change proportions
     for (var t of entries.transport) {
 	// this is all terrible
+	//need to add co2 contributions here, feels like q already contains the relevant data, ish?
 	var q = t.c*5400*e.cf + t.b*254*e.bf + t.t*427*e.tf +
 	    (t.c*5400*e.ce + t.b*254*e.be + t.t*427*e.te)*elec;
 	//console.log(`${t.name}: ${t.c} ${t.b} ${t.t} em=${q}`);
@@ -172,6 +173,7 @@ function transport() {
 	    if (q/8 >= [10000,8000,6000,4000,2000,1000,500,200,0][orb])
 		break;
 	}
+	
 	console.log(`orb ${orb}`);
 	t.orb = orb;
     }
