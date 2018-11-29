@@ -108,7 +108,7 @@ function set_cards (c) {
 	real_orbs[i] = null;
     }
 
-    console.log(`c.length=${c.length}`);
+    //console.log(`c.length=${c.length}`);
     for (var n=0; n<c.length; n++) {
 	var i = c[n];
 	if (!i || i==='00000000' || i==='eeeeeeee')
@@ -116,17 +116,17 @@ function set_cards (c) {
 	var obj = ids[i];
 	if (!obj) { problems.push(`dunno what ${i} is`); continue;}
 	//if (!obj) { alert(`dunno what ${i} is`); continue;}
-	console.log (obj);
+	//console.log (obj);
 	
 	entries[obj.group].push(names[obj.group][obj.id]);
-	console.log(`pushing source ${n} for ${obj.name}`);
-	console.log(names[obj.group][obj.id]);
+	//console.log(`pushing source ${n} for ${obj.name}`);
+	//console.log(names[obj.group][obj.id]);
 	names[obj.group][obj.id].source.push(n);
     }
     
     for (var group of Object.keys(entries)) {
-	console.log(`group ${group} max ${blocks[group]} got ${entries[group].length}`);
-	console.log(entries[group]);
+	//console.log(`group ${group} max ${blocks[group]} got ${entries[group].length}`);
+	//console.log(entries[group]);
 	var problem=false;
 	if (entries[group].length > blocks[group]) {
 	    problems.push (`Too many ${group} blocks`);
@@ -144,14 +144,14 @@ function set_cards (c) {
 	gebi("problems").innerHTML=prefix+problems.join("<br>"+prefix);
 	//return;
     }
-    console.log(`
+    /*console.log(`
 		housing ${housing()}
 		leisure ${leisure()}
 		industry ${industry()}
 		transport ${transport()}
 		energy ${energy()}
 		`);
-			  
+*/
     var total = housing()+leisure()+industry()+transport()+energy();
 	
 	setResistance(total);
@@ -161,6 +161,24 @@ function set_cards (c) {
     set_real_orbs();
 }
 
+{
+    let requests = 0;
+    function fire_and_forget (target) {
+	console.log(target);
+	if (requests < 2) {
+	    let xhr = new XMLHttpRequest();
+	    xhr.open('GET', target, true);
+	    xhr.timeout = 5000; // ms
+	    xhr.onload = xhr.onerror =
+		xhr.ontimeout = ()=>requests--;
+	    requests++;
+	    xhr.send(null);
+	} else {
+	    console.log(`no: requests=${requests}`);
+	}
+    }
+}
+
 function setResistance(duty){
 	//incoming value generally between 1000 and 3500 ish
 	//output duty between 0 and 2000
@@ -168,13 +186,11 @@ function setResistance(duty){
 	
 	//using a function that will hopefully make the bikes feel like theyre doing something..
 	
-	duty=((duty-500)*2/3); //1000->300 and 3500->2000
-	
-	var theURL="http://" + "192.168.0.138" +"/Set?";
-	theURL+="Duty="+String(parseInt(duty));
-	$.get(theURL,{},function(response,stat){},"text");
-	
-	
+    duty=((duty-500)*2/3); //1000->300 and 3500->2000
+    if (duty<0) duty=0;
+    if (duty>2000) duty=2000;
+
+    fire_and_forget(`http://192.168.0.139/Set?Duty=${duty|0}`);
 }
 
 function commaify (num) {
