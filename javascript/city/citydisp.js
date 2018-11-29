@@ -66,7 +66,8 @@ function set_real_orbs() {
 	// animation type
 	a[ptr++] = (real_orbs[i] && real_orbs[i].anim) || anim.NONE;
     }
-    citylights.send(a);
+    if (!passive)
+	citylights.send(a);
 }
 
 function set_orbs(id) {
@@ -241,6 +242,7 @@ function keyevent(e) {
 	break;
     }
 }
+var passive = false;
 
 $(document).ready( function() {
     //set_cards(['608c17a4','f0466ea4','90976da5','50a3a2a4', 'fuel1']);
@@ -252,6 +254,10 @@ $(document).ready( function() {
     set_cards([]);
     //set_cards(['04ad5382', '04ce5482']);
     window.onkeypress = keyevent;
+    if (window.location.hash.match(/passive/)) {
+	passive = true;
+	gebi("loading2").firstChild.textContent+="(passive)";
+    }
 });
 
 /*
