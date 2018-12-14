@@ -193,7 +193,8 @@ function setResistance(duty){
     if (duty<0) duty=0;
     if (duty>2000) duty=2000;
 
-    fire_and_forget(`http://192.168.0.139/Set?Duty=${duty|0}`);
+    if (!passive)
+	fire_and_forget(`http://192.168.0.139/Set?Duty=${duty|0}`);
 }
 
 function commaify (num) {
