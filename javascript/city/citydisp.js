@@ -13,8 +13,10 @@ var ledmap = [13,9,12,11,10,17,14,18,15,16,3,0,1,2,6,7,4,5,8,25,27,24,26,23,21,1
 var real_orbs = [], sent_real_orbs = [];
 
 function set_orb(el, obj) {
-    el.textContent = obj.name;
-    el.style.backgroundPosition=`0px -${(obj.orb===null)?9999:(0|([0,54,107,161,215,270,325,381,436][obj.orb]*30/45))}px`;
+    if (el) {
+	el.textContent = obj.name;
+	el.style.backgroundPosition=`0px -${(obj.orb===null)?9999:(0|([0,54,107,161,215,270,325,381,436][obj.orb]*30/45))}px`;
+    }
     if (obj.source) {
 	for (var i=0; i<obj.source.length; i++) {
 	    //console.log(`set_real_orb: ${obj.source[i]} ${obj.orb}`);
@@ -75,13 +77,13 @@ function set_orbs(id) {
     var arr = entries[id];
     //console.log(`id=${id} arr=${arr} len=${arr.length}`);
     for (var i=0; i<arr.length; i++, el&&(el=el.nextSibling)) {
-	if (el)
-	    set_orb(el, arr[i]);
+	set_orb(el, arr[i]);
     }
-    if (el)
-    do {
-	set_orb(el, {orb:null, name:'empty', source:[]});
-    } while (el=el.nextSibling);
+    if (el) {
+	do {
+	    set_orb(el, {orb:null, name:'empty', source:[]});
+	} while (el=el.nextSibling);
+    }
 }
 
 var entries = {};
