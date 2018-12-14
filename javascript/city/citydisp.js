@@ -185,8 +185,8 @@ function setResistance(duty){
 	//incoming value generally between 1000 and 3500 ish
 	//output duty between 0 and 2000
 	
-	console.log("set resistance");
-	console.log(duty);
+	//console.log("set resistance");
+	//console.log(duty);
 	//using a function that will hopefully make the bikes feel like theyre doing something..
 	
     duty=((duty-500)*2/3); //1000->300 and 3500->2000

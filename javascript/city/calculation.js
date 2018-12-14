@@ -16,13 +16,13 @@ function get_energy_mix() { // CO2 intensity of electricity
 	console.log ("wrong number of energies");
 	return entries.energy[0] ? entries.energy[0].e : 55; // FIXME
     }
-    console.log(`get_energy: 0=${entries.energy[0].e} 1=${entries.energy[1].e}`);
+    //console.log(`get_energy: 0=${entries.energy[0].e} 1=${entries.energy[1].e}`);
     return ((entries.energy[0].e +entries.energy[1].e)/2);
 }
 
 function housing() {
     var elec = get_energy_mix();
-    console.log(`elec ${elec}`);
+    //console.log(`elec ${elec}`);
     var total = 0;
     for (var h of entries.housing) {
 	var co2 = h.hn * h.n * 222  // heat
@@ -71,13 +71,13 @@ function modifiers_block(id, baseheat, baseelec, orbs) {
 	var co2 = (baseheat  // heat
 		   + elec * baseelec) // appliances
 	    * e.m / 1e9;
-	console.log(`${id} ${e.name} co2 ${co2}`);
+	//console.log(`${id} ${e.name} co2 ${co2}`);
 	
 	for (var orb=0; orb<9; orb++) {
 	    if (co2 > orbs[orb])
 		break;
 	}
-	console.log(`orb ${orb}`);
+	//console.log(`orb ${orb}`);
 	e.orb = orb;
 	total += co2;
     }
@@ -157,7 +157,7 @@ function transport() {
 	if (co2/7 > [100,90,80,70,60,50,40,30,0][orb])
 	    break;
     }
-    console.log(`orb ${orb}`);
+    //console.log(`orb ${orb}`);
     e.orb = orb;
     set_orbs("fuel");
     
@@ -174,7 +174,7 @@ function transport() {
 		break;
 	}
 	
-	console.log(`orb ${orb}`);
+	//console.log(`orb ${orb}`);
 	t.orb = orb;
     }
     set_orbs("transport");
