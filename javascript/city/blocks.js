@@ -76,6 +76,7 @@ var names = {
 	{ c:.5, b:.5, t:0, name:"Park and ride" },
 	{ c:.5, b:.5, t:0, name:"Park and ride (EV)" },
 	{ c:0, b:0, t:0, name:"Cycle park" },
+	{ c:1, b:0, t:0, name:"Airport" },
     ],
     fuel: [ // gCO2/km/person fuel and kwh/pkm electric for car, bus and train
 	{ cf:90, bf:42.47, tf:64.81, ce:0, be:0, te:0, name:"Baseline" }, // 90 42.47 64.81
@@ -103,6 +104,8 @@ var names = {
 	{ m:.3, name:"Community garden" }, // -20  //guessed value
 	{ m: 1.6, name: "University" }, // Id 17  //guessed value
 	{ m: 1.1, name: "College" }, // Id 17     //guessed value
+	{ m: 0.7, name: "East End Swimming Pool" }, // ID 19
+	{ m: 0.5, name: "Ca-Faye (Faye's Cafe)" }, // ID 20
     ],
 };
 
@@ -165,6 +168,8 @@ var ids = {
     '0484d26a': {group:'industry', id:8},// agriculture
     '0496d36a': {group:'industry', id:9},// cosmetics
     '04e7913a': {group:'industry', id:10},// furniture
+	
+
     '50dc7ea4': {group:'leisure', id:0},// mega supermarket
     '04a35682': {group:'leisure', id:0},// mega supermarket
     '109680a4': {group:'leisure', id:1},// retail park
@@ -182,15 +187,19 @@ var ids = {
     '043b5382': {group:'leisure', id:6},// cinema
     '043e5482': {group:'leisure', id:15},// youth club
     '046c5582': {group:'leisure', id:9}, // park
-    '50af90a6': {group:'leisure', id:11},// skateboard park
+    '50af90a6': {group:'leisure', id:11}, // skateboard park
     '0465d46a': {group:'leisure', id:11},// skateboard park
     '04db913a': {group:'leisure', id:16},// community garden
     '048ed36a': {group:'leisure', id:7},// kirkgate market
     '04eb913a': {group:'leisure', id:10}, // gym + pool
-	'04cf913a': {group:'leisure', id:11},// skateboard park
+	//'04cf913a': {group:'leisure', id:11},// skateboard park
 	'04d3913a': {group:'leisure', id:17}, // University
 	'04d7913a': {group:'leisure', id:18}, // college
-
+	//'04cf913a': {group:'leisure', id:19}, // East End Swimming Pool
+	'04765382': {group:'leisure', id:20},// Ca-Faye (Faye's cafe)
+	
+	
+	
     '6a537889': {group:'transport', id:0},// train station
     '045a5582': {group:'transport', id:0},// train station
     '70fa77a4': {group:'transport', id:1},// bus station
@@ -199,8 +208,11 @@ var ids = {
     '40fb3fa6': {group:'transport', id:6},// cycle park
     '04d65482': {group:'transport', id:4},// park and ride
     '04625582': {group:'transport', id:4},// park and ride
-    '04765382': {group:'transport', id:4},// park and ride
+	'04cb913a': {group:'transport', id:4},// park and ride
+   // '': {group:'transport', id:20},// park and ride
     '04ce5482': {group:'transport', id:6},// cycle park
+	'04cf913a': {group:'transport', id:7}, // Airport
+	
     
     '005e7ba4': {group:'fuel', id:0},// baseline
     '70fa77a4': {group:'fuel', id:1},// biofuels
