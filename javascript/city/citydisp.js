@@ -11,6 +11,7 @@ function make_orbs(id, n) {
 var ledmap = [13,9,12,11,10,17,14,18,15,16,3,0,1,2,6,7,4,5,8,25,27,24,26,23,21,19,22,20];
 // LEDs to write
 var real_orbs = [], sent_real_orbs = [];
+var last_emissions;
 
 function set_orb(el, obj) {
     if (el) {
@@ -134,18 +135,13 @@ function set_cards (c) {
 	    problems.push (`Too many ${group} blocks`);
 	    problem=true;
 	} else if (entries[group].length < blocks[group]) {
-	    //problems.push (`Not enough ${group}`);
+	    problems.push (`Not enough ${group} blocks`);
 	    problem=true;
 	}
 	gebi(`${group}_head`).className=problem?"flashing":"";
 	set_orbs(group);
     }
-    gebi("problems").style.display=problems.length?'block':'none';
-    if (problems.length) {
-	var prefix = "<big>⚠</big>";
-	gebi("problems").innerHTML=prefix+problems.join("<br>"+prefix);
-	//return;
-    }
+    gebi("problems").style.display=(problems.length && !still_loading)?'block':'none';
     /*console.log(`
 		housing ${housing()}
 		leisure ${leisure()}
@@ -155,13 +151,26 @@ function set_cards (c) {
 		`);
 */
     var total = housing()+leisure()+industry()+transport()+energy();
+    set_real_orbs();
 	
+    if (problems.length) {
+	var prefix = "<big>⚠</big>";
+	gebi("problems").innerHTML=prefix+problems.join("<br>"+prefix);
+	return;
+    }
+
+    // ok, we have enough stuff for meaningful emissions
+    
     if (!passive)
 	setResistance(total);
-	
     set_emissions(emissions,total);
+    if (last_emissions) {
+	var diff = total - last_emissions;
+	gebi("diff").innerHTML = `(${(diff>=0 && '+')}${commaify(diff)})`;
+    }
+    last_emissions = total;
+
     set_thermometer(total);
-    set_real_orbs();
 }
 
 {
