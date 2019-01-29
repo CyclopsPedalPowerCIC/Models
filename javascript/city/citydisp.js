@@ -156,6 +156,7 @@ function set_cards (c) {
 */
     var total = housing()+leisure()+industry()+transport()+energy();
 	
+    if (!passive)
 	setResistance(total);
 	
     set_emissions(emissions,total);
@@ -181,7 +182,7 @@ function set_cards (c) {
     }
 }
 
-function setResistance(duty){
+function setResistance(co2){
 	//incoming value generally between 1000 and 3500 ish
 	//output duty between 0 and 2000
 	
@@ -189,12 +190,11 @@ function setResistance(duty){
 	//console.log(duty);
 	//using a function that will hopefully make the bikes feel like theyre doing something..
 	
-    duty=((duty-500)*2/3); //1000->300 and 3500->2000
+    var duty=((co2-500)*2/3); //1000->300 and 3500->2000
     if (duty<0) duty=0;
     if (duty>2000) duty=2000;
 
-    if (!passive)
-	fire_and_forget(`http://192.168.0.139/Set?Duty=${duty|0}`);
+    fire_and_forget(`http://192.168.0.139/Set?Duty=${duty|0}`);
 }
 
 function commaify (num) {
@@ -218,18 +218,18 @@ var target = { el: gebi("target"), cloud: gebi("tarcloud"), val: 1100 };
 
 function set_emissions(obj,v) {
     var valueProperty = {val: obj.val};
-    $(valueProperty).animate( {val: v}, {
-        duration: 1000,
-        step: function() {
+    var stepfn = function() {
+            obj.val = this.val;
             obj.el.textContent=commaify(obj.val.toFixed(0));
 	    var minsize = .5;
 	    var size = ((Math.tanh(obj.val/3000))*(1-minsize)+minsize);
 	    obj.cloud.style.backgroundSize = size*100+"%";
-	    
-            obj.val = this.val;
-        }
-    }
-			    );
+    };
+    $(valueProperty).animate( {val: v}, {
+        duration: 1000,
+        step: stepfn,
+	complete: stepfn,
+    });
 }
 
 
