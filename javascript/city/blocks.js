@@ -20,7 +20,7 @@ var blocks = { housing: 8,
 var names = {
     housing: [ // heating need, number of dwellings, appliance energy need
 	{ hn:37200, n:33333, a:3000, name: "Terrace" }, // 37200 33333 3000
-	{ hn:37200, n:33333, a:3000, name: "Terrace (SP)" },
+	{ hn:15000, n:33333, a:3000, name: "Terrace Refurbished" },  //guessed values
 	{ hn:40000, n:33333, a:3900, name:"1950s semi-detached" }, // 40000 33333 3900
 	{ hn:40000, n:33333, a:3900, name:"1950s semi-detached (SP)" }, 
 	{ hn:30000, n:33333, a:3900, name:"Modern semi-detached" }, // 30000 33333 3900
@@ -116,71 +116,90 @@ var ids = {
     '04925482': {group:'housing', id:0},// terrace
     '04835382': {group:'housing', id:0},// terrace
     '0474d26a': {group:'housing', id:0},// terrace
+    '04355582': {group:'housing', id:1},// terrace
+    '04415682': {group:'housing', id:1},// terrace
     '50a3a2a4': {group:'housing', id:2},// 50ssd
     '04865782': {group:'housing', id:2},// 50ssd
+    '04545682': {group:'housing', id:2},// 50ssd
+    '04565882': {group:'housing', id:2},// 50ssd
     '04785582': {group:'housing', id:4},// Mssd
     '407e1ca4': {group:'housing', id:4},//modernsemi
+    '04395882': {group:'housing', id:4},//modernsemi
     '20f391a6': {group:'housing', id:6},// Tower block
     '047c5282': {group:'housing', id:6},// Tower block
     '04ab5582': {group:'housing', id:6},// Tower block
     '04435382': {group:'housing', id:6},// Tower block
     'e05a6ca4': {group:'housing', id:8},// Eco house
     '04f91e82': {group:'housing', id:8},// housing coop
+    '04455882': {group:'housing', id:8},// housing coop
     'b0547da4': {group:'housing', id:10},// Eco flats
-    '047c5782': {group:'housing', id:10},// Eco flats
+    //'047c5782': {group:'housing', id:10},// Eco flats
     '047e5582': {group:'housing', id:10},// Eco flats
+    '045e5882': {group:'housing', id:10},// Eco flats
+    '04465782': {group:'housing', id:10},// Eco flats
     'f0cf44a4': {group:'housing', id:12},// Ziggurat
     '04795882': {group:'housing', id:12},// Ziggurat
     '237d7a89': {group:'housing', id:13},// Detached house
+    '045c5682': {group:'housing', id:13},// Detached house
+    '237d7a89': {group:'housing', id:13},// Detached house
+    '04645682': {group:'housing', id:13},// Detached house
     '04465482': {group:'housing', id:8},// Housing co-operative
     '046cd26a': {group:'housing', id:8},// Housing co-operative
     
     '048b5382': {group:'energy', id:0},// wind farm
-    '04525582': {group:'energy', id:1},// nuclear
-    '04995682': {group:'energy', id:6},// natural gas
+    '04515782': {group:'energy', id:1},// nuclear
+    '04495782': {group:'energy', id:6},// natural gas
     '04a25482': {group:'energy', id:2},// coal
-    '047f5682': {group:'energy', id:2},// coal
+    '043c5982': {group:'energy', id:2},// coal
+    '04405a82': {group:'energy', id:3},// biomass
     '04aa5482': {group:'energy', id:3},// biomass
     '04c25482': {group:'energy', id:5},// solar
     '049c5482': {group:'energy', id:5},// solar
     '04855682': {group:'energy', id:7},// fracked gas
+    '04445982': {group:'energy', id:7},// fracked gas
     '04ba5482': {group:'energy', id:8},// natural gas with ccs
 
     '572c0a0c': {group:'industry', id:0},// steel foundry
+    '04485a82': {group:'industry', id:0},// steel foundry
     '60c4a0a4': {group:'industry', id:1},// chemical works
-    '04985582': {group:'industry', id:2},// turbine factory**
+    '043f5582': {group:'industry', id:2},// turbine factory**
     '005e7ba4': {group:'industry', id:2},// turbine factory
-    '04705582': {group:'industry', id:3},// factory farming**
+    '04475582': {group:'industry', id:3},// factory farming**
     '809649a4': {group:'industry', id:3},// factory farming
     '048d5682': {group:'industry', id:4},// business park **
     '00706ea4': {group:'industry', id:4},// business park
+    '04495682': {group:'industry', id:4},// business park
     '048e5782': {group:'industry', id:5},// datacentre  **
     'b09d6ba4': {group:'industry', id:5},// datacentre
     '047cd26a': {group:'industry', id:5},// datacentre
     '109093a6': {group:'industry', id:6},// cannery
-    '04e3913a': {group:'industry', id:6},// cannery
+    '044e5882': {group:'industry', id:6},// cannery
     '04775682': {group:'industry', id:7},// clothing **
     '50451aa4': {group:'industry', id:7},// clothing
     '04915682': {group:'industry', id:11},// warehouse **
+    '044f5982': {group:'industry', id:11},// warehouse **
     '809649a4': {group:'industry', id:13},// comminuty farm **
-    '049ed16a': {group:'industry', id:12},// chilled warehouse
+    
     '04df913a': {group:'industry', id:7},// another clothing
     '0484d26a': {group:'industry', id:8},// agriculture
     '0496d36a': {group:'industry', id:9},// cosmetics
     '04e7913a': {group:'industry', id:10},// furniture
 	
-
+	'049ed16a': {group:'leisure', id:0},// mega supermarket
     '50dc7ea4': {group:'leisure', id:0},// mega supermarket
     '04a35682': {group:'leisure', id:0},// mega supermarket
     '109680a4': {group:'leisure', id:1},// retail park
     '90976da5': {group:'leisure', id:3},// Sports ground
     '048d5482': {group:'leisure', id:3},// Sports ground
+    '043e5782': {group:'leisure', id:3},// Sports ground
     '8005e6a4': {group:'leisure', id:4},// O2 arena
     '046b5682': {group:'leisure', id:4},// O2 arena **
     'b0128da6': {group:'leisure', id:5},// nature reserve
     '044b5482': {group:'leisure', id:5},// nature reserve
     '048a5582': {group:'leisure', id:8},// shopping precinct
     '04855482': {group:'leisure', id:8},// shopping precinct
+    '04535782': {group:'leisure', id:8},// shopping precinct
+    '04725882': {group:'leisure', id:8},// shopping precinct
     '608c17a4': {group:'leisure', id:14},// paintball arena
     'f0466ea4': {group:'leisure', id:13},// community centre
     '04a6d16a': {group:'leisure', id:12},// kart track
@@ -202,10 +221,15 @@ var ids = {
 	
     '6a537889': {group:'transport', id:0},// train station
     '045a5582': {group:'transport', id:0},// train station
+    '047d5982': {group:'transport', id:0},// train station
     '70fa77a4': {group:'transport', id:1},// bus station
     '04715482': {group:'transport', id:1},// bus station
+    '04665882': {group:'transport', id:1},// bus station
     '04ef5482': {group:'transport', id:2},// cAR PARK
+    '045b5782': {group:'transport', id:2},// cAR PARK
+    '047c5782': {group:'transport', id:3},// EV cAR PARK
     '40fb3fa6': {group:'transport', id:6},// cycle park
+    '043d5882': {group:'transport', id:6},// cycle park
     '04d65482': {group:'transport', id:4},// park and ride
     '04625582': {group:'transport', id:4},// park and ride
 	'04cb913a': {group:'transport', id:4},// park and ride
