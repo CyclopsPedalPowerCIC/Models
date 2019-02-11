@@ -6,11 +6,9 @@
 #include <WebSocketsServer.h>
 #include <ESP8266mDNS.h>
 
-#define NREADERS 5
+#define NREADERS 7
 #define NTRIES 5   // how many failed reads in a row before we believe the card's gone away
-#define ID 5
-
-#define RST_PIN D4
+#define ID 1
 
 struct reader {
   MFRC522 rfid;
@@ -19,7 +17,7 @@ struct reader {
   bool tested_ok;
 } readers[NREADERS];
 
-uint8_t pins[] = { D0, D1, D2, D3, D8 };
+uint8_t pins[] = { D0, D1, D2, D3, D4, D8, D9 };
 MFRC522::MIFARE_Key key; 
 
 unsigned long lastelapsed;
@@ -115,7 +113,12 @@ const char *hostname_string() {
 
 void setup() { 
   Serial.begin(115200);
-  Serial.print("\r\n\r\n\r\nmultirfidreader (" __TIME__ " " __DATE__ ")\r\n");
+  Serial.print("\r\n\r\n\r\nmultirfidreader v2 (" __TIME__ " " __DATE__ ")\r\n");
+  for (int i=0; i<sizeof(pins)/sizeof(pins[0]); i++) {
+    pinMode(pins[i], OUTPUT);
+    digitalWrite(pins[i], HIGH);
+  }
+
   init_server();
   init_readers();
 
@@ -127,12 +130,6 @@ void setup() {
 
 void init_readers () {
   Serial.println("Readers:");
-  // pull shared reset pin low
-  pinMode(RST_PIN, OUTPUT);
-  digitalWrite(RST_PIN, LOW);
-  delay(50);
-  digitalWrite(RST_PIN, HIGH);  
-  delay(10);
 
   for (byte i = 0; i < 6; i++) {
     key.keyByte[i] = 0xFF;
