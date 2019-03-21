@@ -20,14 +20,14 @@ var blocks = { housing: 8,
 var names = {
     housing: [ // heating need, number of dwellings, appliance energy need
 	{ hn:37200, n:33333, a:3000, name: "Terrace" }, // 37200 33333 3000
-	{ hn:15000, n:33333, a:3000, name: "Terrace Refurbished" },  //guessed values
+	{ hn:15000, n:33333, a:3000, name: "Terrace (refurbished)" },  //guessed values
 	{ hn:40000, n:33333, a:3900, name:"1950s semi-detached" }, // 40000 33333 3900
 	{ hn:40000, n:33333, a:3900, name:"1950s semi-detached (SP)" }, 
 	{ hn:30000, n:33333, a:3900, name:"Modern semi-detached" }, // 30000 33333 3900
 	{ hn:30000, n:33333, a:3900, name:"Modern semi-detached (SP)" },
 	{ hn:9000,  n:50000, a:2800, name:"Tower block" }, // 9000 50000 2800
 	{ hn:9000,  n:50000, a:2800, name:"Tower block (SP)" },
-	{ hn:10000, n:33333, a:3900, name:"Housing Cooperative" }, // 10000 33333 3900
+	{ hn:10000, n:33333, a:3900, name:"Housing cooperative" }, // 10000 33333 3900
 	{ hn:10000, n:33333, a:3900, name:"Eco house (SP)" },
 	{ hn:5000,  n:50000, a:2800, name:"Eco flats" }, // 5000 50000 2800
 	{ hn:5000,  n:50000, a:2800, name:"Eco flats (SP)" },
