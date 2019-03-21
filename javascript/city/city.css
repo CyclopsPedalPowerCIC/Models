@@ -127,7 +127,8 @@ h3 {
 #blk0 {
   position: absolute;
   height: 20%; left: 3%;
-  top: 10%; width: 23%;
+  top: 4%; width: 23%;
+  font-size: 92%;
 }
 
 #blk1 {
@@ -153,7 +154,7 @@ h3 {
 #blk4 {
   position: absolute;
   height: 20%; left: 28%;
-  top: 5%; width: 650px;
+  top: 5%; width: 600px;
 }
 
 #blk5 {
