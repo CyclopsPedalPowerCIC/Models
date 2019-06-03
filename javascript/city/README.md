@@ -23,6 +23,10 @@ ID (count)     MAC address       IP address
 5 (5) : 5c:cf:7f:ed:ee:d4	192.168.0.142
 6 (5) : 84:f3:eb:81:3d:ee	192.168.0.141
 
+Lights/buttons ESP
+==================
+a0:20:a6:00:cb:73	192.168.0.145
+
 ESP pin usage:
 2 pins for MISO/MOSI
 1 pin for SPI CLK
