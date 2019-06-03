@@ -13,15 +13,18 @@ function esprfid(host, cb) {
 esprfid.prototype = {
     connected: function() {
 	this.healthy = 1;
+	check_health();
 	if (this.outdata)
 	    this.ws.send(this.outdata);
     },
     reconnect: function() {
 	this.healthy = 0;
+	check_health();
 	window.setTimeout(this.wsstart.bind(this),300);
     },
     onmsg: function(e) {
 	this.healthy = 2;
+	check_health();
 	if (this.lastmsg != e.data) {
 	    this.lastmsg = e.data;
 	    try {
@@ -112,7 +115,7 @@ function update_models() {
     set_cards(rfids);
 }
     
-setInterval(check_health, 1000);
+//setInterval(check_health, 1000);
 var still_loading = true;
 function check_health() {
     var err = [];
