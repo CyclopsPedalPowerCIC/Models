@@ -101,8 +101,8 @@ function set_cards (c) {
 	entries[i] = [];
     }
     // blank all the sources
-    for (var group of Object.keys(entries)) {
-	for (var i=0; i<names[group].length; i++) {
+    for (let group of Object.keys(entries)) {
+	for (let i of Object.keys(names[group])) {
 	    names[group][i].source = [];
 	}
     }
@@ -135,7 +135,7 @@ function set_cards (c) {
 	    problems.push (`Too many ${group} blocks`);
 	    problem=true;
 	} else if (entries[group].length < blocks[group]) {
-	    problems.push (`Not enough ${group} blocks`);
+	    //problems.push (`Not enough ${group} blocks`);
 	    problem=true;
 	}
 	gebi(`${group}_head`).className=problem?"flashing":"";
@@ -165,8 +165,9 @@ function set_cards (c) {
 	setResistance(total);
     set_emissions(emissions,total);
     if (last_emissions) {
-	var diff = total - last_emissions;
-	gebi("diff").innerHTML = `(${(diff>=0 && '+')}${commaify(diff)})`;
+	var diff = (total - last_emissions)|0;
+	console.log(`diff=${diff}`);
+	gebi("diff").innerHTML = `(${(diff>=0?'+':'-')}${commaify(Math.abs(diff))})`;
     }
     last_emissions = total;
 
@@ -222,14 +223,14 @@ function commaify (num) {
     return threes.join();
 }
 
-var emissions = { el: gebi("emissions"), cloud: gebi("emcloud"), val: 1100 };
+var emissions = { el: gebi("emissions"), cloud: gebi("emcloud"), val: 1234.5678 };
 var target = { el: gebi("target"), cloud: gebi("tarcloud"), val: 1100 };
 
 function set_emissions(obj,v) {
     var valueProperty = {val: obj.val};
     var stepfn = function() {
             obj.val = this.val;
-            obj.el.textContent=commaify(obj.val.toFixed(0));
+        obj.el.textContent=commaify(obj.val.toFixed(0));
 	    var minsize = .5;
 	    var size = ((Math.tanh(obj.val/3000))*(1-minsize)+minsize);
 	    obj.cloud.style.backgroundSize = size*100+"%";
@@ -244,7 +245,7 @@ function set_emissions(obj,v) {
 
 
 $('#thermometer').thermometer( {
-    startValue: 0,
+    startValue: -1,
     height: "100%",
     width: "100%",
     bottomText: "",
@@ -253,7 +254,7 @@ $('#thermometer').thermometer( {
     maxValue: 6,
     minValue: 0,
     liquidColour: ()=>"red",
-    valueChanged: (value)=>$('#value').text(value.toFixed(1)+"°C"),
+    valueChanged: (value)=>($('#value').text(value<0?"???":(value.toFixed(1)+"°C"))),
 });
 
 function set_thermometer(co2) {
