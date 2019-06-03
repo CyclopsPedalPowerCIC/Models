@@ -14,7 +14,7 @@ var blocks = { housing: 8,
 	       industry: 4,
 	       energy: 2,
 	       fuel: 1,
-	     };
+	     }; 
 
 /* names and attributes for each template, arranged by category */
 var names = {
@@ -24,13 +24,12 @@ var names = {
 	{ hn:40000, n:33333, a:3900, name:"1950s semi-detached" }, // 40000 33333 3900
 	{ hn:2000, n:33333, a:2800, name:"Retrofit 1950s semi" }, 
 	{ hn:30000, n:33333, a:3900, name:"Modern semi-detached" }, // 30000 33333 3900
-	{ hn:2000, n:33333, a:3900, name:"Retrofit Modern semi" },
+	{ hn:2000, n:33333, a:3900, name:"Retrofit Modern semi" }, // id5
 	{ hn:9000,  n:50000, a:2800, name:"Tower block" }, // 9000 50000 2800
 	{ hn:1000,  n:50000, a:2800, name:"Retrofit Tower block" },
 	{ hn:2000, n:33333, a:3900, name:"Housing Cooperative" }, // 10000 33333 3900
 	{ hn:2000, n:33333, a:3900, name:"Eco house" },
 	{ hn:2000,  n:50000, a:2800, name:"Eco flats" }, // 5000 50000 2800
-	{ hn:2000,  n:50000, a:2800, name:"Eco flats" },
 	{ hn:1000,  n:50000, a:2800, name:"Ziggurat" }, // 3000 50000 2800
 	{ hn:48000, n:33333, a:3900, name:"Detached house" }, // 48000 33333 3900
 	{ hn:3000, n:33333, a:2800, name:"Retrofit Detached" }, // 17000 33333 2800 id14
@@ -48,6 +47,7 @@ var names = {
 	{ e:234.11, name:"Natural gas plant" }, // 234.11
 	{ e:331.61, name:"Fracked gas plant" }, // 331.61
 	{ e:76.63, name:"Natural gas with CCS" }, // 76.63
+	{ e:66.38, name:"Hydro-electric power" }, // 66.38
     ],
     policy: [ 
 	{ name:"Sustainability SSP1" },
@@ -57,26 +57,27 @@ var names = {
 	{ name:"Fossil fuel development SSP5" },
     ],
     industry: [ // modifiers
-	{ m:2.2, name:"Fresh Steel foundry" }, // 2.2 from raw materials
-	{ m:2.0, name:"Chemical works" }, // 2.0
-	{ m:1, name:"Make stuff in UK" }, // 1.8 Turbine factory
-	{ m:2.2, name:"Factory farming" }, // 2.2
-	{ m:0.8, name:"Business park" }, // 0.8
-	{ m:1.1, name:"Datacentre" }, // 1.1
-	{ m:1.1, name:"Cannery" }, // 1.1
-	{ m:0.9, name:"Clothing factory" }, // .9
-	{ m:1, name:"Community Farm" }, // 1.2
-	{ m:0.9, name:"Cosmetics factory" }, // 1.1
-	{ m:0.9, name:"Furniture maker" }, // .9
-	{ m:0.8, name:"Warehouse" }, // .8
-	{ m:1.1, name:"Warehousing (chilled)" }, // 1.1
-	{ m:0.6, name:"Community Farm" }, // total guess for amounts
-	{ m:0.2, name:"Repair and Renew" }, // new on march 2019
-	{ m:2.2, name:"Import Everything" }, // new on march 2019
-	{ m:0.8, name:"Eco Hospital" }, // new on march 2019
-	{ m:1, name:"Recycled Steel foundry" }, // 2.2 from raw materials
-	{m:0.5, name: "Vertical Farm" }, // id 18
+	{ m:2.2, name:"Fresh Steel foundry" }, // 2.2 from raw materials id 0
+	{ m:2.0, name:"Chemical works" }, // 2.0 ID1
+	{ m:0.5, name:"Make stuff in UK" }, // 1.8 Turbine factory ID2
+	{ m:2.2, name:"Factory farming" }, // 2.2 ID3
+	{ m:0.8, name:"Business park" }, // 0.8 ID4
+	{ m:1.1, name:"Datacentre" }, // 1.1 ID5
+	{ m:1.1, name:"Cannery" }, // 1.1 ID6
+	{ m:0.9, name:"Clothing factory" }, // .9 ID7
+	{ m:0.2, name:"Community Farm" }, // 1.2 ID8
+	{ m:0.9, name:"Cosmetics factory" }, // 1.1 ID9
+	{ m:0.9, name:"Furniture maker" }, // .9 ID10
+	{ m:0.8, name:"Warehouse" }, // .8 ID11
+	{ m:1.1, name:"Warehousing (chilled)" }, // 1.1 ID12
+	{ m:0.2, name:"Community Farm" }, // total guess for amounts ID13
+	{ m:0.2, name:"Repair and Renew" }, // new on march 2019 ID14
+	{ m:2.2, name:"Import Everything" }, // new on march 2019 ID15
+	{ m:0.8, name:"Eco Hospital" }, // new on march 2019 ID16
+	{ m:1, name:"Recycled Steel foundry" }, // 2.2 from raw materials ID17
+	{ m:0.2, name: "Vertical Farm" }, // id 18
     ],
+	
     transport: [ // relative amounts of car, bus, train (FIXME: for orb only, no CO2 impact)
 	{ c:0, b:0, t:1, name:"Train station" },
 	{ c:0, b:1, t:0, name:"Bus station" },
@@ -88,26 +89,32 @@ var names = {
 	{ c:2, b:0, t:0, name:"Airport" },
 	{ c:.5, b:.5, t:0, name:"Car Share" },
     ],
+	
     fuel: [ // gCO2/km/person fuel and kwh/pkm electric for car, bus and train
 	{ cf:90, bf:42.47, tf:64.81, ce:0, be:0, te:0, name:"Baseline" }, // 90 42.47 64.81
 	{ cf:73.75, bf:36.1, tf:64.81, ce:0, be:0, te:0, name:"Mostly Biofuels" }, // 73.75 36.1 64.81
 	{ cf:43.75, bf:0, tf:0, ce:0, be:0.076, te: 0.096, name:"Hydrogen" }, // 43.75 XXX (0.076kwh/pkm) (0.096kwh/pkm)
 	{ cf:5, bf:0, tf:0, ce:0.016, be:0, te:0.096, name:"Hydrogen and Electric" }, // (0.16kwh/km) 10 (0.096kwh/km)
     ],
+	
     leisure: [ // CO2 modifiers
 	{ m:1.4, name:"Mega supermarket" }, // 0
 	{ m:1.1, name:"Retail park" }, // +10
 	{ m:1.3, name:"Leisure park" }, // +10
 	{ m:1.5, name:"Sports ground" }, // 0
 	{ m:1, name:"O2 Arena" /*, anim: 7*/ }, // 0
-	{ m:.3, name:"Nature reserve" }, // -20
+	{ m:.01, name:"Nature reserve" }, // -20
 	{ m:1, name:"Cinema" }, // 0
 	{ m:1, name:"Kirkgate Market" }, // 0
 	{ m:1.1, name:"Shopping precinct" }, // +10
-	{ m:.6, name:"Park" }, // -20
+	{ m:.1, name:"Park" }, // -20
 	{ m:1.1, name:"Gym and Pool" }, // +10
-	{ m:.5, name:"Skateboard park" }, // -20
+	{ m:.1, name:"Skateboard park" }, // -20
 	{ m:1, name:"Go-Kart track" }, // 0
+	{ m:0.24, name:"Lupton Community centre" }, // 0 number 13
+	{ m:0.6, name:"Paintball arena" }, // 0 number 14  
+	{ m:0.21, name:"Youth club" }, // 0 number 15  //guessed value
+	{ m:.12, name:"Community garden" }, // -20  //guessed value
 	{ m:0.4, name:"Lupton Community centre" }, // 0 number 13
 	{ m:0.6, name:"Paintball arena" }, // 0 number 14  
 	{ m:0.4, name:"Youth club" }, // 0 number 15  //guessed value
@@ -115,7 +122,18 @@ var names = {
 	{ m: 1.6, name: "University" }, // Id 17  //guessed value
 	{ m: 1.1, name: "College" }, // Id 17     //guessed value
 	{ m: 0.7, name: "East End Swimming Pool" }, // ID 19
-	{ m: 0.5, name: "Ca-Faye (Faye's Cafe)" }, // ID 20
+	{ m: 0.03, name: "Four day Week" }, // ID 21
+	{ m: 0.024, name: "Library of Things" }, // ID 22 // new on march 2019
+	{ m: 0.02, name: "Bike Repair Cafe" }, // ID 23 // new on march 2019
+	{ m: 0.012, name: "Playground" }, // ID 24 // new on march 2019
+	{ m: 0.5, name: "Ocean Life Centre" }, // ID 25 // new on march 2019 DIY 7
+	{ m: 1.5, name: "MacDonalds" }, // ID 26 // new on march 2019 DIY 5
+	{ m: 1.5, name: "Pizza Hut" }, // ID 27 // new on march 2019 DIY 1
+	{ m: 0.03, name: "Handmade recycled clothes" }, // ID 28 // new on march 2019 DIY 1
+	{ m: 0.04, name: "Vegetarian restaurant" }, // ID 29 // new on march 2019 DIY 1
+	{ m: 0.03, name: "Meat only on Mondays" }, // ID 30 // new on march 2019 DIY 1
+	{ m: 0.04, name: "Life skills for young ppl" }, // ID 31 // new on march 2019 DIY 1
+	{ m: 0.03, name: "4 day school week" }, // ID 32 // new on march 2019 DIY 10
 	{ m: 0.3, name: "Four day Week" }, // ID 21
 	{ m: 0.3, name: "Library of Things" }, // ID 22 // new on march 2019
 	{ m: 0.3, name: "Bike Repair Cafe" }, // ID 23 // new on march 2019
@@ -134,6 +152,12 @@ var names = {
 	{ m: 0.3, name: "Free Supermarket" }, // ID 36 // new on march 2019 DIY 10
 	{ m: 0.3, name: "Dog and Cat Spa" }, // ID 37 // new on march 2019 DIY 10
 	{ m: 0.3, name: "Pet-powered Park" }, // ID 38 // new on march 2019 DIY 10
+	{ m: 0.02, name: "People-powered Park" }, // ID 39 // new on march 2019 DIY 10
+	{ m: 0.3, name: "National Media Museum" }, // ID 39 // new on march 2019 DIY 10
+	{ m: 0.04, name: "Parks and Such :)" }, // 41
+	{ m: 0.3, name: "Play areas for adults" }, // 42
+	{ m: 0.1, name: "SHAFF Activism!" }, // 43
+	{ m: 1, name: "School" }, // 44
 	{ m: 0.3, name: "People-powered Park" }, // ID 39 // new on march 2019 DIY 10
 	{ m: 0.3, name: "National Media Museum" }, // ID 39 // new on march 2019 DIY 10
 	{ m: 0.3, name: "Parks and Such :)" }, // 41
@@ -172,8 +196,8 @@ var ids = {
     '04565882': {group:'housing', id:2},// 50ssd
 	'049f913a': {group:'housing', id:4},// Mssd
     '04785582': {group:'housing', id:4},// Mssd
-    '407e1ca4': {group:'housing', id:4},//modernsemi
-    '04395882': {group:'housing', id:4},//modernsemi
+    '407e1ca4': {group:'housing', id:4},// modernsemi
+    '04395882': {group:'housing', id:5},// retrofit modernsemi
     '20f391a6': {group:'housing', id:6},// Tower block
     '047c5282': {group:'housing', id:6},// Tower block
     '04ab5582': {group:'housing', id:6},// Tower block
@@ -206,9 +230,9 @@ var ids = {
     '04aa5482': {group:'energy', id:3},// biomass
     '04c25482': {group:'energy', id:5},// solar
     '049c5482': {group:'energy', id:5},// solar
-    '04855682': {group:'energy', id:7},// fracked gas
     '04445982': {group:'energy', id:7},// fracked gas
     '04ba5482': {group:'energy', id:8},// natural gas with ccs
+	'04715482': {group:'energy', id:9},// hydro-electric 
 
     '572c0a0c': {group:'industry', id:0},// steel foundry
     '04485a82': {group:'industry', id:0},// steel foundry
@@ -233,7 +257,7 @@ var ids = {
     '809649a4': {group:'industry', id:13},// comminuty farm **
     '04625582': {group:'industry', id:15},// import stuff from abroad
     '04925482': {group:'industry', id:14},// repair and renew
-    
+	'04855682': {group:'industry', id:19},// recycled steel factory
     '04df913a': {group:'industry', id:7},// another clothing
     '0484d26a': {group:'industry', id:8},// agriculture
     //'0496d36a': {group:'industry', id:9},// cosmetics
@@ -283,17 +307,28 @@ var ids = {
 	//'04ef5482': {group:'leisure', id:30},// meat only on a monday
 	'04775682': {group:'leisure', id:31},// life skills
 	//'04855482': {group:'leisure', id:32},// 4 day school week
+	//'04715482': {group:'leisure', id:33},// solar panel phone
 	'04715482': {group:'leisure', id:33},// solar panel phone
+
 	//'04cf913a': {group:'leisure', id:34},// warmer and better hospital
 	//'04ef5482': {group:'leisure', id:35},// phone case charger
 	'040e933a': {group:'leisure', id:36},// free supermarket
 	//'0493913a': {group:'leisure', id:37},// dog and cat spa
 	'04f91e82': {group:'leisure', id:38},// pet powered park
 	'04705582': {group:'leisure', id:39},// People-powered park
+
+	//'04cf913a': {group:'leisure', id:40},// National Media Museum
+	'0493913a': {group:'leisure', id:13},// Lupton Community Centre
+	'04ef5482': {group:'leisure', id:41},// Parks and such
+	//'04715482': {group:'leisure', id:42}, // Play areas for adults!
+	'04cf913a': {group:'leisure', id:43}, // SHAFF Adventure Activism
+	'04d7913a': {group:'leisure', id:44}, // school 
+
 	'04cf913a': {group:'leisure', id:40},// National Media Museum
 	'0493913a': {group:'leisure', id:13},// Lupton Community Centre
 	'04ef5482': {group:'leisure', id:41},// Parks and such
 	'04715482': {group:'leisure', id:42}, // Play areas for adults!
+
 	
 	
     '6a537889': {group:'transport', id:0},// train station
