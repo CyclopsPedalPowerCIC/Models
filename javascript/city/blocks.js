@@ -23,18 +23,18 @@ var names = {
 	1: { hn:2000, n:33333, a:2800, name: "Retrofit Terrace" },  //guessed values
 	2: { hn:40000, n:33333, a:3900, name:"1950s semi-detached" }, // 40000 33333 3900
 	3: { hn:2000, n:33333, a:2800, name:"Retrofit 1950s semi" }, 
-	4: { hn:30000, n:33333, a:3900, name:"Modern semi-detached" }, // 30000 33333 3900
-	5: { hn:2000, n:33333, a:3900, name:"Retrofit Modern semi" }, // id5
+	4: { hn:30000, n:33333, a:3900, name:"Semi-detached" }, // 30000 33333 3900
+	5: { hn:2000, n:33333, a:3900, name:"Retrofit semi" }, // id5
 	6: { hn:9000,  n:50000, a:2800, name:"Tower block" }, // 9000 50000 2800
 	7: { hn:1000,  n:50000, a:2800, name:"Retrofit Tower block" },
 	8: { hn:2000, n:33333, a:3900, name:"Housing Cooperative" }, // 10000 33333 3900
 	9: { hn:2000, n:33333, a:3900, name:"Eco house" },
 	10:{ hn:2000,  n:50000, a:2800, name:"Eco flats" }, // 5000 50000 2800
-	11:{ hn:1000,  n:50000, a:2800, name:"Ziggurat" }, // 3000 50000 2800
-	12:{ hn:48000, n:33333, a:3900, name:"Detached house" }, // 48000 33333 3900
-	13:{ hn:3000, n:33333, a:2800, name:"Retrofit Detached" }, // 17000 33333 2800 id14
-	14:{ hn:1000, n:33333, a:2000, name:"GSHP Detached" }, // 17000 33333 2800 id15
-	15:{ hn:1000, n:33333, a:2000, name:"Community built housing" }, // Media museum id 16
+	12:{ hn:1000,  n:50000, a:2800, name:"Ziggurat" }, // 3000 50000 2800
+	13:{ hn:48000, n:33333, a:3900, name:"Detached house" }, // 48000 33333 3900
+	14:{ hn:3000, n:33333, a:2800, name:"Retrofit Detached" }, // 17000 33333 2800 id14
+	15:{ hn:1000, n:33333, a:2000, name:"GSHP Detached" }, // 17000 33333 2800 id15
+	16:{ hn:1000, n:33333, a:2000, name:"Community built housing" }, // Media museum id 16
     },
     energy: { // carbon intensity in gCO2/kWh
 	0: { e:14.6, name:"Wind farm" }, // 14.6
@@ -101,13 +101,13 @@ var names = {
 	1: { m:1.1, name:"Retail park" }, // +10
 	2: { m:1.3, name:"Leisure park" }, // +10
 	3: { m:1.5, name:"Sports ground" }, // 0
-	4: { m:1, name:"O2 Arena" /*, anim: 7*/ }, // 0
+	4: { m:1, name:"First Direct Arena" /*, anim: 7*/ }, // 0
 	5: { m:.01, name:"Nature reserve" }, // -20
 	6: { m:1, name:"Cinema" }, // 0
 	7: { m:1, name:"Kirkgate Market" }, // 0
 	8: { m:1.1, name:"Shopping precinct" }, // +10
 	9: { m:.1, name:"Park" }, // -20
-	10:{ m:1.1, name:"Gym and Pool" }, // +10
+	10:{ m:1.1, name:"Leisure centre" }, // +10
 	11:{ m:.1, name:"Skateboard park" }, // -20
 	12:{ m:1, name:"Go-Kart track" },
 	13:{ m:0.24, name:"Lupton Community centre" },
@@ -170,12 +170,12 @@ var ids = {
     '04415682': {group:'housing', id:1},// terrace
     '50a3a2a4': {group:'housing', id:2},// 50ssd
     '04865782': {group:'housing', id:2},// 50ssd
-    '04545682': {group:'housing', id:2},// 50ssd
     '04565882': {group:'housing', id:2},// 50ssd
 	'049f913a': {group:'housing', id:4},// Mssd
     '04785582': {group:'housing', id:4},// Mssd
     '407e1ca4': {group:'housing', id:4},// modernsemi
-    '04395882': {group:'housing', id:5},// retrofit modernsemi
+    '04545682': {group:'housing', id:4},// modernsemi
+    '04395882': {group:'housing', id:5},// retrofit semi
     '20f391a6': {group:'housing', id:6},// Tower block
     '047c5282': {group:'housing', id:6},// Tower block
     '04ab5582': {group:'housing', id:6},// Tower block
@@ -231,7 +231,7 @@ var ids = {
     '04855682': {group:'industry', id:19},// recycled steel factory
     '04df913a': {group:'industry', id:7},// another clothing
     '0484d26a': {group:'industry', id:8},// agriculture
-    //'0496d36a': {group:'industry', id:9},// cosmetics
+    '0496d36a': {group:'industry', id:9},// cosmetics
     '04e7913a': {group:'industry', id:10},// furniture
     
     '049ed16a': {group:'leisure', id:0},// mega supermarket
@@ -240,7 +240,7 @@ var ids = {
     '90976da5': {group:'leisure', id:3},// Sports ground
     '048d5482': {group:'leisure', id:3},// Sports ground
     '043e5782': {group:'leisure', id:3},// Sports ground
-    '8005e6a4': {group:'leisure', id:4},// O2 arena
+    //'8005e6a4': {group:'leisure', id:4},// O2 arena
     '046b5682': {group:'leisure', id:4},// O2 arena **
     'b0128da6': {group:'leisure', id:5},// nature reserve
     '044b5482': {group:'leisure', id:5},// nature reserve
@@ -258,7 +258,7 @@ var ids = {
     '0465d46a': {group:'leisure', id:11},// skateboard park
     '04db913a': {group:'leisure', id:16},// community garden
     '048ed36a': {group:'leisure', id:7},// kirkgate market
-    '04eb913a': {group:'leisure', id:10}, // gym + pool
+    '04eb913a': {group:'leisure', id:10}, // leisure centre (gym + pool)
     '04d3913a': {group:'leisure', id:17}, // University
     '04765382': {group:'leisure', id:20},// Ca-Faye (Faye's cafe)
     '04525582': {group:'leisure', id:23},// bike cafe
@@ -277,7 +277,7 @@ var ids = {
     '043d5882': {group:'transport', id:6},// cycle park
     '04d65482': {group:'transport', id:4},// park and ride
     '04cb913a': {group:'transport', id:4},// park and ride
-    '0496d36a': {group:'transport', id:5},// park and ride
+    //'': {group:'transport', id:5},// park and ride
     '04ce5482': {group:'transport', id:4},// park and ride
     '0497913a': {group:'transport', id:8}, // Car Club
     
