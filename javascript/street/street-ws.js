@@ -1,0 +1,233 @@
+function gebi(id) { return document.getElementById(id); }
+
+var csel = gebi("econ");
+var cs = new CoinStackBar({
+    container:csel,
+    coinimgsrc:'coin.svg',
+    coinimgwidth:200,
+    coinimgheight:100,
+    coinheight:30,
+    xoffset:10,
+    yoffset:6,
+    
+    startvalue:25,
+    maxstackheight:14,
+    containerwidth:120,
+});
+
+function set_coins(val) {
+    csel.CoinStackBar.setValue(val*12);
+}
+
+var happinesses = {};
+var metric;
+
+function set_happiness(type, val) {
+    val=(val+.5)|0;
+    if (val<1) val=1;
+    if (val>5) val=5;
+    //console.log(`${type}=${val}`);
+    if (happinesses[type] == val)
+	return; // avoid spurious animation
+    happinesses[type] = val;
+    if (type=='cost')
+	set_coins(val);
+    var n={environment:1,economy:2,wellbeing:3}[type];
+    if (n) {
+	var el = gebi(`hap${n}`).firstChild;
+	for (var i=1; el; el=el.nextSibling, i++) {
+	    el.className = (i==val)?'':'transparent';
+	}
+    }
+}
+
+function set_metric(n) {
+    metric=metrics[n];
+    console.log(`metric=${metric}`);
+    for (var i=0; i<=4; i++)
+	gebi(`blk${i+1}`).classList[i==n?'add':'remove']("highlight");
+    set_lights();
+}
+
+$('#thermometer').thermometer( {
+    startValue: 0,
+    height: "100%",
+    width: "100%",
+    bottomText: "",
+    topText: "",
+    animationSpeed: 300,
+    maxValue: 6,
+    minValue: 0,
+    liquidColour: ()=>"red",
+    valueChanged: (value)=>$('#value').text(value.toFixed(1)+"°C"),
+});
+
+var orb = [];
+function get_orb_colour(obj){
+    var value = null;
+    console.log(obj);
+    if (obj && metric && obj[metric]) {
+	value = obj[metric];
+	if (!isFinite(value))
+	    value = null;
+	else
+	    value = 2*(value-1); // map from 1-5 to 0-8
+    }
+    //value goes from 0-8
+    var orb_colours = [  //modified version to make the real life colours better (no blue, more full saturated r/g
+        0xff0000, 0xff3d00, 0xff5f00,
+        0xffa000, 0xffd700, 0xffff00,
+        0xc2ff00, 0x79ff00, 0x00ff00,
+    ];
+    console.log(`orb ${value}`);
+    var rgb = (value===null) ? 0x000000 : orb_colours[value];
+    return rgb;
+}
+
+const anim = { NONE: 0, FLASH_SLOW: 1, FLASH_FAST: 2,
+               CRAWL_SLOW_LEFT:3, CRAWL_SLOW_RIGHT:4,
+               CRAWL_FAST_LEFT:5, CRAWL_FAST_RIGHT:6,
+               DISCO:7
+             };
+var ledmap = [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27 ];
+//var ledmap = [ 0,1,2,3,14,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27 ];
+var z=0;
+// var ledmap = [ z,z,z,z,z,z,z,
+// 	       1,3,5,0,6,2,4,
+// 	       14,19,z,20,17,15,16,
+// 	       9,13,8,7,10,11,12 ];
+if (1) {
+    var ledmap = [
+	11,8,9,10,7,12,13,
+	1,3,5,0,6,2,4,
+	21,26,25,27,24,22,23,
+//	14,19,20,18,16,15,17,
+//	22,23,24,25,26,27,28
+        16,20,15,14,17,18,19,
+];    
+}
+
+function set_lights() {
+    var a = new Uint8Array(28*13);
+    for (var i=0, ptr=0; i<28;i++) {
+        function setrgb(rgb) {
+            a[ptr++] = (rgb>>16)&0xff;
+            a[ptr++] = (rgb>>8)&0xff;
+            a[ptr++] = (rgb)&0xff;
+        }
+        // main colour
+        setrgb (get_orb_colour(orb[ledmap[i]]));
+        // flash colour (unused if no animation)
+        setrgb (0xffffff); // white
+        // corner colour
+        setrgb(0); // unused
+        // corner pressed colour
+        setrgb(0); // unused
+        // animation type
+        a[ptr++] = anim.NONE;
+    }
+    if (!passive && lights)
+        lights.send(a);
+}
+
+function set_blocks(c) {
+    var problems = [];
+    var mc = []; // calculated metrics
+    var count = 0; // applied blocks
+
+    for (let m of metrics) {
+	mc[m] = 0;
+    }
+    for (let i=0; i<28; i++) orb[i]=null;
+    
+    for (var n=0; n<c.length; n++) {
+	var i = c[n];
+	if (!i || i==='00000000' || i==='eeeeeeee')
+	    continue;
+	var obj = blocks[i];
+	orb[n] = obj;//3;
+        if (!obj) { problems.push(`dunno what ${i} is`); continue;}
+	//orb[n] = obj[metric];
+	console.log(`adding ${i}`);
+	count++;
+	for (m of metrics) {
+	    mc[m] += obj[m];
+	    //console.log(`${m}: ${obj[m]}`);
+	}
+    }
+    var str='';
+    for (let m of metrics) {
+	if (count) {
+	    mc[m] /= count; // average
+	} else {
+	    mc[m] = 3; // neutral
+	}
+	set_happiness(m, mc[m]);
+	str += `${m}: ${mc[m]} `;
+    }
+    gebi('blk8').innerHTML=str;
+    set_lights();
+    //console.log(mc);
+    gebi("problems").style.display=(problems.length && !still_loading)?'block':'none';
+    if (problems.length) {
+        var prefix = "<big>⚠</big>";
+        gebi("problems").innerHTML=prefix+problems.join("<br>"+prefix);
+        return;
+    }
+}
+
+function set_thermometer(co2) {
+    var m = 1.2+ co2 / 1500;
+    $('#thermometer').thermometer('setValue', m);
+}
+
+
+var debug = false;
+function keyevent(e) {
+    switch (e.key) {
+    case 'd':
+        debug=!debug;
+        console.log(`debug ${debug}`);
+        gebi("d1").style.display = debug?"block":"none";
+        break;
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+	console.log(e.key);
+	set_metric(parseInt(e.key)-1);
+	break;
+    }
+}
+var passive = false;
+var qq=0;
+var testing = false;
+$(document).ready( function() {
+    // setInterval(function() {
+    // 	qq=((qq+1)%28);
+    //     set_lights();
+    // }, 500);
+    if (testing) {
+	set_blocks(['95af4c63','476f4c63']);
+	window.onkeypress = keyevent;
+	 //setInterval(function() {
+	//     var coins = (10+Math.random()*80)|0;
+	//     set_coins(coins);
+	//     //gebi("blk0").innerHTML=`${coins}`;
+	//     set_happiness(1,1+(Math.random()*3)|0);
+	//     set_happiness(2,1+(Math.random()*3)|0);
+	//     set_happiness(3,1+(Math.random()*3)|0);
+	//     set_thermometer((Math.random()*5000)|0);
+	     //set_metric(((Math.random()*5)|0));
+	 //}, 2000);
+    } else {
+	comms_init();
+	window.onkeypress = keyevent;
+	if (window.location.hash.match(/passive/)) {
+            passive = true;
+            gebi("loading2").firstChild.textContent+="(passive)";
+	}
+    }
+});
+

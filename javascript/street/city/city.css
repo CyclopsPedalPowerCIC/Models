@@ -1,0 +1,283 @@
+@font-face {
+  font-family: 'Gill Sans MT Light';
+src: url('Gill Sans MT Light.ttf');
+}
+@font-face {
+  font-family: 'Gill Sans MT';
+  src: url('Gill Sans MT.ttf');
+}
+@font-face {
+  font-family: 'Gill Sans Condensed Bold';
+  src: url('Gill Sans Condensed Bold.ttf');
+}
+
+#alerter {
+    display: none;
+position: absolute;
+ top: 2%; left: 10%; width: 80%; z-index: 99;
+height: 50px;
+    background: red;
+    padding: 0.5em;
+}
+
+#loading {
+    display: block;
+position: absolute;
+width: 100%; height: 100%;
+backdrop-filter: blur(4px);
+background: rgba(128,128,128,0.5);
+}
+
+#loading2 {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 1.8em;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 60px;
+    background: white;
+    padding: 2em;
+    border-radius: 16px;
+    border: 10px solid rgba(255,255,255,0.1);
+}
+
+#progressbar {
+    width: 10em;
+    height: 1em;
+    background: white;
+    padding: 5px;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+#progress {
+    width: 0%;
+    height: 100%;
+    background: blue;
+    transition: 0.4s linear;
+    transition-property: width;
+}
+
+#d1 {
+    display: none;
+  position: absolute;
+  width: 100%; height: 30px; top:0; background: blue;
+  font-size: 16px; padding:5px;
+}
+
+h1, h2, h3 {
+  display: inline-block;
+  position: relative;
+  left: 10px;
+  font-family: 'Gill Sans MT Light';
+  margin: 0; padding: 2px 30px;
+  text-align: center;
+  border-radius: 10px 10px 0 0;
+}
+
+#problems {
+  display: none;
+  position: fixed;
+  width: 40%; top:8%; left: 30%;
+  background: rgba(255,255,50,0.9);
+  border-radius: 10px; padding: 5px; padding-left: 10px;
+  font-size: 36px;
+}
+
+body {
+  position: fixed; width: 100%;height: 100%;
+  font-family: 'Gill Sans MT';
+  font-size: 24px;
+  background: url(back.png) no-repeat; /*#a2c9e1;*/
+  background-size: cover;
+  margin: 0; padding: 0;
+}
+
+h1 {
+  font-size: 40px;
+  background: #d4004a;
+}
+  
+h2 {
+  font-size: 32px;
+  background: #ffb400;
+}
+
+@keyframes blinky {
+  50% { background: red; }
+}
+
+h2.flashing {
+/*border: #d4004a solid;*/
+animation: blinky 1s linear infinite;
+}
+
+h3 {
+  margin-left: -20%; center; font-size: 32px;
+}
+
+.block {
+  background: rgba(255,255,255,.6);
+  padding: 8px;
+}
+
+#blk0 {
+  position: absolute;
+  height: 20%; left: 3%;
+  top: 10%; width: 23%;
+}
+
+#blk1 {
+  position: absolute;
+  height: 20%; left: 3%;
+  top: 34%; width: 30%;
+}
+
+#blk2 {
+  position: absolute;
+  height: 20%; left: 3%;
+  top: 46%; width: 22%;
+}
+
+#blk3 {
+  position: absolute;
+  width: 25%; height: 50%; right: 0;
+  top: 5%;
+  background: url(earth.png) no-repeat;
+  background-size: contain;
+}
+
+#blk4 {
+  position: absolute;
+  height: 20%; left: 28%;
+  top: 5%; width: 650px;
+}
+
+#blk5 {
+  position: absolute;
+  height: 20%; left: 27%;
+  top: 46%; width: 22%;
+}
+
+#blk6 {
+  position: absolute;
+  height: 20%; left: 27%;
+  top: 68%; width: 22%;
+}
+
+#blk7 {
+  position: absolute;
+  height: 20%; left: 51%;
+  top: 46%; width: 22%;
+}
+
+#blk8 {
+  position: absolute;
+  height: 20%; left: 75%;
+  top: 46%; width: 22%;
+}
+
+#blk9 {
+  position: absolute;
+  height: 8%; left: 51%;
+  top: 82%; width: 22%;
+}
+
+.cloud {
+  display: inline-block;
+width: 49%;
+text-align: center;
+}
+
+.cloud2 {
+width: 292px; height: 160px;
+background: url(cloud.png) no-repeat;
+background-size: 100%;
+background-position: 50% 50%;
+text-align: center;
+font-size: 60px;
+}
+
+.cloud3 {
+  padding-top: 20%;
+}
+
+#cloud4 {
+font-size: 32px;
+text-align: center;
+}
+
+#value {
+  position: absolute;
+  left: 50%; top: 20%;
+  font-size: 60px;
+  font-family: 'Gill Sans Condensed Bold';
+}
+
+#thermometer {
+  width: 300px; margin-left: 20%;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+ul > li {
+  background: url(orbs.png) no-repeat;
+  background-size: 30px;
+  padding-left: 36px;
+  height: 30px;
+  margin-bottom:8px;
+}
+
+.ribbon {
+ transform: scale(0.5,1);
+ font-size: 16px !important;
+ position: relative;
+ background: #ba89b6;
+ color: #000;
+ text-align: center;
+ padding: 1em 1em; /* Adjust to suit */
+ margin: 0 2em auto 3em; /* Based on 24px vertical rhythm. 48px bottom margin - normally 24 but the ribbon 'graphics' take up 24px themselves so we double it. */
+}
+.ribbon:before, .ribbon:after {
+ content: "";
+ position: absolute;
+ display: block;
+ bottom: -1em;
+ border: 1.5em solid #986794;
+ z-index: -1;
+}
+.ribbon:before {
+ left: -2em;
+ border-right-width: 1.5em;
+ border-left-color: transparent;
+}
+.ribbon:after {
+ right: -2em;
+ border-left-width: 1.5em;
+ border-right-color: transparent;
+}
+.ribbon .ribbon-content:before, .ribbon .ribbon-content:after {
+ content: "";
+ position: absolute;
+ display: block;
+ border-style: solid;
+ border-color: #804f7c transparent transparent transparent;
+ bottom: -1em;
+}
+.ribbon .ribbon-content:before {
+ left: 0;
+ border-width: 1em 0 0 1em;
+}
+.ribbon .ribbon-content:after {
+ right: 0;
+ border-width: 1em 1em 0 0;
+}
+.ribbon-content2 {
+display: block;padding:0em 5em;margin: 0 0;transform: scale(2,1);
+}

@@ -1,0 +1,50 @@
+function gebi(id) { return document.getElementById(id); }
+
+var csel = gebi("econ");
+var cs = new CoinStackBar({
+    container:csel,
+    coinimgsrc:'coin.svg',
+    coinimgwidth:200,
+    coinimgheight:100,
+    coinheight:30,
+    xoffset:10,
+    yoffset:6,
+    
+    startvalue:25,
+    maxstackheight:14,
+    containerwidth:120,
+});
+
+setInterval(function() {
+    set_coins(100);//2+(Math.random()*13)|0);
+    set_happiness(gebi("hap2"),1+(Math.random()*3)|0);
+    set_thermometer((Math.random()*5000)|0);
+}, 2000);
+
+function set_coins(val) {
+    csel.CoinStackBar.setValue(val);
+}
+
+function set_happiness(el, val) {
+    //var el=gebi(document.querySelector(`blk${n} sq > img`);
+    console.log(el);
+    el.src=`img/h2${val}.png`;
+}
+
+$('#thermometer').thermometer( {
+    startValue: 0,
+    height: "100%",
+    width: "100%",
+    bottomText: "",
+    topText: "",
+    animationSpeed: 300,
+    maxValue: 6,
+    minValue: 0,
+    liquidColour: ()=>"red",
+    valueChanged: (value)=>$('#value').text(value.toFixed(1)+"°C"),
+});
+
+function set_thermometer(co2) {
+    var m = 1.2+ co2 / 1500;
+    $('#thermometer').thermometer('setValue', m);
+}

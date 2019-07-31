@@ -1,0 +1,8 @@
+v2rfid1 80:7d:3a:32:cf:81  192.168.0.150
+v2rfid2 84:0d:8e:86:e8:0c  192.160.0.151
+v2rfid3 80:7d:3a:79:03:8f  192.168.0.152
+v2rfid4 80:7d:3a:78:6a:d2  192.168.0.153
+
+new router:
+root@192.168.0.1 skullface
+needs citylights MAC adding

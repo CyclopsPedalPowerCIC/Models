@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="213.33333"
+   height="106.66666"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.92.1 r15371"
+   sodipodi:docname="coin.svg"
+   inkscape:export-filename="C:\Users\gebruiker\Dropbox\InternGedeeld\Programming\Bitcoin Jobs\bitcoin.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90"
+   viewBox="0 0 200 100">
+  <title
+     id="title4229">Bitcoin</title>
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient4223">
+      <stop
+         id="stop4225"
+         offset="0"
+         style="stop-color:#ffe457;stop-opacity:1" />
+      <stop
+         id="stop4227"
+         offset="1"
+         style="stop-color:#fffef9;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4203">
+      <stop
+         id="stop4205"
+         offset="0"
+         style="stop-color:#c28400;stop-opacity:1;" />
+      <stop
+         style="stop-color:#fcd64a;stop-opacity:1;"
+         offset="0.47126743"
+         id="stop4207" />
+      <stop
+         style="stop-color:#c28400;stop-opacity:1;"
+         offset="1"
+         id="stop4209" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4193">
+      <stop
+         id="stop4195"
+         offset="0"
+         style="stop-color:#e29a00;stop-opacity:1;" />
+      <stop
+         style="stop-color:#ffc437;stop-opacity:1;"
+         offset="1"
+         id="stop4197" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4145">
+      <stop
+         style="stop-color:#ffdf2c;stop-opacity:1;"
+         offset="0"
+         id="stop4147" />
+      <stop
+         style="stop-color:#fffef9;stop-opacity:1;"
+         offset="1"
+         id="stop4149" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3852">
+      <stop
+         id="stop3854"
+         offset="0"
+         style="stop-color:#fff267;stop-opacity:1;" />
+      <stop
+         style="stop-color:#eaa000;stop-opacity:1;"
+         offset="0.52198792"
+         id="stop3856" />
+      <stop
+         id="stop3858"
+         offset="1"
+         style="stop-color:#fff369;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3832">
+      <stop
+         style="stop-color:#c28400;stop-opacity:1;"
+         offset="0"
+         id="stop3836" />
+      <stop
+         id="stop4199"
+         offset="0.5"
+         style="stop-color:#fcd64a;stop-opacity:1;" />
+      <stop
+         id="stop3838"
+         offset="1"
+         style="stop-color:#fbff95;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3788">
+      <stop
+         style="stop-color:#ffe15e;stop-opacity:1;"
+         offset="0"
+         id="stop3790" />
+      <stop
+         id="stop3800"
+         offset="0.52198792"
+         style="stop-color:#f4b200;stop-opacity:1;" />
+      <stop
+         style="stop-color:#ffe15e;stop-opacity:1;"
+         offset="1"
+         id="stop3792" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3770">
+      <stop
+         style="stop-color:#c28900;stop-opacity:1;"
+         offset="0"
+         id="stop3772" />
+      <stop
+         id="stop3780"
+         offset="0.5"
+         style="stop-color:#fead00;stop-opacity:1;" />
+      <stop
+         style="stop-color:#da9a00;stop-opacity:1;"
+         offset="1"
+         id="stop3774" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3770"
+       id="linearGradient3786"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.66308953,0,0,1,52.984888,15.41085)"
+       x1="157.5"
+       y1="459.40625"
+       x2="509.4375"
+       y2="459.40625" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3852"
+       id="linearGradient3798"
+       x1="332.09158"
+       y1="492.17929"
+       x2="366.92532"
+       y2="379.32214"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3788"
+       id="linearGradient3850"
+       gradientUnits="userSpaceOnUse"
+       x1="332.09158"
+       y1="492.17929"
+       x2="366.92532"
+       y2="379.32214" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3852"
+       id="linearGradient3866"
+       x1="157.0838"
+       y1="437.17929"
+       x2="509.61688"
+       y2="437.17929"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3788"
+       id="linearGradient3874"
+       x1="157.0838"
+       y1="437.17929"
+       x2="509.61688"
+       y2="437.17929"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4203"
+       id="linearGradient4201"
+       gradientUnits="userSpaceOnUse"
+       x1="298.23257"
+       y1="538.34424"
+       x2="404.19907"
+       y2="259.46375" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4223"
+       id="linearGradient4221"
+       gradientUnits="userSpaceOnUse"
+       x1="236.05013"
+       y1="463.4397"
+       x2="310.20865"
+       y2="406.81854" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.979899"
+     inkscape:cx="79.699384"
+     inkscape:cy="100.05484"
+     inkscape:document-units="px"
+     inkscape:current-layer="g3782"
+     showgrid="false"
+     inkscape:window-width="1366"
+     inkscape:window-height="768"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     showguides="true"
+     inkscape:guide-bbox="true" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Bitcoin</dc:title>
+        <dc:date>22-11-2013</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Wiebe-Marten Wijnja</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title />
+          </cc:Agent>
+        </dc:rights>
+        <dc:description>A vector representation of a Bitcoin.</dc:description>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-952.36218)">
+    <g
+       id="g3782"
+       transform="matrix(0.85797276,0,0,0.64046871,-135.17004,710.30803)">
+      <path
+         inkscape:connector-curvature="0"
+         id="path2987"
+         d="m 274.02164,416.22335 c -49.34722,0 -91.51781,-0.66141 -108.51875,21.11383 l -7.92515,-1.34375 -0.0319,40.54242 c 1.82331,31.55622 53.26062,56.875 116.47582,56.875 63.04784,0 114.39547,-25.1855 116.47582,-56.625 l 0.13226,-40.79242 -8.04789,1.34375 C 365.5893,415.55326 323.38129,416.22335 274.02164,416.22335 Z"
+         style="fill:url(#linearGradient3786);fill-opacity:1;stroke:none"
+         sodipodi:nodetypes="scccscccs" />
+      <ellipse
+         transform="matrix(0.66308953,0,0,1,53.063399,0)"
+         id="path2985"
+         style="fill:url(#linearGradient3798);fill-opacity:1;stroke:none"
+         cx="333.35034"
+         cy="437.17929"
+         rx="175.76654"
+         ry="58.588848" />
+      <ellipse
+         style="fill:url(#linearGradient3850);fill-opacity:1;stroke:url(#linearGradient3866);stroke-opacity:1"
+         id="path3846"
+         transform="matrix(0.63084067,0,0,0.95136576,63.813566,21.261884)"
+         cx="333.35034"
+         cy="437.17929"
+         rx="175.76654"
+         ry="58.588848" />
+      <ellipse
+         style="fill:url(#linearGradient4201);fill-opacity:1;stroke:url(#linearGradient3874);stroke-opacity:1"
+         id="path3802"
+         transform="matrix(0.52853263,0,0,0.79707582,97.917992,88.714248)"
+         cx="333.35034"
+         cy="437.17929"
+         rx="175.76654"
+         ry="58.588848" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:Quivira;-inkscape-font-specification:Quivira;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         x="40.911179"
+         y="303.83914"
+         id="text3886"
+         transform="matrix(1,0,0,1.5742606,-110,-217.40956)"><tspan
+           sodipodi:role="line"
+           id="tspan3888"
+           x="40.911179"
+           y="303.83914"
+           style="font-size:40px;line-height:1.25"> </tspan></text>
+      <g
+         id="g4211"
+         transform="matrix(1.3412016,0,-0.27651589,1.3412016,27.564805,-149.16627)" />
+    </g>
+  </g>
+</svg>

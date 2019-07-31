@@ -1,0 +1,18 @@
+var metrics = [ 'environment', 'economy', 'wellbeing', 'cost', 'temp' ];
+
+var blocks = {
+    '95af4c63': {
+	environment: 5,
+	economy: 3,
+	wellbeing: 4,
+	cost: 1,
+	temp: 1,
+    },
+    '476f4c63': {
+	environment: 5,
+	economy: 5,
+	wellbeing: 2,
+	cost: 5,
+	temp: 1,
+    },
+};

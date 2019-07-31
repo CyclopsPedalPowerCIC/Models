@@ -1,0 +1,81 @@
+<html>
+  <meta charset=utf-8>
+  <head>
+    <link rel="stylesheet" href="street.css">
+</head>
+<body>
+
+<div id=blk0>
+  <img src=img/title.png>
+</div>
+
+<div id=blk1>
+  <h1>Waste and Pollution</h1>
+  <div class=sq2 id=hap1><img src=img/h21.png><img src=img/h22.png><img src=img/h23.png><img src=img/h24.png><img src=img/h25.png></div>
+</div>
+
+<div id=blk2>
+  <h1>Circular Economy</h1>
+  <div class=sq2 id=hap2><img src=img/h21.png><img src=img/h22.png><img src=img/h23.png><img src=img/h24.png><img src=img/h25.png></div>
+</div>
+
+<div id=blk3>
+  <h1>Equality and Wellbeing</h1>
+  <div class=sq2 id=hap3><img src=img/h21.png><img src=img/h22.png><img src=img/h23.png><img src=img/h24.png><img src=img/h25.png></div>
+</div>
+
+<div id=blk4>
+  <div id=econ>
+  </div>
+  <h2>Economic cost of climate change</h2>
+</div>
+
+<div id=blk5>
+  <div id=earth>
+    <div id="value"></div>
+    <div id="thermometer"></div>
+  </div>
+  <h2>Global warming by 2100</h2>
+</div>
+
+<div id=blk6>
+  Can you design a place that supports equality and wellbeing, the environment, and an economy that works for everyone?
+  How does each thing affect the others?
+</div>
+
+<div id=blk7>
+  Make your area better by:
+  <ul>
+    <li>tackling the worst sub-score for environment
+    <li>ditto economy
+    <li>ditto equality and wellbeing
+  </ul>
+</div>
+
+<div id=blk8>
+</div>
+
+<div id=loading>
+  <div id=loading2>
+    Loading...
+    <div id=progressbar>
+      <div id=progress>
+      </div>
+    </div>
+  </div>
+</div>
+<div id=alerter></div>
+<div id=problems></div>
+<div id=d1></div>
+
+<script src="jquery-1.11.0.min.js"></script>
+<script src="jquery-ui.min.js"></script>
+<script type="text/javascript" src="jquery.thermometer.js"></script>
+<script src="coinStackBarv0-7.js"></script>
+<script src="comms.js"></script>
+<script src="blocks.js"></script>
+<script src="street.js"></script>
+
+
+</body>
+</html>

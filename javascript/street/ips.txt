@@ -1,0 +1,8 @@
+v2rfid1 80:7d:3a:32:cf:81  192.168.0.150
+v2rfid2 84:0d:8e:86:e8:0c  192.160.0.151
+v2rfid3 84:f3:eb:0a:24:0b  192.168.0.152
+v2rfid4 80:7d:3a:78:6a:d2  192.168.0.153
+streetlights 84:0d:8e:86:e8:00   192.168.0.154
+new router:
+root@192.168.0.1 skullface
+static IPs in /etc/config/dhcp

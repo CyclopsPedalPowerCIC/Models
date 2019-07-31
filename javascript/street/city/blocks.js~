@@ -1,0 +1,96 @@
+var names = {
+    housing: [ // heating need, number of dwellings, appliance energy need
+	{ hn:37200, n:33333, a:3000, name: "Terrace" }, // 37200 33333 3000
+	{ hn:37200, n:33333, a:3000, name: "Terrace (SP)" },
+	{ hn:40000, n:33333, a:3900, name:"1950s semi-detached" }, // 40000 33333 3900
+	{ hn:40000, n:33333, a:3900, name:"1950s semi-detached (SP)" }, 
+	{ hn:30000, n:33333, a:3900, name:"Modern semi-detached" }, // 30000 33333 3900
+	{ hn:30000, n:33333, a:3900, name:"Modern semi-detached (SP)" },
+	{ hn:9000,  n:50000, a:2800, name:"Tower block" }, // 9000 50000 2800
+	{ hn:9000,  n:50000, a:2800, name:"Tower block (SP)" },
+	{ hn:10000, n:33333, a:3900, name:"Housing Cooperative" }, // 10000 33333 3900
+	{ hn:10000, n:33333, a:3900, name:"Eco house (SP)" },
+	{ hn:5000,  n:50000, a:2800, name:"Eco flats" }, // 5000 50000 2800
+	{ hn:5000,  n:50000, a:2800, name:"Eco flats (SP)" },
+	{ hn:3000,  n:50000, a:2800, name:"Ziggurat" }, // 3000 50000 2800
+	{ hn:48000, n:33333, a:3900, name:"Detached house" }, // 48000 33333 3900
+    ],
+    energy: [ // carbon intensity in gCO2/kWh
+	{ e:14.6, name:"Wind farm" }, // 14.6
+	{ e:66.38, name:"Nuclear plant" }, // 66.38
+	{ e:331.61, name:"Coal power station" }, // 331.61
+	{ e:331.61, name:"Biomass power station" }, // 331.61
+	{ e:76.63, name:"Biomass with CCS" }, // 76.63
+	{ e:14.6, name:"Solar farm" }, // 14.6
+	{ e:234.11, name:"Natural gas plant" }, // 234.11
+	{ e:331.61, name:"Fracked gas plant" }, // 331.61
+	{ e:76.63, name:"Natural gas with CCS" }, // 76.63
+    ],
+    policy: [ 
+	{ name:"Sustainability SSP1" },
+	{ name:"Middle-of-the-road SSP2" },
+	{ name:"Rivalry SSP3" },
+	{ name:"Inequality SSP4" },
+	{ name:"Fossil fuel development SSP5" },
+    ],
+    industry: [ // modifiers
+	{ m:2.2, name:"Steel foundry" }, // 2.2
+	{ m:2.0, name:"Chemical works" }, // 2.0
+	{ m:1.8, name:"Turbine factory" }, // 1.8
+	{ m:2.2, name:"Factory farming" }, // 2.2
+
+	{ m:0.8, name:"Business park" }, // 0.8
+	{ m:1.1, name:"Datacentre" }, // 1.1
+	{ m:1.1, name:"Cannery" }, // 1.1
+	{ m:0.9, name:"Clothing factory" }, // .9
+	{ m:1.2, name:"Agriculture" }, // 1.2
+	{ m:1.1, name:"Cosmetics factory" }, // 1.1
+	{ m:0.9, name:"Furniture maker" }, // .9
+	{ m:0.8, name:"Warehouse" }, // .8
+	{ m:1.1, name:"Warehousing (chilled)" }, // 1.1
+	{ m:0.6, name:"Community Farm" }, // total guess
+    ],
+
+/* transport
+
+   blocks change fuel mix
+   fuel station
+   co2/km / passenger number per type * miles travelled * population (800k)
+   pnpt: car 1.6  bus 21   train 108
+   miles travelled per person: car 5400   bus 254  train 427
+   
+*/
+    transport: [ // relative amounts of car, bus, train (FIXME: for orb only, no CO2 impact)
+	{ c:0, b:0, t:1, name:"Train station" },
+	{ c:0, b:1, t:0, name:"Bus station" },
+	{ c:1, b:0, t:0, name:"Car park" },
+	{ c:1, b:0, t:0, name:"Car park (EV)" },
+	{ c:.5, b:.5, t:0, name:"Park and ride" },
+	{ c:.5, b:.5, t:0, name:"Park and ride (EV)" },
+	{ c:0, b:0, t:0, name:"Cycle park" },
+    ],
+    fuel: [ // gCO2/km/person fuel and kwh/pkm electric for car, bus and train
+	{ cf:90, bf:42.47, tf:64.81, ce:0, be:0, te:0, name:"Baseline" }, // 90 42.47 64.81
+	{ cf:73.75, bf:36.1, tf:64.81, ce:0, be:0, te:0, name:"Biofuels" }, // 73.75 36.1 64.81
+	{ cf:43.75, bf:0, tf:0, ce:0, be:0.076, te: 0.096, name:"Hydrogen" }, // 43.75 XXX (0.076kwh/pkm) (0.096kwh/pkm)
+	{ cf:0, bf:10, tf:0, ce:0.16, be:0, te:0.096, name:"Electric" }, // (0.16kwh/km) 10 (0.096kwh/km)
+    ],
+    leisure: [ // CO2 modifiers
+	{ m:1.4, name:"Mega supermarket" }, // 0
+	{ m:1.1, name:"Retail park" }, // +10
+	{ m:1.3, name:"Leisure park" }, // +10
+	{ m:1.5, name:"Sports ground" }, // 0
+	{ m:1, name:"O2 Arena" }, // 0
+	{ m:.3, name:"Nature reserve" }, // -20
+	{ m:1, name:"Cinema" }, // 0
+	{ m:1, name:"Kirkgate Market" }, // 0
+	{ m:1.1, name:"Shopping precinct" }, // +10
+	{ m:.6, name:"Park" }, // -20
+	{ m:1.1, name:"Gym and Pool" }, // +10
+	{ m:.5, name:"Skateboard park" }, // -20
+	{ m:1, name:"Kart track" }, // 0
+	{ m:0.8, name:"Community centre" }, // 0 number 13
+	{ m:0.6, name:"Paintball arena" }, // 0 number 14
+	{ m:0.8, name:"Youth club" }, // 0 number 15
+    ],
+};
