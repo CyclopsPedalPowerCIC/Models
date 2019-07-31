@@ -1,0 +1,2 @@
+perl -lne 'while (<>) { @a=split"\t", $_;print "{ name: \"$a[0]\", type: \"$a[1]\", categories: { heating: $a[2], waste: $a[3], economy: $a[4], happiness: $a[5] }"}' ~/Downloads/Eco-hack\ scores.csv
+
