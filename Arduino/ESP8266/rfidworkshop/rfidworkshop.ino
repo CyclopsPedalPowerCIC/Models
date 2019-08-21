@@ -23,7 +23,7 @@ struct reader {
 uint8_t pins[] = { D8 };
 MFRC522::MIFARE_Key key; 
 
-#define NUM_LEDS 5
+#define NUM_LEDS 20
 
 #define PIN_LEDS      D3
 
@@ -69,9 +69,11 @@ bool connect_wifi(const char* ssid, const char* password) {
 
 void init_server() {
   init_wifi();
-  if (MDNS.begin("rfidworkshop")) {
+#if 0
+if (MDNS.begin("rfidworkshop")) {
     Serial.println("MDNS responder started");
   }
+#endif
 
   server.on("/", handleRoot);
   server.on("/reboot", do_reboot);
