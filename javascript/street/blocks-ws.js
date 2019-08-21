@@ -1,6 +1,26 @@
-//var metrics = [ 'environment', 'economy', 'wellbeing', 'cost', 'temp' ];
-var metrics = [ 'waste', 'economy', 'happiness', 'democracy', 'heating' ];
+/*
+Types:
+Actions
+Places and Facilities
+Policies
 
+Scores from 1-5, 5 is the best
+
+
+//var metrics = [ 'environment', 'economy', 'wellbeing', 'cost', 'temp' ];
+// var metrics = [ 'waste', 'economy', 'happiness', 'democracy', 'heating' ];
+
+*/
+var metrics = ["waste", "pollution", "energy"];
+
+var blocks = {
+  "048ac3b2": {
+    name: "Pedallers, Tool Library, Repair Cafe",
+    categories: { waste: 4, pollution: 3, energy: 3 }
+  }
+};
+
+/*
 var blocks = {
 
     'a5ed4d63': { name: "Leeds Hackspace", type: "Places and facilities", categories: { heating: 4, waste: 4, economy: 4, happiness: 4, democracy: 2 } },
@@ -20,6 +40,8 @@ var blocks = {
     'd9a7e756': { name: "Living wage for UK; ensure people can afford more ethical clothes", type: "Policy", categories: { heating: 5, waste: 5, economy: 5, happiness: 5, democracy: 5 } },
     '49e1a255': { name: "Remove subsidies for fossil fuels, and bring in subsidies for renewables", type: "Policy", categories: { heating: 5, waste: 5, economy: 3, happiness: 5, democracy: 5 } },
 };
+*/
+
 /*
 
     { name: "Buy less stuff", type: "Individual Action", categories: { heating: 4, waste: 5, economy: 5, happiness: 3, democracy: 3 } },
