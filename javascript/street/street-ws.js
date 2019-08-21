@@ -1,5 +1,5 @@
 function gebi(id) { return document.getElementById(id); }
-
+/*
 var csel = gebi("econ");
 var cs = new CoinStackBar({
     container:csel,
@@ -18,11 +18,15 @@ var cs = new CoinStackBar({
 function set_coins(val) {
     csel.CoinStackBar.setValue(val*12);
 }
-
+*/
 var happinesses = {};
 var metric;
 
 function set_happiness(type, val) {
+    if (type=='heating') {
+	set_thermometer(6-val);
+	return;
+    }
     val=(val+.5)|0;
     if (val<1) val=1;
     if (val>5) val=5;
@@ -32,7 +36,9 @@ function set_happiness(type, val) {
     happinesses[type] = val;
     if (type=='cost')
 	set_coins(val);
-    var n={environment:1,economy:2,wellbeing:3}[type];
+    //var n={environment:1,economy:2,wellbeing:3}[type];
+
+    var n={waste:1,economy:2,happiness:3,democracy:4}[type];
     if (n) {
 	var el = gebi(`hap${n}`).firstChild;
 	for (var i=1; el; el=el.nextSibling, i++) {
@@ -65,13 +71,18 @@ $('#thermometer').thermometer( {
 var orb = [];
 function get_orb_colour(obj){
     var value = null;
-    console.log(obj);
-    if (obj && metric && obj[metric]) {
+    //console.log(obj);
+    if (obj && metric && obj[metric]!==null) {
 	value = obj[metric];
 	if (!isFinite(value))
 	    value = null;
-	else
-	    value = 2*(value-1); // map from 1-5 to 0-8
+	else {
+	    //value = 2*(value-1); // map from 1-5 to 0-8
+	    value += 4; // map from -5-5 to 0-8
+	    if (value<0) value=0;
+	    if (value>8) value=8;
+	    value|=0;
+	}
     }
     //value goes from 0-8
     var orb_colours = [  //modified version to make the real life colours better (no blue, more full saturated r/g
@@ -79,7 +90,7 @@ function get_orb_colour(obj){
         0xffa000, 0xffd700, 0xffff00,
         0xc2ff00, 0x79ff00, 0x00ff00,
     ];
-    console.log(`orb ${value}`);
+    //console.log(`orb ${value}`);
     var rgb = (value===null) ? 0x000000 : orb_colours[value];
     return rgb;
 }
@@ -89,23 +100,12 @@ const anim = { NONE: 0, FLASH_SLOW: 1, FLASH_FAST: 2,
                CRAWL_FAST_LEFT:5, CRAWL_FAST_RIGHT:6,
                DISCO:7
              };
-var ledmap = [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27 ];
-//var ledmap = [ 0,1,2,3,14,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27 ];
-var z=0;
-// var ledmap = [ z,z,z,z,z,z,z,
-// 	       1,3,5,0,6,2,4,
-// 	       14,19,z,20,17,15,16,
-// 	       9,13,8,7,10,11,12 ];
-if (1) {
-    var ledmap = [
+var ledmap = [
 	11,8,9,10,7,12,13,
 	1,3,5,0,6,2,4,
 	21,26,25,27,24,22,23,
-//	14,19,20,18,16,15,17,
-//	22,23,24,25,26,27,28
         16,20,15,14,17,18,19,
 ];    
-}
 
 function set_lights() {
     var a = new Uint8Array(28*13);
@@ -144,7 +144,7 @@ function set_blocks(c) {
 	var i = c[n];
 	if (!i || i==='00000000' || i==='eeeeeeee')
 	    continue;
-	var obj = blocks[i];
+	var obj = blocks[i] && blocks[i].categories;
 	orb[n] = obj;//3;
         if (!obj) { problems.push(`dunno what ${i} is`); continue;}
 	//orb[n] = obj[metric];
@@ -152,7 +152,7 @@ function set_blocks(c) {
 	count++;
 	for (m of metrics) {
 	    mc[m] += obj[m];
-	    //console.log(`${m}: ${obj[m]}`);
+	    console.log(`${m}: ${obj[m]}`);
 	}
     }
     var str='';
@@ -176,8 +176,8 @@ function set_blocks(c) {
     }
 }
 
-function set_thermometer(co2) {
-    var m = 1.2+ co2 / 1500;
+function set_thermometer(m) {
+    console.log(`set_thermometer ${m}`);
     $('#thermometer').thermometer('setValue', m);
 }
 
@@ -224,6 +224,10 @@ $(document).ready( function() {
     } else {
 	comms_init();
 	window.onkeypress = keyevent;
+	set_metric(0);
+	for (var i=0; i<=4; i++)
+	    gebi(`blk${i+1}`).addEventListener('click', ((i)=>(()=>set_metric(i)))(i),false);
+
 	if (window.location.hash.match(/passive/)) {
             passive = true;
             gebi("loading2").firstChild.textContent+="(passive)";
