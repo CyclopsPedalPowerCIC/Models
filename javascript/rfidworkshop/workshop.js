@@ -34,6 +34,20 @@ function init_cats() {
     gebi("name").addEventListener('change', update_name, false);
 }
 
+function init_leds() {
+    gebi("col").addEventListener('change', update_col, false);
+}
+
+function update_col() {
+    var rgb = parseInt(gebi("col").value.slice(1),16);
+    var a = new Uint8Array(3);
+    var ptr=0;
+    a[ptr++] = (rgb>>16)&0xff;
+    a[ptr++] = (rgb>>8)&0xff;
+    a[ptr++] = (rgb)&0xff;
+    esp.send(a);
+}
+
 function update_name() {
     block.name = gebi("name").value;
     console.log(`saved name ${block.name}`);
@@ -99,6 +113,7 @@ function keyevent(e) {
 window.onload = function() {
     comms_init();
     init_cats();
+    init_leds();
     window.onkeypress = keyevent;
 };
 

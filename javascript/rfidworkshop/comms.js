@@ -76,7 +76,9 @@ esprfid.prototype = {
 var esp, ws_objs=[];
 
 function comms_init() {
-    var host="192.168.1.236";
+//    var host="192.168.1.236";
+    var host="192.168.1.122";
+//    var host="192.168.1.175";
     
     esp = new esprfid(host, update_models);
     ws_objs = [esp];
