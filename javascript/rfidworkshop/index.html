@@ -2,21 +2,21 @@
   <meta charset=utf-8>
   <head>
     <link rel="stylesheet" href="workshop.css">
+    <link href="prism.css" rel="stylesheet">
 </head>
 <body>
-<div id=out>OUT</div>
-
-<div id=cat>
+<!--<div id=cat>
       <div id=stats></div>
 
     <div id=stats></div>
     <label for=name>Name</label>
     <input id=name></input>
-    <span id=id></span>
-</div>
+    </div>
 
 <div id=leds>
   <input id=col type="color"></input>
+-->
+<div id=id></div>
 <div id=loading>
   <div id=loading2>
     Loading...
@@ -29,8 +29,18 @@
 <div id=alerter></div>
 <div id=problems></div>
 <div id=d1></div>
+  <div class="container">
+    <pre id="pre"><code id="code" class="language-javascript" contenteditable="true" autocorrect="off" autocapitalize="off" spellcheck="false"></code></pre>
+  </div>
+  <div id="error">
+  </div>
+  <div id="metric">
+  </div>
 <script src="comms.js"></script>
 <script src="workshop.js"></script>
+<script src="prism.js"></script>
+<script src="misbehave.js"></script>
+<script src="syn.js"></script>
 
 
 </body>

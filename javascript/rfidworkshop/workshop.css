@@ -6,3 +6,26 @@
 }
 #cat {
 }
+
+pre {
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+}
+
+.container {
+  width: 62em;
+  margin: 0 auto;
+  margin-top:5em;
+}
+
+#pre {
+  min-height: 1.5em;
+}
+
+#code {
+  display: block;
+}
+
+[contenteditable] {
+  border-style: Transparent;
+  outline: none;
+}

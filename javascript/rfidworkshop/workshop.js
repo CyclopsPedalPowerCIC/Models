@@ -2,13 +2,14 @@ function gebi(id) { return document.getElementById(id); }
 
 function switch_pressed(s) {
     console.log(`switch ${s} pressed`);
+    set_metric((metric+(s==1?1:-1)+metrics.length)%metrics.length);
 }
 
-var blocks = [];
-var categories = ["abc", "def", "eghi"];
+var blocks = {};
+var metrics = ["recycle", "reduce", "reuse"];
 
 function init_cats() {
-    var ncats = 3;
+/*    var ncats = 3;
     var cat = gebi("cat");
     for (var j=0; j<ncats; j++) {
 	var c = document.createElement('div');
@@ -32,14 +33,62 @@ function init_cats() {
 	}
     }
     gebi("name").addEventListener('change', update_name, false);
+*/
 }
 
-function init_leds() {
-    gebi("col").addEventListener('change', update_col, false);
+//function init_leds() {
+//    gebi("col").addEventListener('change', update_col, false);
+//}
+
+var metric = '';
+function set_metric(n) {
+    metric = n;
+    gebi("metric").innerHTML=metrics[metric];
+/*
+    metric = metrics[n];
+  console.log(`metric=${metric}`);
+  for (var i = 0; i < metrics.length; i++)
+    gebi(`blk${i + 1}`).classList[i == n ? "add" : "remove"]("highlight");
+  set_lights();
+*/
+    do_update();
 }
 
-function update_col() {
-    var rgb = parseInt(gebi("col").value.slice(1),16);
+function get_orb_colour(obj) {
+  var value = null;
+  //console.log(obj);
+  if (obj && obj[metrics[metric]] !== null) {
+    value = obj[metrics[metric]];
+    if (!isFinite(value)) value = null;
+    else {
+      value = 2 * (value - 1); // map from 1-5 to 0-8
+      //value += 4; // map from -5-5 to 0-8
+      if (value < 0) value = 0;
+      if (value > 8) value = 8;
+      value |= 0;
+    }
+  }
+    console.log(`value=${value}`);
+  //value goes from 0-8
+  var orb_colours = [
+    //modified version to make the real life colours better (no blue, more full saturated r/g
+    0xe00000,
+    0xff4000,
+    0xff8000,
+    0xffc000,
+    0xffe700,
+    0xffff00,
+    0xc2ff00,
+    0x79ff00,
+    0x00ff00
+  ];
+  //console.log(`orb ${value}`);
+  var rgb = value === null ? 0x000000 : orb_colours[value];
+  return rgb;
+}
+
+function update_col(rgb) {
+    //var rgb = parseInt(gebi("col").value.slice(1),16);
     var a = new Uint8Array(3);
     var ptr=0;
     a[ptr++] = (rgb>>16)&0xff;
@@ -47,7 +96,7 @@ function update_col() {
     a[ptr++] = (rgb)&0xff;
     esp.send(a);
 }
-
+/*
 function update_name() {
     block.name = gebi("name").value;
     console.log(`saved name ${block.name}`);
@@ -76,20 +125,27 @@ function update_block() {
     }
     
     gebi("stats").innerHTML = `${Object.keys(blocks).length} block(s)`;
-    gebi("id").innerHTML = `id ${block.id}`;
-    
 }
+*/
 
+var blkid = '123';
 function set_rfid(c) {
     console.log(`block is ${c}`);
     if (c == 'eeeeeeee' || c == '00000000')
 	return;
+    //gebi("code").innerHTML =
+    misbehave.update(
+	{prefix:(
+	blocks[c] ? 
+	JSON.stringify({[c]:blocks[c]},null,2)
+	    : "")
+	 ,suffix:'',selected:''});
 
-    if (!blocks[c])
-	blocks[c] = new Block(c);
-
-    block = blocks[c];
-    update_block();
+    blkid = c;
+    //block = blocks[c];
+    gebi("id").innerHTML = `block id ${blkid}`;
+    do_update();
+    //update_block();
 }
 
 var Block = function(id) {
@@ -101,6 +157,7 @@ var Block = function(id) {
 
 var debug = false;
 function keyevent(e) {
+    /*
     switch (e.key) {
     case 'd':
         debug=!debug;
@@ -108,12 +165,39 @@ function keyevent(e) {
         gebi("d1").style.display = debug?"block":"none";
         break;
     }
+    */
 }
 
+var boardhost = '';
+
 window.onload = function() {
+    boardhost=window.location.search.replace(/^\?/,"");
+    if (!boardhost) {
+	boardhost = "codecraft"+parseInt(prompt("Board number?"));
+    }
+    console.log(`boardhost=${boardhost}`);
     comms_init();
     init_cats();
-    init_leds();
+    //init_leds();
+    set_metric(0);
+    init_syn();
     window.onkeypress = keyevent;
 };
+var block=null;
+function do_update(error) {
+    console.log(`error=${error}`);
+    if (!error) {
+	// called when syntax check passes
+	
+	if (blkid && block && block[blkid]) {
+	    blocks[blkid] = block[blkid];
+	    //console.log("ok");
+	    //console.log(blocks[blkid]);
+	}
+	console.log(blocks[blkid]);
 
+	update_col(get_orb_colour(blocks[blkid]));
+    } else {
+	update_col(0);
+    }
+}
