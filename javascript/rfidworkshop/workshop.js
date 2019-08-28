@@ -143,7 +143,7 @@ function set_rfid(c) {
 
     blkid = c;
     //block = blocks[c];
-    gebi("id").innerHTML = `block id ${blkid}`;
+    gebi("id").innerHTML = blkid;
     do_update();
     //update_block();
 }
@@ -176,6 +176,7 @@ window.onload = function() {
 	boardhost = "codecraft"+parseInt(prompt("Board number?"));
     }
     console.log(`boardhost=${boardhost}`);
+    gebi("boardhost").innerHTML=boardhost;
     comms_init();
     init_cats();
     //init_leds();
@@ -183,9 +184,29 @@ window.onload = function() {
     init_syn();
     window.onkeypress = keyevent;
 };
+
+{
+    let requests = 0;
+    function fire_and_forget_post (target, data) {
+        console.log(target);
+        if (requests < 2) {
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', target, true);
+            xhr.timeout = 5000; // ms
+            xhr.onload = xhr.onerror =
+                xhr.ontimeout = ()=>requests--;
+            requests++;
+            xhr.send(data);
+        } else {
+            console.log(`no: requests=${requests}`);
+        }
+    }
+}
+
+
 var block=null;
 function do_update(error) {
-    console.log(`error=${error}`);
+    //console.log(`error=${error}`);
     if (!error) {
 	// called when syntax check passes
 	
@@ -193,9 +214,9 @@ function do_update(error) {
 	    blocks[blkid] = block[blkid];
 	    //console.log("ok");
 	    //console.log(blocks[blkid]);
+	    fire_and_forget_post("http://codecraft:8000/set", `{"${blkid}":${JSON.stringify(blocks[blkid])}}`);
 	}
-	console.log(blocks[blkid]);
-
+	//console.log(blocks[blkid]);
 	update_col(get_orb_colour(blocks[blkid]));
     } else {
 	update_col(0);

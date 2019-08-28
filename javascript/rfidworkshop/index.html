@@ -16,7 +16,6 @@
 <div id=leds>
   <input id=col type="color"></input>
 -->
-<div id=id></div>
 <div id=loading>
   <div id=loading2>
     Loading...
@@ -28,14 +27,27 @@
 </div>
 <div id=alerter></div>
 <div id=problems></div>
-<div id=d1></div>
-  <div class="container">
-    <pre id="pre"><code id="code" class="language-javascript" contenteditable="true" autocorrect="off" autocapitalize="off" spellcheck="false"></code></pre>
+<div id=board>
+  <div id=boardhost></div>
+  <div class=box>
+    <p>Last tile id
+      <div id=id>00000000</div>
   </div>
+  <div id="metr" class=box>
+    <p>Currently showing
+      <div id="metric">
+      </div>
+  </div>
+</div>
+<div id=d1></div>
+<div id=codehalf>
+  <div class="container">
+    Type your code here
+    <pre id="pre"><code id="code" class="language-javascript" contenteditable="true" autocorrect="off" autocapitalize="off" spellcheck="false"></code></pre>
   <div id="error">
   </div>
-  <div id="metric">
   </div>
+</div>
 <script src="comms.js"></script>
 <script src="workshop.js"></script>
 <script src="prism.js"></script>
