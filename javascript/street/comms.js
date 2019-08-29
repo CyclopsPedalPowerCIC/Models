@@ -66,36 +66,56 @@ esprfid.prototype = {
 	if (this.ws && !this.ws.readyState)
 	    return;
 
-	this.ws = new WebSocket(`ws://${this.host}:81/`);
+	this.ws = new WebSocket(`ws://${this.host}`);
 	this.ws.onopen = this.connected.bind(this);
 	this.ws.onclose = this.ws.onerror = this.reconnect.bind(this);
 	this.ws.onmessage = this.onmsg.bind(this);
     }
 };
 
-var ws_objs= [], rfid_objs = [], lights;
+var ws_objs= [], rfid_objs = [], lights, blocks_esp;
 
 function comms_init() {
     var hosts = {
-	"192.168.0.150":true,
-	"192.168.0.151":true,
-	"192.168.0.152":true,
-	"192.168.0.153":true,
+	"192.168.0.150:81":1,
+	"192.168.0.151:81":1,
+	"192.168.0.152:81":1,
+	"192.168.0.153:81":1,
 	
-	"192.168.0.154":false,
+	"192.168.0.154:81":0,
+	"codecraft:8000/ws":2,
     };
-    for (let [h,is_rfid] of Object.entries(hosts)) {
-	var esp = new esprfid(h, is_rfid?update_models:update_switches);
+    for (let [h,type] of Object.entries(hosts)) {
+	var esp = new esprfid(h,
+			      [
+				  update_switches,
+				  update_models,
+				  update_blocks
+			      ][type]
+			      );
 	ws_objs.push(esp);
-	if (is_rfid)
-	    rfid_objs.push(esp);
-	else
+	switch (type) {
+	case 0:
 	    lights = esp;
+	    break;
+	case 1:
+	    rfid_objs.push(esp);
+	    break;
+	case 2:
+	    blocks_esp = esp;
+	    break;
+	}
     }
 }
 
 function update_switches() {
     console.log(`sw ${lights.lastjson}`);
+}
+
+function update_blocks() {
+    console.log(`blocks ${blocks_esp.lastjson}`);
+    console.log(blocks_esp.lastjson);
+    blocks = Object.assign (blocks, blocks_esp.lastjson);
 }
 
 function update_models() {

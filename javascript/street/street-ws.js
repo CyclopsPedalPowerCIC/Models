@@ -38,7 +38,7 @@ function set_happiness(type, val) {
   if (type == "cost") set_coins(val);
   //var n={environment:1,economy:2,wellbeing:3}[type];
 
-  var n = { waste: 1, pollution: 2, energy: 3, ignore: 4 }[type];
+  var n = { reduce: 1, reuse: 2, recycle: 3, total: 4 }[type];
   if (n) {
     var el = gebi(`hap${n}`).firstChild;
     for (var i = 1; el; el = el.nextSibling, i++) {
@@ -50,23 +50,10 @@ function set_happiness(type, val) {
 function set_metric(n) {
   metric = metrics[n];
   console.log(`metric=${metric}`);
-  for (var i = 0; i <= 4; i++)
+  for (var i = 0; i < metrics.length; i++)
     gebi(`blk${i + 1}`).classList[i == n ? "add" : "remove"]("highlight");
   set_lights();
 }
-
-$("#thermometer").thermometer({
-  startValue: 0,
-  height: "100%",
-  width: "100%",
-  bottomText: "",
-  topText: "",
-  animationSpeed: 300,
-  maxValue: 6,
-  minValue: 0,
-  liquidColour: () => "red",
-  valueChanged: value => $("#value").text(value.toFixed(1) + "°C")
-});
 
 var orb = [];
 function get_orb_colour(obj) {
@@ -86,7 +73,17 @@ function get_orb_colour(obj) {
   //value goes from 0-8
   var orb_colours = [
     //modified version to make the real life colours better (no blue, more full saturated r/g
-    0xff0000,
+    0xe00000,
+    0xff4000,
+    0xff8000,
+    0xffc000,
+    0xffe700,
+    0xffff00,
+    0xc2ff00,
+    0x79ff00,
+    0x00ff00
+
+/*    0xff0000,
     0xff3d00,
     0xff5f00,
     0xffa000,
@@ -95,6 +92,7 @@ function get_orb_colour(obj) {
     0xc2ff00,
     0x79ff00,
     0x00ff00
+*/
   ];
   //console.log(`orb ${value}`);
   var rgb = value === null ? 0x000000 : orb_colours[value];
@@ -112,34 +110,10 @@ const anim = {
   DISCO: 7
 };
 var ledmap = [
-  11,
-  8,
-  9,
-  10,
-  7,
-  12,
-  13,
-  1,
-  3,
-  5,
-  0,
-  6,
-  2,
-  4,
-  21,
-  26,
-  25,
-  27,
-  24,
-  22,
-  23,
-  16,
-  20,
-  15,
-  14,
-  17,
-  18,
-  19
+    11,8,9,10,7,12,13,
+    1,3,5,0,6,2,4,
+    21,26,25,27,24,22,23,
+    16,20,15,14,17,18,19
 ];
 
 function set_lights() {
@@ -173,11 +147,11 @@ function set_blocks(c) {
     mc[m] = 0;
   }
   for (let i = 0; i < 28; i++) orb[i] = null;
-
+  var total = 0;
   for (var n = 0; n < c.length; n++) {
     var i = c[n];
     if (!i || i === "00000000" || i === "eeeeeeee") continue;
-    var obj = blocks[i] && blocks[i].categories;
+      var obj = blocks[i];// && blocks[i].categories;
     orb[n] = obj; //3;
     if (!obj) {
       problems.push(`dunno what ${i} is`);
@@ -188,20 +162,28 @@ function set_blocks(c) {
     count++;
     for (m of metrics) {
       mc[m] += obj[m];
-      console.log(`${m}: ${obj[m]}`);
+      //console.log(`${m}: ${obj[m]}`);
     }
   }
   var str = "";
-  for (let m of metrics) {
+    for (let m of metrics) {
     if (count) {
       mc[m] /= count; // average
     } else {
       mc[m] = 3; // neutral
     }
     set_happiness(m, mc[m]);
-    str += `${m}: ${mc[m]} `;
+	total += mc[m];
+
+	str += `${m}: ${mc[m].toFixed(2)} `;
+	console.log(`val_${m}`);
+	gebi(`val_${m}`).innerHTML= mc[m].toFixed(2);
   }
-  gebi("blk8").innerHTML = str;
+  total /= metrics.length;
+    gebi(`val_total`).innerHTML=total.toFixed(2);
+    str += `total: ${total.toFixed(2)}`;
+  set_happiness("total", total);    
+//  gebi("blk8").innerHTML = str;
   set_lights();
   //console.log(mc);
   gebi("problems").style.display =
@@ -229,8 +211,8 @@ function keyevent(e) {
     case "1":
     case "2":
     case "3":
-    case "4":
-    case "5":
+    //case "4":
+    //case "5":
       console.log(e.key);
       set_metric(parseInt(e.key) - 1);
       break;
@@ -261,7 +243,7 @@ $(document).ready(function() {
     comms_init();
     window.onkeypress = keyevent;
     set_metric(0);
-    for (var i = 0; i <= 4; i++)
+    for (var i = 0; i < metrics.length; i++)
       gebi(`blk${i + 1}`).addEventListener(
         "click",
         (i => () => set_metric(i))(i),

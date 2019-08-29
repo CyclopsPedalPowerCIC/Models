@@ -150,8 +150,8 @@ h3 {
 #blk0 {
   position: absolute;
   height: 10%; left: 3%;
-  top: 5%; width: 43%;
-  background: url(ribbon3.png) no-repeat;
+  top: 3%; width: 43%;
+  background: url(recycle_banner.png) no-repeat;
   background-size: contain;
 }
 
@@ -164,26 +164,26 @@ h3 {
 
 #blk1 {
   position: absolute;
-  height: 20%; left: 50%;
-  top: 4%;
+  height: 20%; left: 20%;
+  top: 18%;
 }
 
 #blk2 {
   position: absolute;
-  height: 20%; left: 74%;
-  top: 4%;
+  height: 20%; left: 20%;
+  top: 44%;
 }
 
 #blk3 {
   position: absolute;
-  height: 20%; left: 59%;
-  top: 36%;
+  height: 20%; left: 20%;
+  top: 70%;
 }
 
 #blk4 {
   position: absolute;
-  left: 50%;
-  bottom: 3%; width: 18%;
+  left: 60%;
+  bottom: 12%; width: 18%;
   text-align: center;
 }
 
@@ -244,7 +244,7 @@ h3 {
 
 #blk8 {
   position: absolute;
-  left: 2%;
+  left: 50%;
   top: 80%; width: 43%;
   background: white;
   border-radius: 10px;
@@ -275,11 +275,51 @@ h3 {
     position: relative;
 }
 
+.sqtitle {
+    display: inline-block;
+    width: 7em;
+    height: 150px;
+    vertical-align: top;
+    margin-top: .5em;
+    text-align: center;
+}
+
+.value {
+    color: white;
+    font-size: 2em;
+    text-align: center;
+    margin-top: .5em;
+    font-weight: bold;
+    background: rgba(0,0,0,.8);
+    display: inline-block;
+}
+
+.totaltitle {
+    display: inline-block;
+    width: 7em;
+    height: 160px;
+    vertical-align: top;
+    margin-top: .5em;
+    margin-bottom: 2.5em;
+    text-align: center;
+    background: white;
+}
+
+.totalvalue {
+    color: black;
+    font-size: 3em;
+    text-align: center;
+    margin-top: 0;
+    font-weight: bold;
+    display: inline-block;
+}
+
 .sq2 {
   position:relative;
   width: 150px;
   height: 150px;
-  margin:10px auto;
+/*  margin:10px auto;*/
+  display: inline-block;
   background: url(img/square2.png) no-repeat;
   background-size: contain;
 }
@@ -295,6 +335,32 @@ h3 {
 }
 
 .sq2 img.transparent {
+    /*opacity:0;*/
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+    z-index: -1;
+}
+
+.sq3 {
+  position:relative;
+  width: 300px;
+  height: 300px;
+  margin:10px auto;
+  background: url(img/square2.png) no-repeat;
+  background-size: contain;
+}
+
+.sq3 img {
+  position:absolute;
+  width: 80%; height: 80%;
+  left: 10%; top: 10%;
+  perspective: 1000px;
+  transition: 1s;
+  transform-style: preserve-3d;
+  z-index:2;
+}
+
+.sq3 img.transparent {
     /*opacity:0;*/
     transform: rotateY(180deg);
     backface-visibility: hidden;
@@ -381,4 +447,12 @@ text-align: center;
 
 li {
   margin-bottom:5px;
+}
+
+#logo {
+    position: absolute;
+    width: 100px; height: 100px;
+    bottom: 2%; left: 2%;
+    background: url(makertopia.png);
+    background-size: cover;
 }
