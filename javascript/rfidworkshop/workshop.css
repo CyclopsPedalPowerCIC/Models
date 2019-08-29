@@ -112,7 +112,40 @@ pre {
     font-weight: bold;
     font-family: sans-serif;
 }
+
+#name {
+    border: 3px solid #c080ff;
+    border-radius: 5em;
+    background: rgba(128,64,255,.8);
+    max-width: min-content;
+    margin: 0em;
+    padding: 0 1em;
+    font-size: 1.4em;
+    font-weight: bold;
+    font-family: sans-serif;
+}
+
+#logo {
+    position: absolute;
+    width: 100px%; height: 100px;
+    bottom: 2%; left: 2%;
+    background: url(makertopia.png);
+    background-size: cover;
+}
+
 body {
     position: fixed; width: 100%;height: 100%;
     margin: 0; padding: 0;
- }
+}
+
+input[type=button] {
+    display: block;
+    background: lime;
+    font-size: 1.2em;
+    padding: .3em 1em;
+    border-radius: .8em;
+    cursor: hand;
+    margin-top: .5em;
+    margin-bottom: 1em;
+    cursor: pointer;
+}

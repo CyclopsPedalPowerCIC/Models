@@ -5,8 +5,8 @@ function switch_pressed(s) {
     set_metric((metric+(s==1?1:-1)+metrics.length)%metrics.length);
 }
 
-var blocks = {};
-var metrics = ["recycle", "reduce", "reuse"];
+//var blocks = {};
+//var metrics = ["recycle", "reduce", "reuse"];
 
 function init_cats() {
 /*    var ncats = 3;
@@ -68,7 +68,7 @@ function get_orb_colour(obj) {
       value |= 0;
     }
   }
-    console.log(`value=${value}`);
+    //console.log(`value=${value}`);
   //value goes from 0-8
   var orb_colours = [
     //modified version to make the real life colours better (no blue, more full saturated r/g
@@ -128,20 +128,23 @@ function update_block() {
 }
 */
 
+function set_code() {
+    misbehave.update(
+	{prefix:(
+	blocks[blkid] ? 
+	JSON.stringify({[blkid]:blocks[blkid]},null,2)
+	    : "")
+	 ,suffix:'',selected:''});
+}
+
 var blkid = '123';
 function set_rfid(c) {
     console.log(`block is ${c}`);
-    if (c == 'eeeeeeee' || c == '00000000')
+    if (c == 'eeeeeeee' || c == '00000000' || c == blkid)
 	return;
-    //gebi("code").innerHTML =
-    misbehave.update(
-	{prefix:(
-	blocks[c] ? 
-	JSON.stringify({[c]:blocks[c]},null,2)
-	    : "")
-	 ,suffix:'',selected:''});
 
     blkid = c;
+    set_code();
     //block = blocks[c];
     gebi("id").innerHTML = blkid;
     do_update();
@@ -188,7 +191,7 @@ window.onload = function() {
 {
     let requests = 0;
     function fire_and_forget_post (target, data) {
-        console.log(target);
+        //console.log(target);
         if (requests < 2) {
             let xhr = new XMLHttpRequest();
             xhr.open('POST', target, true);
@@ -203,22 +206,53 @@ window.onload = function() {
     }
 }
 
+gebi("push").addEventListener("click", function() {
+    if (blkid && blocks[blkid] && validate_block(blocks[blkid])) {
+	fire_and_forget_post("http://codecraft:8000/set", `{"${blkid}":${JSON.stringify(blocks[blkid])}}`);
+    }
+});
+
+//gebi("indent").addEventListener("click", set_code);
+			      
+function validate_block(blk) {
+    //console.log(`validate_block: ${JSON.stringify(blk)}`);
+    if (typeof blk !== "object")
+	return false;
+    for (let m of metrics) {
+	//console.log(`${m} => ${blk[m]}`);
+	if (!isFinite(blk[m]) || blk[m] < 1 || blk[m] > 5)
+	    return false;
+    }
+    //console.log("VALID");
+    return true;
+}
 
 var block=null;
 function do_update(error) {
     //console.log(`error=${error}`);
+//	gebi("indent").style.display=
+//	error?"none":"block";
+    gebi("push").style.display="none";
+
     if (!error) {
 	// called when syntax check passes
-	
-	if (blkid && block && block[blkid]) {
+	gebi("name").style.display="none";
+	if (blkid && block && block[blkid] &&
+	    validate_block(block[blkid])) {
 	    blocks[blkid] = block[blkid];
+	    gebi("push").style.display="block";
 	    //console.log("ok");
 	    //console.log(blocks[blkid]);
-	    fire_and_forget_post("http://codecraft:8000/set", `{"${blkid}":${JSON.stringify(blocks[blkid])}}`);
+
+	    if (blocks[blkid].name) {
+		gebi("name").innerHTML=blocks[blkid].name;
+		gebi("name").style.display="inline-block";
+	    }
 	}
 	//console.log(blocks[blkid]);
 	update_col(get_orb_colour(blocks[blkid]));
     } else {
 	update_col(0);
+	gebi("name").style.display="none";
     }
 }
