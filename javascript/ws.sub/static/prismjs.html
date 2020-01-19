@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>misbehave w/prism.js</title>
+  <style>
+body {
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+}
+
+.container {
+  width: 62em;
+  margin: 0 auto;
+  margin-top:5em;
+}
+
+#pre {
+  min-height: 1.5em;
+}
+
+#code {
+  display: block;
+}
+
+[contenteditable] {
+  border-style: Transparent;
+  outline: none;
+}
+  </style>
+  <link href="prism.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <pre id="pre"><code id="code" class="language-javascript" contenteditable="true" autocorrect="off" autocapitalize="off" spellcheck="false"></code></pre>
+  </div>
+  <div id="error">
+  </div>
+
+  <script src="prism.js"></script>
+  <script src="misbehave.js"></script>
+  <script src="syn.js"></script>
+</body>
+</html>

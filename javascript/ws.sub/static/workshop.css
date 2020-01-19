@@ -1,0 +1,292 @@
+#loading {
+    display: block;
+    position: absolute;
+    width: 100%; height: 100%;
+    backdrop-filter: blur(4px);
+    background: rgba(128,128,128,0.5);
+    z-index: 99;
+}
+
+#loading2 {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 1.8em;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 60px;
+    background: white;
+    padding: 2em;
+    border-radius: 16px;
+    border: 10px solid rgba(255,255,255,0.1);
+}
+
+#progressbar {
+    width: 10em;
+    height: 1em;
+    background: white;
+    padding: 5px;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+#out {
+    border: 1px solid black;
+    display: inline-block;
+    float: right;
+    width: 50%;
+}
+.cats {
+    /*border: 2px solid #ddf;*/
+    overflow-y: scroll;
+}
+.cat {
+    padding: 5px;
+}
+.cat {
+    border: 2px solid #ddf;
+    border-top: none;
+}
+.cat:nth-child(1) {
+    border-top: 2px solid #ddf;
+}
+.cat:nth-child(odd) {
+    /*background: #ddf;*/
+}
+
+pre {
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    margin-top:1em;
+    padding: 1em 2em;
+    background: rgba(255,255,255,.5);
+
+}
+
+#boardhost {
+    display: inline-block;
+    background: #4444ff;
+    padding: .3em 1.7em;
+    font-family: sans-serif;
+    font-weight: 600;
+    font-size: 1.2em;
+    margin-top: .2em;
+}
+
+#id {
+    font-size: 1.4em;
+    font-weight: bold;
+    font-family: monospace;
+}
+
+.value {
+    float: right;
+    font-size: 1.4em;
+    font-weight: bold;
+    font-family: "Myriad";
+    
+}
+
+label {
+    display: block;
+}
+.cat_value {
+    float: right;
+}
+.highlight div {
+/*	  drop-shadow(0px 0px 20px black)*/
+    ;
+
+}
+#blk1.highlight,
+#blk2.highlight,
+#blk3.highlight {
+    border: 10px solid yellow;
+    border-radius: 10px;
+    /*margin: -10px;*/
+    z-index: 9;
+    filter: drop-shadow(0px 0px 10px #cc4)
+		       drop-shadow(0px 0px 10px #cc4);
+}
+
+
+.block {
+  background: rgba(255,255,255,.6);
+  padding: 8px;
+}
+
+#blk0 {
+  position: absolute;
+  left: 3%;
+  top: 5%;
+  background: rgba(255,255,255,.5);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+}
+
+#blk0 span {
+    padding-bottom: 0;
+}
+    
+h1 {
+    margin-top: 0;
+}
+
+.sqtitle {
+
+}
+
+#blk1 {
+    left: 6%;
+}
+
+#blk2 {
+    left: 36%;
+}
+
+#blk3 {
+  left: 66%;
+}
+
+#blk1,#blk2,#blk3 {
+    position: absolute;
+    background: white;
+    border: 10px solid white;
+    border-radius: 10px;
+    padding: 10px;
+    width: 25%;
+    top: 45%;
+    height: 45%;
+}
+
+#blk4 {
+  position: absolute;
+  left: 30%;
+  right: 30%;
+  background: white;
+  top: 5%;
+  height: 140px;
+  text-align: center;
+  border-radius: 100px;
+}
+
+#blk4 h1 {
+    display: block;
+    position: relative;
+    top: 0;
+    left: 100px;
+    margin-left: 40px;
+    margin-top: 30px;
+    padding-right: 150px;
+    font: 56pt "Londrina";
+}
+
+#blk5 {
+  position: absolute;
+  right: 5%;
+  background: white;
+  top: 5%;
+  text-align: center;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.5);
+}
+
+#blk6 {
+  position: absolute;
+  left: 3%;
+  width: 92%;
+  background: white;
+  top: 26%;
+  height: 68%;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: -2;
+  background: rgba(255,255,255,.6);
+}
+
+#blk7 {
+  position: absolute;
+  left: 37%;
+  background: white;
+  top: 45%; width: 15%;
+  margin-top: -30px;
+  height: 30px;
+  text-align: center;
+  border: 10px solid yellow;
+  background: yellow;
+  z-index: 20;
+  border-radius: 10px;
+}
+
+#name {
+    border-radius: 5em;
+    background: white;
+    width: 20em;
+    margin: 0em;
+    padding: 0 1em;
+    font-size: 1.4em;
+    font-weight: bold;
+    font-family: sans-serif;
+}
+
+#logo {
+    display: block;
+    position: absolute;
+    top:0;left:0;
+    width: 100px; height: 100px;
+    margin: 20px;
+    background: url(blue_split_logo_makertopia.png);
+    background-size: cover;
+}
+
+body {
+    position: fixed; width: 100%;height: 100%;
+    margin: 0; padding: 0;
+    background: url(back.png);
+    background-size: cover;
+    font-family: 'Myriad';
+    font-size: 24px;
+
+}
+@font-face {
+  font-family: 'Gill Sans MT';
+  src: url('Gill Sans MT.ttf');
+}
+@font-face {
+  font-family: 'Gill Sans Condensed Bold';
+  src: url('Gill Sans Condensed Bold.ttf');
+}
+@font-face {
+  font-family: 'Myriad';
+  src: url('AdobeCorpID-MyriadRg.otf');
+}
+
+@font-face {
+  font-family: 'Myriad Light';
+  src: url('AdobeCorpID-MyriadLt.otf');
+}
+@font-face {
+  font-family: 'Londrina';
+  src: url('londrina.ttf');
+}
+
+
+input[type=button] {
+    display: block;
+    background: lime;
+    font-size: 1.2em;
+    padding: .3em 1em;
+    border-radius: .8em;
+    cursor: hand;
+    margin-top: .5em;
+    margin-bottom: 1em;
+    cursor: pointer;
+}

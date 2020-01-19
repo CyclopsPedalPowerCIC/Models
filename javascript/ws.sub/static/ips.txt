@@ -1,0 +1,9 @@
+a0:20:a6:00:c0:fd codecraft1 192.168.0.161
+80:7d:3a:78:6c:d5 codecraft2 192.168.0.162
+80:7d:3a:79:05:bf codecraft3 192.168.0.163
+a4:cf:12:bf:79:47 codecraft4 192.168.0.164
+a4:cf:12:bf:7a:24 codecraft6 192.168.0.166
+a4:cf:12:bf:87:a0 codecraft7 192.168.0.167 (only 8 LEDs)
+a4:cf:12:bf:7f:d2 codecraft9 192.168.0.169
+
+8c:a9:82:6c:ec:74 codecraft 192.168.0.160 (thinkpad)

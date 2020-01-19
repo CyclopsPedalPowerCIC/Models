@@ -1,0 +1,22 @@
+function gebi(id) { return document.getElementById(id); }
+
+var code = gebi('code');
+var misbehave = new Misbehave(code, {
+    oninput : function(q) {
+	Prism.highlightElement(code);
+	console.log(q);
+	error = '';
+	try {
+	    block = JSON.parse (q);
+	} catch (e) {
+	    error = e;
+	}
+	gebi("error").innerHTML = error;
+    },
+});
+
+var pre = gebi('pre');
+pre.onclick = function() {
+    code.focus();
+    return false;
+}

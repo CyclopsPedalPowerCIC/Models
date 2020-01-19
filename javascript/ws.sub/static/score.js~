@@ -1,0 +1,89 @@
+function get_orb_colour(obj) {
+    var value = null;
+    //console.log(obj);
+    if (obj && obj[metrics[metric]] !== null) {
+	value = obj[metrics[metric]];
+	if (!isFinite(value)) value = null;
+	else {
+	    //value = 2 * (value - 1); // map from 1-5 to 0-8
+	    value += 4; // map from -5-5 to 0-8
+	    if (value < 0) value = 0;
+	    if (value > 8) value = 8;
+	    value |= 0;
+	}
+    }
+    //console.log(`value=${value}`);
+    //value goes from 0-8
+    var orb_colours = [
+	//modified version to make the real life colours better (no blue, more full saturated r/g
+	0xe00000,
+	0xff4000,
+	0xff8000,
+	0xffc000,
+	0xffe700,
+	0xffff00,
+	0xc2ff00,
+	0x79ff00,
+	0x00ff00
+    ];
+    //console.log(`orb ${value}`);
+    var rgb = value === null ? 0x000000 : orb_colours[value];
+    return rgb;
+}
+
+function format_score(s) {
+    s=s.toFixed(2);
+    if (s>0) return "+"+s;
+    return s;
+}
+
+function score_adjust(s) {
+    if (s<0) return -score_adjust(-s);
+    return Math.pow(s/game.score_max,game.nonlinearity)*game.score_max;
+}
+
+function score_tiles(c) {
+    var problems = [];
+    var mc = []; // calculated metrics
+    var count = 0; // applied blocks
+    var orb = [];
+    for (let m of metrics) {
+	mc[m] = 0;
+    }
+    for (let i = 0; i < 28; i++) orb[i] = null;
+    var total = 0;
+    for (var n = 0; n < c.length; n++) {
+	var i = c[n];
+	if (!i || i === "00000000" || i === "eeeeeeee") continue;
+	var obj = blocks[i];// && blocks[i].categories;
+	orb[n] = obj; //3;
+	if (!obj) {
+	    problems.push(`dunno what ${i} is`);
+	    continue;
+	}
+	//orb[n] = obj[metric];
+	console.log(`adding ${i}`);
+	count++;
+	for (m of metrics) {
+	    mc[m] += obj[m];
+	    //console.log(`${m}: ${obj[m]}`);
+	}
+    }
+    var str = "";
+    for (let m of metrics) {
+	if (count) {
+	    mc[m] /= count; // average
+	} else {
+	    mc[m] = 0; // neutral
+	}
+	total += mc[m];
+
+	str += `${m}: ${mc[m].toFixed(2)} `;
+	console.log(`val_${m}`);
+	gebi(`val_${m}`).innerHTML= format_score(mc[m]);
+    }
+    total /= metrics.length;
+    gebi(`val_total`).innerHTML=total.toFixed(2);
+    str += `total: ${total.toFixed(2)}`;
+    set_happiness("total", total);    
+    

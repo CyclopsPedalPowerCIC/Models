@@ -1,0 +1,67 @@
+<html>
+  <meta charset=utf-8>
+  <head>
+    <link rel="stylesheet" href="workshop.css">
+    <link href="prism.css" rel="stylesheet">
+</head>
+<body>
+<!--<div id=cat>
+      <div id=stats></div>
+
+    <div id=stats></div>
+    <label for=name>Name</label>
+    <input id=name></input>
+    </div>
+
+<div id=leds>
+  <input id=col type="color"></input>
+-->
+<div id=loading>
+  <div id=loading2>
+    Loading...
+    <div id=progressbar>
+      <div id=progress>
+      </div>
+    </div>
+  </div>
+</div>
+<div id=alerter></div>
+<div id=problems></div>
+<div id=board>
+  <div id=boardhost></div>
+  <div class=box>
+    <p>Last tile id
+      <div id=id>00000000</div>
+  </div>
+  <div id="metr" class=box>
+    <p>Currently showing
+      <div id="metric">
+      </div>
+  </div>
+  <div id="name">
+  </div>
+</div>
+<div id=d1></div>
+<div id=logo></div>
+
+<div id=codehalf>
+  <div class="container">
+    Type your code here
+    <pre id="pre"><code id="code" class="language-javascript" contenteditable="true" autocorrect="off" autocapitalize="off" spellcheck="false"></code></pre>
+  <div id="error">
+  </div>
+<!--  <input id="indent" type=button value="Auto-indent your code"></input>-->
+  <input id="push" type=button value="Push code to main board!"></input>
+  </div>
+  </div>
+</div>
+<script src="blocks-rrr.js"></script>
+<script src="comms.js"></script>
+<script src="workshop.js"></script>
+<script src="prism.js"></script>
+<script src="misbehave.js"></script>
+<script src="syn.js"></script>
+
+
+</body>
+</html>
