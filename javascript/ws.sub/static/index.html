@@ -79,8 +79,17 @@
   <div id=id>00000000</div>
 </div>
 <div id="blk6">
-  <span>Tile name</span>
-  <input id=name value="name_placeholder"></input>
+  <div id="notile" >
+    <center><h1>Place a tile to get started!</h1></center>
+  </div>
+  <div id="notile2" style="display: none">
+    <table><tr><td>Tile name</td>
+      <td><input id=name value="name_placeholder"></input></td></tr>
+      <tr>
+    <td>Made by</td>
+      <td><input id=author value="author_placeholder"></input></td></tr>
+</table>
+  </div>
 </div>
 
 <div id=blk7>
@@ -96,6 +105,7 @@
 
 <script src="jquery-1.11.0.min.js"></script>
     <script src="jquery-ui.min.js"></script>
+    <script src="wslib.js"></script>
     <script src="comms.js"></script>
     <script src="score.js"></script>
   </body>

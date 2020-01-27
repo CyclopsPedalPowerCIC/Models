@@ -73,6 +73,7 @@ function init_cats() {
     }
 */
     gebi("name").addEventListener('input', update_name, false);
+    gebi("author").addEventListener('input', update_author, false);
 }
 
 //function init_leds() {
@@ -125,8 +126,14 @@ function update_name() {
     console.log(`saved name ${block.name}`);
     update_block();
 }
+function update_author() {
+    block.author = gebi("author").value;
+    console.log(`saved author ${block.author}`);
+    update_block();
+}
 function save_block() {
     block.name = gebi("name").value;
+    block.author = gebi("author").value;
     update_block();
 }
 
@@ -139,6 +146,7 @@ function select(i,j) {
 function update_block() {
 //    gebi("out").innerHTML="<pre>"+JSON.stringify(block,null,2)+"</pre>";
     gebi("name").value = block.name;
+    gebi("author").value = block.author||'';
     for (var c=0; c<cat_name.length; c++) {
 	var v=block[cat_name[c]] || 0;
 	var e = `cat_${c}`;
@@ -159,16 +167,20 @@ function update_block() {
     //gebi("stats").innerHTML = `${Object.keys(blocks).length} block(s)`;
 }
 
-var blkid = '123';
+var blkid;// = '123';
 function set_rfid(c) {
     console.log(`block is ${c}`);
     if (c == 'eeeeeeee') alert("RFID reader hardware failure");
     
     if (c == 'eeeeeeee' || c == '00000000' || c == blkid)
 	return;
+    gebi("notile2").style.display="block";
+    gebi("notile").style.display="none";
+    if (blkid) push_block(); // flush existing changes
     blocks[blkid] = block;
     blkid = c;
     block = blocks[blkid] || {name:""};
+    last_sent_block = block_string();
     gebi("id").innerHTML = blkid;
     do_update();
     update_block();
@@ -183,15 +195,20 @@ var Block = function(id) {
 
 var debug = false;
 function keyevent(e) {
-    /*
     switch (e.key) {
-    case 'd':
+/*    case 'd':
         debug=!debug;
         console.log(`debug ${debug}`);
         gebi("d1").style.display = debug?"block":"none";
         break;
+*/
+    case '1':
+    case '2':
+    case '3':
+	set_metric(parseInt(e.key)-1);
+	break;
     }
-    */
+
 }
 
 var boardhost = '';
@@ -227,6 +244,26 @@ window.onload = function() {
         }
     }
 }
+
+var last_sent_block;
+
+function block_string() {
+    var o={};
+    o[blkid]=blocks[blkid];
+    return JSON.stringify(o); //`{"${blkid}":${)}}`;
+}
+
+function push_block() {
+    var s=block_string();
+    if (s !== last_sent_block) {
+	fire_and_forget_post("http://codecraft:8000/set", s);
+	console.log(`sent ${s}`);
+	last_sent_block = s;
+    }
+}
+
+setInterval(push_block, 10000);
+
 /*
 gebi("push").addEventListener("click", function() {
     if (blkid && blocks[blkid] && validate_block(blocks[blkid])) {
@@ -249,18 +286,20 @@ function validate_block(blk) {
     return true;
 }
 */
-var block={"Individual Wellbeing":2,"Circular economies":1};
+//var block={"Individual Wellbeing":2,"Circular economies":1};
+var block={};
+
 function do_update() {
     // called when syntax check passes
     if (blkid && block
 	//	&& validate_block(block[blkid]
        ) {
 	blocks[blkid] = block;
-	console.log("ok");
-	console.log(block);
+	//console.log("ok");
+	//console.log(block);
 	var mt = score_tiles([block]);
-	console.log(mt);
-	console.log(metric);
+	//console.log(mt);
+	//console.log(metric);
 	update_col(get_orb_colour(mt));
 	for (let m of metrics) {
 	    let el = gebi(metric_to_blk(m));

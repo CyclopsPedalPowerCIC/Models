@@ -29,7 +29,7 @@ function set_happiness(type, val) {
     set_thermometer(6 - val);
     return;
   }
-  val = (val/2 + 2.5) | 0;
+  val = (val/2 + 3) | 0;
   if (val < 1) val = 1;
   if (val > 5) val = 5;
   //console.log(`${type}=${val}`);
@@ -48,7 +48,7 @@ function set_happiness(type, val) {
 }
 
 function set_metric(n) {
-  metric = metrics[n];
+    metric = n;//metrics[n];
   console.log(`metric=${metric}`);
   for (var i = 0; i < metrics.length; i++)
     gebi(`blk${i + 1}`).classList[i == n ? "add" : "remove"]("highlight");
@@ -56,48 +56,49 @@ function set_metric(n) {
 }
 
 var orb = [];
-function get_orb_colour(obj) {
-  var value = null;
-  //console.log(obj);
-  if (obj && metric && obj[metric] !== null) {
-    value = obj[metric];
-    if (!isFinite(value)) value = null;
-    else {
-      value = 2 * (value - 1); // map from 1-5 to 0-8
-      //value += 4; // map from -5-5 to 0-8
-      if (value < 0) value = 0;
-      if (value > 8) value = 8;
-      value |= 0;
-    }
-  }
-  //value goes from 0-8
-  var orb_colours = [
-    //modified version to make the real life colours better (no blue, more full saturated r/g
-    0xe00000,
-    0xff4000,
-    0xff8000,
-    0xffc000,
-    0xffe700,
-    0xffff00,
-    0xc2ff00,
-    0x79ff00,
-    0x00ff00
 
-/*    0xff0000,
-    0xff3d00,
-    0xff5f00,
-    0xffa000,
-    0xffd700,
-    0xffff00,
-    0xc2ff00,
-    0x79ff00,
-    0x00ff00
-*/
-  ];
-  //console.log(`orb ${value}`);
-  var rgb = value === null ? 0x000000 : orb_colours[value];
-  return rgb;
-}
+// function get_orb_colour(obj) {
+//   var value = null;
+//   //console.log(obj);
+//   if (obj && metric && obj[metric] !== null) {
+//     value = obj[metric];
+//     if (!isFinite(value)) value = null;
+//     else {
+//       value = 2 * (value - 1); // map from 1-5 to 0-8
+//       //value += 4; // map from -5-5 to 0-8
+//       if (value < 0) value = 0;
+//       if (value > 8) value = 8;
+//       value |= 0;
+//     }
+//   }
+//   //value goes from 0-8
+//   var orb_colours = [
+//     //modified version to make the real life colours better (no blue, more full saturated r/g
+//     0xe00000,
+//     0xff4000,
+//     0xff8000,
+//     0xffc000,
+//     0xffe700,
+//     0xffff00,
+//     0xc2ff00,
+//     0x79ff00,
+//     0x00ff00
+
+// /*    0xff0000,
+//     0xff3d00,
+//     0xff5f00,
+//     0xffa000,
+//     0xffd700,
+//     0xffff00,
+//     0xc2ff00,
+//     0x79ff00,
+//     0x00ff00
+// */
+//   ];
+//   //console.log(`orb ${value}`);
+//   var rgb = value === null ? 0x000000 : orb_colours[value];
+//   return rgb;
+// }
 
 const anim = {
   NONE: 0,
@@ -124,8 +125,18 @@ function set_lights() {
       a[ptr++] = (rgb >> 8) & 0xff;
       a[ptr++] = rgb & 0xff;
     }
-    // main colour
-    setrgb(get_orb_colour(orb[ledmap[i]]));
+      // main colour
+      //console.log(`start ${i}`);
+      var o=orb[ledmap[i]];
+      if (o) {
+	  //console.log(metric);
+	  //console.log(get_orb_colour(score_tiles([orb[ledmap[i]]])));
+	  setrgb(get_orb_colour(score_tiles([orb[ledmap[i]]])));
+      } else {
+	  setrgb(0);
+      }
+      //console.log(`end ${i}`);
+    //setrgb(get_orb_colour(score_tiles(orb[ledmap[i]])));
     // flash colour (unused if no animation)
     setrgb(0xffffff); // white
     // corner colour
@@ -164,12 +175,13 @@ function set_blocks(c) {
     var mt = score_tiles(tiles);
     orb = tiles;
     console.log(mt);
-    for (let m of Object.keys(mt)) {
-	set_happiness(m, mt[m]);
+    for (let m of metrics) {
+	var val = mt[m] || 0;
+	set_happiness(m, val);
 	console.log(`val_${m}`);
 	var el=gebi(`val_${m}`);
 	if (el) {
-	    el.innerHTML= format_score(mt[m]);
+	    el.innerHTML= format_score(val);
 	} 
     }
     //gebi(`val_${m}`).innerHTML= format_score(mt[null]);
@@ -188,6 +200,12 @@ function set_blocks(c) {
     }
 }
 
+function init_headings() {
+    for (var i=0; i<3; i++) {
+	gebi(`blk${i+1}`).getElementsByTagName("h1")[0].innerHTML=game.metrics[i];
+	gebi(`blk${i+1}`).getElementsByTagName("h1")[0].innerHTML=game.metrics[i];
+    }
+}
 function set_thermometer(m) {
   console.log(`set_thermometer ${m}`);
   $("#thermometer").thermometer("setValue", m);
@@ -242,7 +260,7 @@ $(document).ready(function() {
         (i => () => set_metric(i))(i),
         false
       );
-
+      init_headings();
     if (window.location.hash.match(/passive/)) {
       passive = true;
       gebi("loading2").firstChild.textContent += "(passive)";

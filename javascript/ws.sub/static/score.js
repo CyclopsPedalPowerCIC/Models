@@ -5,22 +5,24 @@ function get_orb_colour(obj) {
 	value = obj[metrics[metric]];
 	if (!isFinite(value)) value = null;
 	else {
+	    console.log(`before ${value}`);
 	    //value = 2 * (value - 1); // map from 1-5 to 0-8
 	    value += 4; // map from -5-5 to 0-8
 	    if (value < 0) value = 0;
 	    if (value > 8) value = 8;
 	    value *= 2;
 	    value |= 0;
+	    console.log(`after ${value}`);
 	}
     }
     //console.log(`value=${value}`);
     //value goes from 0-8
     var orb_colours = [
 	//modified version to make the real life colours better (no blue, more full saturated r/g
-	0xe00000,
-	0xf00000,
+	0x800000,
+	0xc00000,
+	0xff0000,
 	0xff4000,
-	0xff6000,
 	0xff8000,
 	0xffa000,
 	0xffc000,
@@ -63,7 +65,7 @@ function score_tiles(tiles) {
     for (let obj of tiles) {
 	if (!obj) continue;
 	for (let m of Object.keys(obj)) {
-	    if (m=="name") continue;
+	    if (m=="name" || m=="author") continue;
 	    //console.log(`adding ${i}`);
 	    var p=m;
 	    do {
@@ -77,12 +79,14 @@ function score_tiles(tiles) {
 
     for (let m of Object.keys(mc)) {
 	var t=0;
+	var weight = (game.weights && game.weights[m]) || 1;
 	for (let i of mc[m]) {
-	    t += i;
+	    console.log(`i=${i}`);
+	   t+=i;
 	}
-	console.log(t);
+	console.log(`m=${m} weight=${weight} t=${t}`);
 	//t /= mc[m].length;
-	t = score_adjust(t);
+	t = score_adjust(t);//*weight);
 	mt[m] = t;
     }
     
