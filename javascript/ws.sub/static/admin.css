@@ -1,0 +1,33 @@
+td { margin: 3px; }
+tr:nth-child(even) { background: #ddd; }
+      
+#spinner { position: fixed; left: 10%; top: 10%;
+	   width: 10em; height: 10em;
+           border: 2em solid black;
+           border-right-color: transparent;
+           border-radius: 50%;
+	   z-index: 99;
+
+	   -webkit-animation: rotate .8s linear infinite;
+	   -moz-animation: rotate .8s linear infinite;
+	   animation: rotate .8s linear infinite;
+	 }
+  @-webkit-keyframes rotate {
+  from { -webkit-transform: rotate(0deg); }
+  50% { -webkit-transform: rotate(180deg); }
+  100% { -webkit-transform: rotate(360deg); }
+  }
+  @-moz-keyframes rotate {
+  from { -moz-transform: rotate(0deg); }
+  50% { -moz-transform: rotate(180deg); }
+  100% { -moz-transform: rotate(360deg); }
+  }
+ul#tab { padding-bottom:3px; padding-top: 2px; border-bottom: 2px solid black; list-style-type: none; padding-left: 0.5em; font-size:90% }
+ul#tab li { display: inline; }
+ul#tab li a { background: lightsteelblue; border: 2px solid black; border-top-left-radius: 5px; border-top-right-radius: 5px; margin-right: 0.2em; padding-top: 2px; padding-bottom: 1px; padding-left: 0.4em; padding-right: 0.4em; text-decoration: none; font-weight: bold; cursor: pointer; }
+ul#tab li a.selected { background: white; border-bottom: 3px solid white; }
+ul#tab li a:hover { background: white; }
+#tab {margin-top: 10px !important;}
+
+#debug  div {  width: 600px; height: 100px; display: inline-block; }
+ iframe { border: 1px solid black; margin:10px; width: 100%; height: 100% }

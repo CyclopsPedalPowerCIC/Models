@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <title>
+      Admin-o-matic
+    </title>
+    <link rel="stylesheet" href="admin.css">
+  </head>
+  <body>
+    <div id=spinner></div>`
+    <h1>Admin-o-matic</h1>
+    <ul id=tab>
+    </ul>
+    <div id=file>
+      <p>Tiles loaded: <span id=ntiles>loaded_placeholder</span></p>
+      
+  <p>
+    Tilesets available: (<a href onclick=do_list()>refresh</a>) 
+    <table id="list">
+     </table>
+    <p>Or save as new: <input id="fn" placeholder="Filename"></input><button id=savenew>Save</button>
+  </p>
+    </div>
+    <div id=tilelist>
+    <table id="tiles">
+     </table>
+    </div>
+    <div id=log>
+    </div>
+    <div id=debug>
+      <div>lights (192.168.0.154)<iframe src=http://192.168.0.154></iframe></div>
+    </div>
+<script src="wslib.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
